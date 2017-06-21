@@ -1,0 +1,5 @@
+Need to install windows sdk 8.1 and windows c++ build tools if visual studio is not installed
+
+Create c++ windows desktop project 
+
+install the necessary tools
