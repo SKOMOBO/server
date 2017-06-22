@@ -2,7 +2,7 @@
 ///<reference path="node_modules/@types/node/index.d.ts"/>
 import * as http from "http"
 
-import {has_null, repeat, extract} from "./lib"
+import {has, repeat, extract} from "./lib"
 
 let mysql = require('mysql2')
 
@@ -15,16 +15,22 @@ async function handleRequest(request, response){
     if(request.url != '/favicon.ico'){
 
        let values = extract(request.url)
-
        console.log(values)
-
-       if(!has_null(values)){
+       if(!has(values, null)){
           await connection.query('INSERT INTO sensor_data set ?' , values)
+          // tell the client everything is ok
+          response.writeHead(200, {"Content-Type": "text/HTML"})
        }
        else{
            console.log("Invalid request!")
+           response.writeHead(400, {"Content-Type": "text/HTML"})
        }
     }
+
+ 
+
+    //send the response
+    response.end()
 
 }
 

@@ -2,12 +2,13 @@
 
 import test from "ava"
 
-import {has_null, repeat} from "./lib"
+import {has, repeat} from "./lib"
 
 test('child-is-null', t =>{
-    t.is(has_null({"cat": null}), true)
+    t.is(has({"cat": null}, null), true)
 })
 
 test('is-null', t =>{
-    t.true(has_null(null))
+    t.is(has(null, null), true)
 })
+

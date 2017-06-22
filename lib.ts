@@ -13,6 +13,15 @@ let nums = Array.apply(null, Array(end + 1)).map(function (_, i) {return i;});
 return nums.slice(start)
 }
 
+
+/**
+ * 
+ * 
+ * @export
+ * @param {string} col 
+ * @param {number} times 
+ * @returns 
+ */
 export function repeat(col: string, times: number){
 
     return range(1, times).map((value)=>{
@@ -22,21 +31,21 @@ export function repeat(col: string, times: number){
 
 
 /**
- * Checks if the object contains any null children or if it itself is null
+ * Checks if the object contains any children with value or if it itself is that value
  * 
  * @param {*} object 
  */
-export function has_null(object: any){
+export function has(object: any, val: any){
 
-    if(object != null){
-        for (let val in object){
-            if (object[val] === null){
+    if(object != val){
+        for (let prop in object){
+            if (object[prop] === val){
                 return true
             }
         }
     }
     else{
-        return object == null
+        return object === val
     }
 
 }
@@ -54,6 +63,9 @@ export function extract(url){
 
     let values = {}
 
+    if(tokens.includes('')){
+        return null
+    }
     tokens.map((value, index)=>{
         values[col_names[index]] = value
     })
@@ -63,4 +75,6 @@ export function extract(url){
     return values
 }
 
+// integrate into vscode task system?? so that tsc happens and ava happens at the sane time
 
+// make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
