@@ -2,7 +2,7 @@
 ///<reference path="node_modules/@types/node/index.d.ts"/>
 import * as http from "http"
 
-import {has, repeat, extract} from "./lib"
+import { has, repeat} from "./lib"
 
 let mysql = require('mysql2')
 
@@ -11,7 +11,11 @@ let mysql = require('mysql2')
 
 //// use arduino json to save memory space and remove the need for my extractor
 
+// setup load testing at a later date
+
 var connection = mysql.createConnection({host:'localhost', user: 'root', database: 'skomobo', password: 'dev1234'});
+
+//// this is becoming crazy --- look at using seneca to make this a micro service architecture
 
 
 async function handleRequest(request, response){
@@ -19,7 +23,7 @@ async function handleRequest(request, response){
     // for browser testing
     if(request.url != '/favicon.ico'){
 
-       let values = extract(request.url)
+       let values = JSON.parse(request.url)
        console.log(values)
        if(!has(values, null)){
           await connection.query('INSERT INTO sensor_data set ?' , values)
