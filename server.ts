@@ -13,14 +13,15 @@ let mysql = require('mysql2')
 
 var connection = mysql.createConnection({host:'localhost', user: 'root', database: 'skomobo', password: 'dev1234'});
 
-
-async function handleRequest(request, response){
+// use this https://github.com/senecajs/seneca-mysql-store
+async function handleRequest(request:http.IncomingMessage, response:http.ServerResponse){
 
     // for browser testing
     if(request.url != '/favicon.ico'){
-
+       console.log(request.url)
        let values = extract(request.url)
        console.log(values)
+       
        if(!has(values, null)){
           await connection.query('INSERT INTO sensor_data set ?' , values)
           // tell the client everything is ok

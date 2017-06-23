@@ -18,12 +18,12 @@ var connection = mysql.createConnection({host:'localhost', user: 'root', databas
 //// this is becoming crazy --- look at using seneca to make this a micro service architecture
 
 
-async function handleRequest(request, response){
+async function handleRequest(request: http.IncomingMessage, response: http.ServerResponse){
 
     // for browser testing
     if(request.url != '/favicon.ico'){
 
-       let values = JSON.parse(request.url)
+       let values = JSON.parse(request.headers)
        console.log(values)
        if(!has(values, null)){
           await connection.query('INSERT INTO sensor_data set ?' , values)
