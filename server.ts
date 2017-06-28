@@ -60,7 +60,7 @@ var server = http.createServer(handleRequest);
 let ip = require("ip")
 
 //Lets start our server
-server.listen(8080, '0.0.0.0', function(){
+server.listen(80, '0.0.0.0', function(){
     //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://%s:%s", ip.address(), 8080);
+    console.log("Server listening on: http://%s:%s", ip.address(), 80);
 });
