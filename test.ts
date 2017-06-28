@@ -12,3 +12,7 @@ test('is-null', t =>{
     t.is(has(null, null), true)
 })
 
+test('password-present', t=>{
+    let details = require("../prod-password.json")
+    t.pass()
+})
