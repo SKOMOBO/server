@@ -4,16 +4,35 @@ import * as http from "http"
 
 import {has, repeat, extract} from "./lib"
 
-let mysql = require('mysql2')
+var mysql = require('mysql2')
 
-let config = require('config')
+var config = require('config')
 
 ///// need two seperate routes for data, raspi and arduino
 
 //// use arduino json to save memory space and remove the need for my extractor
 
 // var connection = mysql.createConnection({host:'localhost', user: 'root', database: 'skomobo', password: 'dev1234'});
-var connection = mysql.createConnection(config.get('Dbconfig'))
+
+var connection
+
+console.log(config.util.getEnv('NODE_ENV'))
+if(config.util.getEnv('NODE_ENV') === 'production'){
+    //get all the publicly available config values
+    let my_config = config.get('Dbconfig')
+    let login_details = require('./prod-password')
+
+    //set production password and user to production username and password stored locally on computer
+    my_config.password = login_details.password
+    my_config.user = login_details.user
+
+    connection = mysql.createConnection(my_config)
+}else{
+    connection = mysql.createConnection(config.get('Dbconfig'))
+}
+
+
+//rewrite to use express instead and seneca
 
 // use this https://github.com/senecajs/seneca-mysql-store
 async function handleRequest(request:http.IncomingMessage, response:http.ServerResponse){
