@@ -20,7 +20,7 @@ console.log(config.util.getEnv('NODE_ENV'))
 if(config.util.getEnv('NODE_ENV') === 'production'){
     //get all the publicly available config values
     let my_config = config.get('Dbconfig')
-    let login_details = require('./prod-password.json')
+    let login_details = require('../prod-password.json')
 
     //set production password and user to production username and password stored locally on computer
     my_config.password = login_details.password
