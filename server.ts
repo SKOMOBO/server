@@ -2,11 +2,11 @@
 ///<reference path="node_modules/@types/node/index.d.ts"/>
 import * as http from "http"
 
-import {has, repeat, extract} from "./lib"
+import {has, repeat, extract, config_production} from "./lib"
 
 var mysql = require('mysql2')
 
-var config = require('config')
+let config = require('config')
 
 ///// need two seperate routes for data, raspi and arduino
 
@@ -16,17 +16,12 @@ var config = require('config')
 
 var connection
 
-console.log(config.util.getEnv('NODE_ENV'))
 if(config.util.getEnv('NODE_ENV') === 'production'){
-    //get all the publicly available config values
-    let my_config = config.get('Dbconfig')
-    let login_details = require('../prod-password.json')
-
+  
+    let login_details = config_production()
     //set production password and user to production username and password stored locally on computer
-    my_config.password = login_details.password
-    my_config.user = login_details.user
+    connection = mysql.createConnection(login_details)
 
-    connection = mysql.createConnection(my_config)
 }else{
     connection = mysql.createConnection(config.get('Dbconfig'))
 }

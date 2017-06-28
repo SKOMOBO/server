@@ -50,6 +50,22 @@ export function has(object: any, val: any){
 
 }
 
+export function config_production(){
+    let config = require('config')
+
+    //get all the publicly available config values
+    let the_config = config.get('Dbconfig')
+    let login_details = require('../prod-password.json')
+
+    for(let prop in the_config){
+
+        if(prop !== 'password' && prop !== 'user'){
+            login_details[prop] = the_config[prop]
+        }
+    }
+
+    return login_details
+}
 
 export function extract(url){
      // breaks up each value by a dash and removes / in the front
