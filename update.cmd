@@ -1,1 +1,0 @@
-git pull && tsc server.ts
