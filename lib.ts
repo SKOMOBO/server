@@ -50,6 +50,13 @@ export function has(object: any, val: any){
 
 }
 
+
+/**
+ * This function cheats the config system to adjust the password for production
+ * 
+ * @export
+ * @returns 
+ */
 export function config_production(){
     let config = require('config')
 

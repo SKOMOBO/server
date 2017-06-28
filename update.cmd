@@ -1,1 +1,1 @@
-git pull && tsc Server/server.ts
+git pull && tsc server.ts
