@@ -1,0 +1,9 @@
+{
+    "Dbconfig": {
+        "host":"localhost",
+        "user": "root", 
+        "database": "skomobo", 
+        "password": "dev1234"
+    }
+    
+}

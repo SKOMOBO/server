@@ -4,6 +4,7 @@
     "@types/node": "^7.0.13",
     "@types/ramda": "^0.0.7",
     "@types/seneca": "^2.1.6",
+    "config": "^1.26.1",
     "ip": "^1.1.5",
     "mysql": "^2.13.0",
     "mysql2": "^1.2.0",
