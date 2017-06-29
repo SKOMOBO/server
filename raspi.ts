@@ -1,5 +1,3 @@
-
-///<reference path="node_modules/@types/node/index.d.ts"/>
 import * as http from "http"
 
 import {has, repeat, extract} from "./lib"

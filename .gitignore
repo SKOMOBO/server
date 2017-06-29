@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 
 Dist
+prod-password.json
 
 # Runtime data
 pids
