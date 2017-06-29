@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "lib": ["es2016", "dom"],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowJs": true,
+        "outDir": "Server/Dist"
+    },"include": [
+        "Server/node_modules/@types",
+        "Server/*"
+    ],
+    "exclude": [
+        "Server/node_modules/*",
+        "Arduino/*",
+        "Resources/*",
+        "Server/cljs/*"
+    ]
+    
+}
