@@ -21,8 +21,7 @@ async function handleRequest(request:http.IncomingMessage, response:http.ServerR
        console.log(request.url)
 
        if(request.url.slice(0,5) == "/rapi"){
-         let values = extract(request.url)
-         console.log(values)
+         let values = JSON.parse(request.rawTrailers)
          if(!has(values, null)){
             await connection.query('INSERT INTO sensor_data set ?' , values)
             // tell the client everything is ok
@@ -45,8 +44,11 @@ var server = http.createServer(handleRequest);
 
 let ip = require("ip")
 
+
+// put it on https somehow for this route? because the raspi can actually handle it 
+
 //Lets start our server
-server.listen(8080, '0.0.0.0', function(){
+server.listen(82, '0.0.0.0', function(){
     //Callback triggered when server is successfully listening. Hurray!
     console.log("Server listening on: http://%s:%s", ip.address(), 8080);
 });
