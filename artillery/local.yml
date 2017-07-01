@@ -1,0 +1,18 @@
+config:
+  # target: 'https://artillery.io'
+  # replace with local host for nodejs
+  phases:
+    - duration: 60
+      arrivalRate: 20
+      # this should be fine but if not change to more realistic num of 2
+  defaults:
+    headers:
+      # x-my-service-auth: '987401838271002188298567'
+
+scenarios:
+  - flow:
+    - get:
+        url: "/docs"
+        # http://localhost:81/0_2016-6-23_12332_12_31_23434_12_2434_1
+# working production 
+# http://seat-skomobo.massey.ac.nz/0_2016-6-23_12332_12_31_23434_12_2434_1

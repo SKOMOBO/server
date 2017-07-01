@@ -8,7 +8,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowJs": true,
-        "outDir": "Dist"
+        "outDir": "../Dist"
     }
     
 }

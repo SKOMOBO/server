@@ -16,10 +16,12 @@
   "scripts": {
     "test": "ava Dist/test.js --watch",
     "tsc": "tsc",
-    "start": "nodemon Dist/server.js"
+    "start": "nodemon Dist/server.js",
+    "seneca": "nodemon Dist/seneca-server.js"
   },
   "devDependencies": {
     "ava": "^0.19.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "supertest": "^3.0.0"
   }
 }
