@@ -9,6 +9,13 @@
         "experimentalDecorators": true,
         "allowJs": true,
         "outDir": "Compiled"
-    }
+    },
+    "exclude":[
+        "node_modules",
+        "Compiled",
+        "artillery",
+        "DB_schema",
+        ".vscode"
+    ]
     
 }

@@ -1,6 +1,6 @@
-import * as http from "http"
+import {IncomingMessage, ServerResponse} from "http"
 
-import {has, repeat, extract, config_production, store} from "./lib"
+import * as lib from "./lib"
 
 let mysql = require("mysql2")
 
@@ -20,7 +20,7 @@ var connection
 
 if(config.util.getEnv('NODE_ENV') === 'production'){
   
-    let login_details = config_production()
+    let login_details = lib.config_production()
     //set production password and user to production username and password stored locally on computer
     connection = mysql.createConnection(login_details)
 
@@ -32,22 +32,17 @@ if(config.util.getEnv('NODE_ENV') === 'production'){
 //rewrite to use express instead and seneca
 
 // use this https://github.com/senecajs/seneca-mysql-store
-async function handleRequest(request:http.IncomingMessage, response:http.ServerResponse){
+async function handleRequest(request:IncomingMessage, response:ServerResponse){
 
     // for browser testing
     if(request.url != '/favicon.ico'){
        console.log(request.url)
-       let values = extract(request.url)
+       let values = lib.extract(request.url)
        console.log(values)
        
-       store(connection, response, "arduino", values)
+       lib.store(connection, response, "arduino", values)
       
     }
-
 }
 
-//Lets start our server
-http.createServer(handleRequest).listen(81, '0.0.0.0', function(){
-    //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://%s:%s", require("ip").address(), 81);
-});
+export var server = lib.spawn(81, handleRequest)

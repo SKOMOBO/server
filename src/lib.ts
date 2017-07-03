@@ -29,6 +29,7 @@ export function repeat(col: string, times: number){
     })
 }
 
+import * as R from "ramda"
 
 /**
  * Checks if the object contains any children with value or if it itself is that value
@@ -122,4 +123,17 @@ export async function store(connection, response, database_name: String, values:
        
     //send the response
     response.end()
+}
+
+import {createServer, Server, IncomingMessage, ServerResponse} from "http"
+export function spawn(port: Number, handler: (request: IncomingMessage, response: ServerResponse) => void): Server{
+    let server = createServer(handler)
+
+    //Lets start our server
+    server.listen(port, '0.0.0.0', function(){
+        //Callback triggered when server is successfully listening. Hurray!
+        console.log("Server listening on: http://%s:%s", require("ip").address(), port);
+    });
+
+    return server
 }

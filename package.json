@@ -18,8 +18,7 @@
     "tsc": "tsc",
     "start": "nodemon Compiled/src/server.js",
     "seneca": "nodemon Compiled/src/seneca-server.js",
-    "raspi": "nodemon Compiled/src/raspi.js",
-    "http": "nodemon Compiled/tests/http_tests.js"
+    "raspi": "nodemon Compiled/src/raspi.js"
   },
   "devDependencies": {
     "@types/config": "0.0.32",
