@@ -18,10 +18,12 @@
     "tsc": "tsc",
     "start": "nodemon Compiled/src/server.js",
     "seneca": "nodemon Compiled/src/seneca-server.js",
-    "raspi": "nodemon Compiled/src/raspi.js"
-
+    "raspi": "nodemon Compiled/src/raspi.js",
+    "http": "nodemon Compiled/tests/http_tests.js"
   },
   "devDependencies": {
+    "@types/config": "0.0.32",
+    "@types/supertest": "^2.0.1",
     "ava": "^0.19.0",
     "nodemon": "^1.11.0",
     "supertest": "^3.0.0"

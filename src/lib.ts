@@ -109,15 +109,17 @@ export function extract(url){
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
-
 export async function store(connection, response, database_name: String, values: any){
-     if(!has(values, null)){
-          await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
-          // tell the client everything is ok
-          response.writeHead(200, {"Content-Type": "text/HTML"})
-       }
-       else{
-           console.log("Invalid request!")
-           response.writeHead(400, {"Content-Type": "text/HTML"})
-       }
+    if(!has(values, null)){
+        await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+        // tell the client everything is ok
+        response.writeHead(200, {"Content-Type": "text/HTML"})
+    }
+    else{
+        console.log("Invalid request!")
+        response.writeHead(400, {"Content-Type": "text/HTML"})
+    }
+       
+    //send the response
+    response.end()
 }

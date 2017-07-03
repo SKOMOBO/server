@@ -2,8 +2,10 @@ import * as http from "http"
 
 import {has, repeat, store} from "./lib"
 
-let mysql = require('mysql2')
+let mysql = require("mysql2")
 
+//fix this
+// import * as mysql from "../node_modules/mysql2/index"
 
 //rewrite using seneca
 
@@ -21,7 +23,7 @@ async function handleRequest(request:http.IncomingMessage, response:http.ServerR
        
        // move this to the iis server
        if(request.url.slice(0,5) == "/rapi"){
-        console.log(request.rawTrailers)
+        console.log(request.rawTrailers )
          let values = JSON.parse(request.rawTrailers)
          
          store(connection, response, "raspi", values)

@@ -1,18 +1,20 @@
-
-///<reference path="../node_modules/@types/node/index.d.ts"/>
 import * as http from "http"
 
 import {has, repeat, extract, config_production, store} from "./lib"
 
-var mysql = require('mysql2')
+let mysql = require("mysql2")
 
-let config = require('config')
+import * as config from "config"
+
 
 ///// need two seperate routes for data, raspi and arduino
 
 //// use arduino json to save memory space and remove the need for my extractor
 
 // var connection = mysql.createConnection({host:'localhost', user: 'root', database: 'skomobo', password: 'dev1234'});
+
+
+// use concurrently to run all test tools in watch mode :)
 
 var connection
 
@@ -41,9 +43,6 @@ async function handleRequest(request:http.IncomingMessage, response:http.ServerR
        store(connection, response, "arduino", values)
       
     }
-
-    //send the response
-    response.end()
 
 }
 
