@@ -62,7 +62,7 @@ export function config_production(){
 
     //get all the publicly available config values
     let the_config = config.get('Dbconfig')
-    let login_details = require('../prod-password.json')
+    let login_details = require('..//../src/prod-password.json')
 
     for(let prop in the_config){
 
@@ -108,3 +108,16 @@ export function extract(url){
 // integrate into vscode task system?? so that tsc happens and ava happens at the sane time
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
+
+
+export async function store(connection, response, database_name: String, values: any){
+     if(!has(values, null)){
+          await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+          // tell the client everything is ok
+          response.writeHead(200, {"Content-Type": "text/HTML"})
+       }
+       else{
+           console.log("Invalid request!")
+           response.writeHead(400, {"Content-Type": "text/HTML"})
+       }
+}

@@ -1,8 +1,8 @@
 
-///<reference path="node_modules/@types/node/index.d.ts"/>
+///<reference path="../node_modules/@types/node/index.d.ts"/>
 import * as http from "http"
 
-import {has, repeat, extract, config_production} from "./lib"
+import {has, repeat, extract, config_production, store} from "./lib"
 
 var mysql = require('mysql2')
 
@@ -38,15 +38,8 @@ async function handleRequest(request:http.IncomingMessage, response:http.ServerR
        let values = extract(request.url)
        console.log(values)
        
-       if(!has(values, null)){
-          await connection.query('INSERT INTO sensor_data set ?' , values)
-          // tell the client everything is ok
-          response.writeHead(200, {"Content-Type": "text/HTML"})
-       }
-       else{
-           console.log("Invalid request!")
-           response.writeHead(400, {"Content-Type": "text/HTML"})
-       }
+       store(connection, response, "arduino", values)
+      
     }
 
     //send the response
@@ -54,13 +47,8 @@ async function handleRequest(request:http.IncomingMessage, response:http.ServerR
 
 }
 
-//Create a server
-var server = http.createServer(handleRequest);
-
-let ip = require("ip")
-
 //Lets start our server
-server.listen(81, '0.0.0.0', function(){
+http.createServer(handleRequest).listen(81, '0.0.0.0', function(){
     //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://%s:%s", ip.address(), 81);
+    console.log("Server listening on: http://%s:%s", require("ip").address(), 81);
 });

@@ -14,10 +14,12 @@
     "typeorm": "0.0.11"
   },
   "scripts": {
-    "test": "ava Dist/test.js --watch",
+    "test": "ava Compiled/tests/test.js --watch",
     "tsc": "tsc",
-    "start": "nodemon Dist/server.js",
-    "seneca": "nodemon Dist/seneca-server.js"
+    "start": "nodemon Compiled/src/server.js",
+    "seneca": "nodemon Compiled/src/seneca-server.js",
+    "raspi": "nodemon Compiled/src/raspi.js"
+
   },
   "devDependencies": {
     "ava": "^0.19.0",

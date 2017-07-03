@@ -2,7 +2,7 @@
 
 import test from "ava"
 
-import {has, repeat, config_production} from "./lib"
+import {has, repeat, config_production} from "../src/lib"
 
 test('child is null', t =>{
     t.is(has({"cat": null}, null), true)
@@ -13,7 +13,7 @@ test('is null', t =>{
 })
 
 test('password present', t=>{
-    let details = require("../prod-password.json")
+    let details = require("../../src/prod-password.json")
     t.pass()
 })
 
