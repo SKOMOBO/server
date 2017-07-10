@@ -29,7 +29,7 @@ export function repeat(col: string, times: number){
     })
 }
 
-import * as R from "ramda"
+// import * as R from "ramda"
 
 /**
  * Checks if the object contains any children with value or if it itself is that value
@@ -51,6 +51,40 @@ export function has(object: any, val: any){
 
 }
 
+import * as config from "config"
+
+export function config_db(){
+    if(config.util.getEnv('NODE_ENV') === 'production'){
+    
+        let login_details = config_production()
+        //set production password and user to production username and password stored locally on computer
+        return connect_db(login_details)
+
+    }else{
+        // connection = mysql.createConnection(config.get('Dbconfig'))
+       return connect_db(config.get('Dbconfig'))
+    }
+
+}
+
+
+// fix this so that it has proper typescript definitions
+let mysql = require("mysql2")
+export function connect_db(details: any){
+
+    let connection
+
+    try{
+        connection = mysql.createConnection(details)
+    }catch(e){
+        console.log("Database not started")
+
+        // change this so that it executes cmd cmmand to start DB
+    }
+
+    return connection
+    
+}
 
 /**
  * This function cheats the config system to adjust the password for production
@@ -106,11 +140,18 @@ export function extract(url){
     return values
 }
 
+export function no_favicon(url:String, Callback: Function){
+   if (url != '/favicon.ico') Callback()
+}
+
 // integrate into vscode task system?? so that tsc happens and ava happens at the sane time
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
-export async function store(connection, response, database_name: String, values: any){
+export async function store(response: ServerResponse, database_name: String, values: any){
+
+    let connection = config_db()
+
     if(!has(values, null)){
         await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
         // tell the client everything is ok

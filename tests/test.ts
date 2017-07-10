@@ -12,7 +12,7 @@ import {raspi_server} from "../src/raspi"
 
 import {Server} from "http"
 
-function check_status(server: Server, code: Number, path: string){
+function check_status(server: Server | String , code: Number, path: string){
 
     //checking if arduino fails correctly
     supertest(server)
