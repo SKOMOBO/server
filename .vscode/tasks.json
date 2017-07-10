@@ -1,6 +1,8 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
+
+    // add a task for the test runner
     "version": "0.1.0",
     "command": "tsc",
     "isShellCommand": true,

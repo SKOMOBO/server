@@ -1,4 +1,6 @@
 {
+  "name": "skomobo",
+  "version": "0.0.1",
   "dependencies": {
     "@types/ip": "0.0.30",
     "@types/node": "^7.0.13",

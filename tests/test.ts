@@ -6,7 +6,7 @@ import {has, repeat, config_production} from "../src/lib"
 
 import * as supertest from "supertest"
 
-import {server} from "../src/server"
+import {server} from "../src/arduino"
 
 import {raspi_server} from "../src/raspi"
 

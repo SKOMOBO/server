@@ -1,6 +1,6 @@
 import {IncomingMessage, ServerResponse} from "http"
 
-import {no_favicon, extract, store, spawn} from "./lib"
+import {handler_generator, extract, spawn} from "./lib"
 
 
 ///// need two seperate routes for data, raspi and arduino
@@ -15,16 +15,17 @@ import {no_favicon, extract, store, spawn} from "./lib"
 // var connection = lib.config_db()
 
 // use this https://github.com/senecajs/seneca-mysql-store
-async function handleRequest(request:IncomingMessage, response:ServerResponse){
+// async function handleRequest(request:IncomingMessage, response:ServerResponse){
 
-    // for browser testing
-    no_favicon(request.url, ()=>{
-        console.log(request.url)
-        let values = extract(request.url)
-        console.log(values)
-        store(response, "arduino", values)
-    })
+//     // for browser testing
+//     no_favicon(request.url, ()=>{
+//         console.log(request.url)
+//         let values = extract(request.url)
+//         console.log(values)
+//         store(response, "arduino", values)
+//     })
 
-}
+// }
 
-export var server = spawn(81, handleRequest)
+// exporting variable for testing
+export var server = spawn(81, handler_generator("request.url", extract, "arduino"))

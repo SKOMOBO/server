@@ -166,6 +166,50 @@ export async function store(response: ServerResponse, database_name: String, val
     response.end()
 }
 
+export function handler_generator(data:any, decoder: Function, db_name: String){
+    return async (request:IncomingMessage, response:ServerResponse)=>{
+        
+        no_favicon(request.url, ()=>{
+            console.log(request.url)
+            
+            console.log(data)
+            // evil but it works for now
+            data = eval(data)
+            console.log(data)
+            let values
+            if(data.length !== 0){
+                values = decoder(data)
+                console.log(values)
+                store(response, "arduino", values)
+            }
+            else{
+                response.writeHead(400)
+                console.log("No data")
+            }
+            
+        })
+
+        // no_favicon(request.url, ()=>{
+        //     console.log(request.url)
+        
+        //     // move this to the iis server
+        //         //if(request.url.slice(0,5) == "/rapi"){
+        //     let values;
+        //     if(data.length !== 0){
+        //         values = decoder(data)
+        //         console.log(values)
+        //         store(response, "raspi", values)
+        //     }
+        //     else{
+        //         response.writeHead(400)
+        //         console.log("No data")
+        //     }
+
+        // })
+
+    }
+}
+
 import {createServer, Server, IncomingMessage, ServerResponse} from "http"
 export function spawn(port: Number, handler: (request: IncomingMessage, response: ServerResponse) => void): Server{
     let server = createServer(handler)
