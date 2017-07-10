@@ -11,7 +11,7 @@ artilleryjs
 
 super test
 
-tes2342t
+nyc
 
 avajs
 
