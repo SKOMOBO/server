@@ -6,7 +6,7 @@ import {has, repeat, config_production} from "../src/lib"
 
 import * as supertest from "supertest"
 
-import {server} from "../src/arduino"
+import {server} from "../src/server"
 
 import {raspi_server} from "../src/raspi"
 
@@ -36,7 +36,6 @@ test('arduino fails correctly', t=>{
     check_status(server, 400, "/")
     t.pass()
 })
-
 
 test('child is null', t =>{
     t.is(has({"cat": null}, null), true)

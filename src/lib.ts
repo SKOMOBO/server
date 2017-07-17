@@ -178,7 +178,7 @@ export function handler_generator(data:any, decoder: Function, db_name: String){
             if(data.length !== 0 && data !== "/"){
                 values = decoder(data)
                 console.log(values)
-                store(response, "arduino", values)
+                store(response, db_name, values)
             }
             else{
                 response.writeHead(400)
