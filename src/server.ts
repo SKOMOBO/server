@@ -30,7 +30,8 @@ function extract(data: String){
     let values = {}
     // route 1
     if(data[1] == '1'){
-
+        
+        //! server needs to create a new record not insert
         let col_names1 = ['Box_ID', 'Time_sent', 'Dust1', 'Dust2_5', 'Dust10']
         if(tokens.includes('')){
             return null
@@ -52,6 +53,8 @@ function extract(data: String){
 
     } // route 2
     else if(data[1] == '2'){
+
+        //! server needs to insert new record not create
         let col_names2 = ['Box_ID', 'Temperature', 'Humidity', 'CO2', 'Presence']
         if(tokens.includes('')){
             return null
