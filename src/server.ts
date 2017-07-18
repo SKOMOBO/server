@@ -7,6 +7,8 @@ export async function store(response: ServerResponse, route: number, values: any
     let connection = config_db()
 
     if(!has(values, null)){
+
+        // let query = 
         await connection.query('INSERT INTO arduino where BOX_ID = ' + values[0] + ' set ?' , values)
         // tell the client everything is ok
         response.writeHead(200, {"Content-Type": "text/HTML"})
@@ -59,6 +61,8 @@ function extract(data: String){
         })
 
         values['Presence'] = values['Presence'] == '1'
+        values['Temperature'] = Number(values['Temperature']) / 100
+        values['Humidity'] = Number(values['Temperature']) / 100
         // insert into the latest record that has the same box ID
         
         // boxID
