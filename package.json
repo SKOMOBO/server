@@ -18,7 +18,7 @@
   "scripts": {
     "test": "ava Compiled/tests/test.js --watch",
     "tsc": "tsc",
-    "start": "nodemon Compiled/src/arduino.js",
+    "start": "nodemon Compiled/src/server.js",
     "raspi": "nodemon Compiled/src/raspi.js"
   },
   "devDependencies": {

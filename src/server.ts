@@ -1,5 +1,24 @@
 import {createServer, Server,IncomingMessage, ServerResponse} from "http"
 
+import {config_db, has} from "./lib"
+
+export async function store(response: ServerResponse, route: number, values: any){
+
+    let connection = config_db()
+
+    if(!has(values, null)){
+        await connection.query('INSERT INTO arduino where BOX_ID = ' + values[0] + ' set ?' , values)
+        // tell the client everything is ok
+        response.writeHead(200, {"Content-Type": "text/HTML"})
+    }
+    else{
+        console.log("Invalid request!")
+        response.writeHead(400, {"Content-Type": "text/HTML"})
+    }
+       
+    //send the response
+    response.end()
+}
 
 function extract(data: String){
 
@@ -18,6 +37,11 @@ function extract(data: String){
             values[col_names1[index]] = value
         })
 
+        let times: String[] = values['Time_sent'].split("-")
+        let date = times.slice(0, 3).join("-")
+        let time = times.slice(3, 6).join(":")
+        values["Time_sent"] = date + " " + time
+
         // boxID 
         // day month year second minute hour
         // dust 1 2.5 10
@@ -34,6 +58,7 @@ function extract(data: String){
             values[col_names2[index]] = value
         })
 
+        values['Presence'] = values['Presence'] == '1'
         // insert into the latest record that has the same box ID
         
         // boxID
@@ -70,7 +95,7 @@ async function handler (request:IncomingMessage, response:ServerResponse)
 }
 
 
-var server = createServer(handler)
+export var server = createServer(handler)
 
 server.listen(81, '0.0.0.0', function(){
     //Callback triggered when server is successfully listening. Hurray!
