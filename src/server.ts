@@ -26,7 +26,10 @@ export async function store(response: ServerResponse, route: number, values: any
             // let query = 
             // console.log(values['BOX_ID'])
             // console.log(query)
-            await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_sent ASC LIMIT 1' , [ values, values['BOX_ID']])
+
+            // use received because it means that if the time sent wasnt received we still have a time to use
+            let query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received ASC LIMIT 1' , [ values, values['BOX_ID']])
+            console.log(query.sql)
             // tell the client everything is ok
             response.writeHead(200, {"Content-Type": "text/HTML"})
         }
