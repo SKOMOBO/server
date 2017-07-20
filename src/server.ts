@@ -6,16 +6,34 @@ export async function store(response: ServerResponse, route: number, values: any
 
     let connection = config_db()
 
-    if(!has(values, null)){
-
-        // let query = 
-        await connection.query('INSERT INTO arduino where BOX_ID = ' + values[0] + ' set ?' , values)
-        // tell the client everything is ok
-        response.writeHead(200, {"Content-Type": "text/HTML"})
+    if(route === 1){
+       // Create new record
+        if(!has(values, null)){
+            // let query = 
+            await connection.query('INSERT INTO arduino set ?' , values)
+            // tell the client everything is ok
+            response.writeHead(200, {"Content-Type": "text/HTML"})
+        }
+        else{
+            console.log("Invalid request!")
+            response.writeHead(400, {"Content-Type": "text/HTML"})
+        }
     }
-    else{
-        console.log("Invalid request!")
-        response.writeHead(400, {"Content-Type": "text/HTML"})
+    if(route === 2){
+         // insert data into existing most recent record
+        if(!has(values, null)){
+            // let query = 
+            // let query = 
+            // console.log(values['BOX_ID'])
+            // console.log(query)
+            await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_sent ASC LIMIT 1' , [ values, values['BOX_ID']])
+            // tell the client everything is ok
+            response.writeHead(200, {"Content-Type": "text/HTML"})
+        }
+        else{
+            console.log("Invalid request!")
+            response.writeHead(400, {"Content-Type": "text/HTML"})
+        }
     }
        
     //send the response
@@ -32,7 +50,7 @@ function extract(data: String){
     if(data[1] == '1'){
         
         //! server needs to create a new record not insert
-        let col_names1 = ['Box_ID', 'Time_sent', 'Dust1', 'Dust2_5', 'Dust10']
+        let col_names1 = ['BOX_ID', 'Time_sent', 'Dust1', 'Dust2_5', 'Dust10']
         if(tokens.includes('')){
             return null
         }
@@ -55,7 +73,7 @@ function extract(data: String){
     else if(data[1] == '2'){
 
         //! server needs to insert new record not create
-        let col_names2 = ['Box_ID', 'Temperature', 'Humidity', 'CO2', 'Presence']
+        let col_names2 = ['BOX_ID', 'Temperature', 'Humidity', 'CO2', 'Presence']
         if(tokens.includes('')){
             return null
         }
@@ -82,16 +100,17 @@ function extract(data: String){
     return values
 }
 
-async function handler (request:IncomingMessage, response:ServerResponse)
+async function handler(request:IncomingMessage, response:ServerResponse)
 {
     
     console.log(request.url)
     let data = request.url
     // evil but it works for now
  
-    if(data.length !== 0 && data !== "/"){
+    if(data.length !== 0 && data !== "/" && data != "/favicon.ico"){
         let values = extract(data)
         console.log(values)
+        store(response, Number(data[1]), values)
         // store(response, db_name, values)
     }
     else{
