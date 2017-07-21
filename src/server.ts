@@ -77,8 +77,16 @@ export var server = net.createServer((socket)=>{
 
     // let data = data.toString("UTF8")
     socket.on("data", (data)=>{
-        console.log(data.toString("UTF8"))
-        let values = extract(data.toString("UTF8"))
+
+        let received = data.toString("UTF8")
+        console.log(received)
+
+        if(received.includes("GET") || received.includes("POST") || received.includes("http")){
+            // if it is HTTP shit just return
+            return;
+        }
+        
+        let values = extract(received)
         console.log(values)
         store(values, connection)
     })
