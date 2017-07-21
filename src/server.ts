@@ -64,8 +64,9 @@ function extract(data: String){
 }
 
 async function store(values, connection){
-
-    let query = await connection.query('INSERT INTO arduino set ?' , values)
+    if(values !== {}){
+        let query = await connection.query('INSERT INTO arduino set ?' , values)
+    }
     // console.log(query.sql);
 }
 
