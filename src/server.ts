@@ -99,7 +99,7 @@ async function store(route, values, connection){
         else{
             console.log("Invalid request!")
         }
-       
+    }
     // console.log(query.sql);
 }
 
@@ -131,4 +131,4 @@ export var server = net.createServer((socket)=>{
 
 server.listen(80, '0.0.0.0', ()=>{
     console.log("Server listening on: %s:%s", require("ip").address(), 80);
-});
+})
