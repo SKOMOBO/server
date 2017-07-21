@@ -5,17 +5,18 @@ import {config_db} from "./lib"
 function extract(data: String){
 
     // breaks up each value by a dash and removes / in the front
-    let tokens: string[] = data.slice(3).split('_')
-    
+    let tokens: string[] = data.slice(2).split('_')
+    // console.log
+
     let values = {}
     // route 1
     if(data[0] == '1'){
         
         //! server needs to create a new record not insert
         let col_names1 = ['BOX_ID', 'Time_sent', 'Dust1', 'Dust2_5', 'Dust10']
-        if(tokens.includes('')){
-            return null
-        }
+        // if(tokens.includes('')){
+        //     return null
+        // }
         tokens.map((value, index)=>{
             values[col_names1[index]] = value
         })
@@ -64,12 +65,11 @@ function extract(data: String){
 
 async function store(values, connection){
 
-    await connection.query('INSERT INTO arduino set ?' , values)
-
+    let query = await connection.query('INSERT INTO arduino set ?' , values)
+    // console.log(query.sql);
 }
 
 export var server = net.createServer((socket)=>{
-    console.log("Server listening on: %s:%s", require("ip").address(), 80);
     let connection = config_db()
 
     socket.write("Connected")
@@ -80,15 +80,14 @@ export var server = net.createServer((socket)=>{
 
         let received = data.toString("UTF8")
         console.log(received)
-
-        if(received.includes("GET") || received.includes("POST") || received.includes("http")){
-            // if it is HTTP shit just return
-            return;
-        }
         
-        let values = extract(received)
-        console.log(values)
-        store(values, connection)
+        let isHTTP : boolean = received.includes("GET") || received.includes("POST") || received.includes("http")
+        
+        if(!isHTTP){
+            let values = extract(received)
+            console.log(values)
+            store(values, connection)
+        }
     })
 
     socket.pipe(socket)
@@ -96,4 +95,6 @@ export var server = net.createServer((socket)=>{
     // socket.end()
 })
 
-server.listen(80, '0.0.0.0');
+server.listen(80, '0.0.0.0', ()=>{
+    console.log("Server listening on: %s:%s", require("ip").address(), 80);
+});
