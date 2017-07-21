@@ -8,6 +8,9 @@ function extract(data: String){
     let tokens: string[] = data.slice(2).split('_')
     // console.log
 
+
+    //! FIX DB NOT STORING ON PRODUCTION
+
     let values = {}
     // route 1
     if(data[0] == '1'){
@@ -106,8 +109,8 @@ async function store(route, values, connection){
 export var server = net.createServer((socket)=>{
     let connection = config_db()
 
-    socket.write("Connected")
-    console.log("Connected");
+    // socket.write("Connected")
+    // console.log("Connected");
 
     // let data = data.toString("UTF8")
     socket.on("data", (data)=>{
