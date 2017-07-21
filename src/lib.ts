@@ -109,9 +109,9 @@ export function config_production(){
     return login_details
 }
 
-export function extract(url){
+export function extract(data:String){
      // breaks up each value by a dash and removes / in the front
-    let tokens: string[] = url.slice(1).split('_')
+    let tokens: string[] = data.split('_')
 
     // layout how the data is going to be mapped
     // use javascript array.map for this somehow
@@ -136,6 +136,8 @@ export function extract(url){
     values["Time_sent"] = date + " " + time
 
     values['Presence'] = values['Presence'] == '1'
+    values['Temperature'] = Number(values['Temperature']) / 100
+    values['Humidity'] = Number(values['Temperature']) / 100
 
     return values
 }
