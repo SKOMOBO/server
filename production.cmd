@@ -1,1 +1,1 @@
-pm2 start Compiled/src/server.js -f
+pm2 restart Compiled/src/server.js

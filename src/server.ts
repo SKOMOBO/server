@@ -1,6 +1,6 @@
 import * as net from "net"
 
-import {config_db} from "./lib"
+import {config_db,  has} from "./lib"
 
 function extract(data: String){
 
@@ -63,10 +63,24 @@ function extract(data: String){
     return values
 }
 
-async function store(values, connection){
-    if(values !== {}){
-        let query = await connection.query('INSERT INTO arduino set ?' , values)
+async function store(route, values, connection){
+
+    // if(values !== {}){
+        
+    //     let query = await connection.query('INSERT INTO arduino set ?' , values)
+    // }
+
+    
+    if(!has(values, null)){
+        await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+        // tell the client everything is ok
+        response.writeHead(200, {"Content-Type": "text/HTML"})
     }
+    else{
+        console.log("Invalid request!")
+        response.writeHead(400, {"Content-Type": "text/HTML"})
+    }
+       
     // console.log(query.sql);
 }
 
@@ -87,7 +101,7 @@ export var server = net.createServer((socket)=>{
         if(!isHTTP){
             let values = extract(received)
             console.log(values)
-            store(values, connection)
+            store(data[0], values, connection)
         }
     })
 
