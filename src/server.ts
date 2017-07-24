@@ -73,8 +73,14 @@ async function store(route, values, connection){
        // Create new record
         if(!has(values, null)){
             // let query = 
-            let query = await connection.query('INSERT INTO arduino set ?' , values)
-            console.log(query.sql) // tell the client everything is ok
+            let query
+            try{
+                query = await connection.query('INSERT INTO arduino set ?' , values)
+                console.log("SQL: ", query.sql)
+            }
+            catch(err){
+                console.log("error: ", err) // tell the client everything is ok
+            } 
         }
         else{
             console.log("Invalid request!")
@@ -85,10 +91,14 @@ async function store(route, values, connection){
         if(!has(values, null)){
             
             //! need to fix bug where it does not append if there is no record yet abd where it overwrites previous record if first one not sent
-
             // use received because it means that if the time sent wasnt received we still have a time to use
-            let query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received ASC LIMIT 1' , [ values, values['BOX_ID']])
-            console.log(query.sql)
+           let query 
+            try{
+                query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received ASC LIMIT 1' , [ values, values['BOX_ID']])
+            }
+            catch(err){
+                console.log("Error ", err)
+            }            // query.catch()
         }
         else{
             console.log("Invalid request!")
