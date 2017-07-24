@@ -94,7 +94,7 @@ async function store(route, values, connection){
             // use received because it means that if the time sent wasnt received we still have a time to use
            let query 
             try{
-                query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received ASC LIMIT 1' , [ values, values['BOX_ID']])
+                query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received DESC LIMIT 1' , [ values, values['BOX_ID']])
             }
             catch(err){
                 console.log("Error ", err)
