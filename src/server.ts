@@ -69,7 +69,7 @@ function extract(data: String){
 async function store(route, values, connection){
     console.log("route: ", route)
    
-    if(route === 1){
+    if(route === "1"){
        // Create new record
         if(!has(values, null)){
             // let query = 
@@ -86,7 +86,7 @@ async function store(route, values, connection){
             console.log("Invalid request!")
         }
     }
-    if(route === 2){
+    if(route === "2"){
          // insert data into existing most recent record
         if(!has(values, null)){
             
