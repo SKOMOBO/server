@@ -8,9 +8,6 @@ function extract(data: String){
     let tokens: string[] = data.slice(2).split('_')
     // console.log
 
-
-    //! FIX DB NOT STORING ON PRODUCTION
-
     let values = {}
     // route 1
     if(data[0] == '1'){
@@ -66,12 +63,8 @@ function extract(data: String){
     return values
 }
 
-async function store(route, values, connection){
-    console.log("route: ", route)
-   
-    if(route === "1"){
-       // Create new record
-        if(!has(values, null)){
+async function query(connection, query: String, values: any){
+    if(!has(values, null)){
             // let query = 
             let query
             try{
@@ -79,30 +72,59 @@ async function store(route, values, connection){
                 console.log("SQL: ", query.sql)
             }
             catch(err){
-                console.log("error: ", err) // tell the client everything is ok
+                console.log("error: ", err) // log the error that occured but don't crash server
             } 
-        }
-        else{
-            console.log("Invalid request!")
-        }
+    }
+    else{
+        console.log("Invalid request!")
+    }
+}
+
+async function store(route, values, connection){
+    console.log("route: ", route)
+    
+    if(route === "1"){
+        query(connection, 'INSERT INTO arduino set ?' , values)
+       // Create new record
+        // if(!has(values, null)){
+        //     // let query = 
+        //     let query
+        //     try{
+        //         query = await connection.query('INSERT INTO arduino set ?' , values)
+        //         console.log("SQL: ", query.sql)
+        //     }
+        //     catch(err){
+        //         console.log("error: ", err) // tell the client everything is ok
+        //     } 
+        // }
+        // else{
+        //     console.log("Invalid request!")
+        // }
     }
     if(route === "2"){
          // insert data into existing most recent record
-        if(!has(values, null)){
+        // if(!has(values, null)){
             
             //! need to fix bug where it does not append if there is no record yet abd where it overwrites previous record if first one not sent
             // use received because it means that if the time sent wasnt received we still have a time to use
-           let query 
-            try{
-                query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received DESC LIMIT 1' , [ values, values['BOX_ID']])
-            }
-            catch(err){
-                console.log("Error ", err)
-            }            // query.catch()
-        }
-        else{
-            console.log("Invalid request!")
-        }
+            query(connection, 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received DESC LIMIT 1', [ values, values['BOX_ID']])
+        //    let query 
+        //     try{
+        //         query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received DESC LIMIT 1' , [ values, values['BOX_ID']])
+        //     }
+        //     catch(err){
+        //         console.log("Error ", err)
+        //     }            // query.catch()
+        // }
+        // else{
+        //     console.log("Invalid request!")
+        // }
+    }
+}
+
+function isNotHTTP(received, callback: Function){
+    if(received.includes("GET") || received.includes("POST") || received.includes("http")){
+        callback()
     }
 }
 
@@ -118,13 +140,16 @@ export var server = net.createServer((socket)=>{
         let received = data.toString("UTF8")
         console.log(received)
         
-        let isHTTP : boolean = received.includes("GET") || received.includes("POST") || received.includes("http")
+        // let isHTTP : boolean = received.includes("GET") || received.includes("POST") || received.includes("http")
         
-        if(!isHTTP){
+        // if(!isHTTP){
+        isNotHTTP(received, ()=>{
             let values = extract(received)
             console.log(values)
             store(received[0], values, connection)
-        }
+        })
+            
+        // }
     })
 
     socket.pipe(socket)
