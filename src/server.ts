@@ -113,7 +113,7 @@ export var server = net.createServer((socket)=>{
         if(!isHTTP){
             let values = extract(received)
             console.log(values)
-            store(data[0], values, connection)
+            store(received[0], values, connection)
         }
     })
 
