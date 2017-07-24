@@ -67,13 +67,14 @@ function extract(data: String){
 }
 
 async function store(route, values, connection){
-
-     if(route === 1){
+    console.log("route: ", route)
+   
+    if(route === 1){
        // Create new record
         if(!has(values, null)){
             // let query = 
-            await connection.query('INSERT INTO arduino set ?' , values)
-            // tell the client everything is ok
+            let query = await connection.query('INSERT INTO arduino set ?' , values)
+            console.log(query.sql) // tell the client everything is ok
         }
         else{
             console.log("Invalid request!")
@@ -87,7 +88,7 @@ async function store(route, values, connection){
 
             // use received because it means that if the time sent wasnt received we still have a time to use
             let query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received ASC LIMIT 1' , [ values, values['BOX_ID']])
-          
+            console.log(query.sql)
         }
         else{
             console.log("Invalid request!")
