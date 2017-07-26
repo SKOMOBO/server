@@ -87,8 +87,8 @@ function extract(data: String){
         })
 
         values['Presence'] = values['Presence'] == '1'
-        values['Temperature'] = Number(values['Temperature']) / 100
-        values['Humidity'] = Number(values['Temperature']) / 100
+        // values['Temperature'] = Number(values['Temperature']) / 100
+        // values['Humidity'] = Number(values['Temperature']) / 100
         // insert into the latest record that has the same box ID
         
         // boxID
