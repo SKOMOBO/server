@@ -1,1 +1,1 @@
-pm2 start Compiled/src/server.js
+pm2 start C:\Users\15297751\Desktop\server\Compiled/src/server.js
