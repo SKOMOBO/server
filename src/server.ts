@@ -45,6 +45,16 @@ export async function store(response: ServerResponse, route: number, values: any
     response.end()
 }
 
+
+// use this to get values into values object
+
+// returns values object
+
+// also does the null check
+// function parse(tokens: string[], colnames: string[]){
+
+// }
+
 function extract(data: String){
 
     // breaks up each value by a dash and removes / in the front
