@@ -119,7 +119,7 @@ async function handler(request:IncomingMessage, response:ServerResponse)
 {
     
     console.log(request.url)
-    let data = request.url
+    let data = request.url.slice(1)
     // evil but it works for now
  
     if(data.length !== 0 && data !== "/" && data != "/favicon.ico"){
