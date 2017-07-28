@@ -136,8 +136,8 @@ export function extract(data:String){
     values["Time_sent"] = date + " " + time
 
     values['Presence'] = values['Presence'] == '1'
-    values['Temperature'] = Number(values['Temperature']) / 100
-    values['Humidity'] = Number(values['Temperature']) / 100
+    // values['Temperature'] = Number(values['Temperature']) / 100
+    // values['Humidity'] = Number(values['Temperature']) / 100
 
     return values
 }
