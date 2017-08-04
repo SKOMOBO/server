@@ -11,23 +11,13 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for table skomobo.box_data
-CREATE TABLE IF NOT EXISTS `box_data` (
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `Location` text NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='this is the table storing all the data about the individual SKOMOBO boxes.';
 
--- Data exporting was unselected.
--- Dumping structure for table skomobo.pir
-CREATE TABLE IF NOT EXISTS `pir` (
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- Dumping database structure for skomobo
+CREATE DATABASE IF NOT EXISTS `skomobo` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `skomobo`;
 
--- Data exporting was unselected.
--- Dumping structure for table skomobo.sensor_data
-CREATE TABLE IF NOT EXISTS `sensor_data` (
+-- Dumping structure for table skomobo.arduino
+CREATE TABLE IF NOT EXISTS `arduino` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Time_received` datetime DEFAULT CURRENT_TIMESTAMP,
   `Box_ID` int(11) DEFAULT NULL,
@@ -40,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `sensor_data` (
   `Humidity` float DEFAULT NULL,
   `CO2` float DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
