@@ -10,9 +10,9 @@ function extract(data: String){
 
     let values = {}
 
-    // assume requests hit router first which then splits into raspi and arduino respectively
+    // assume requests hit router nodejs that will probably be programmed with express? first which then splits into raspi and arduino respectively
 
-    let col_names1 = ['BOX_ID', 'Time_sent', 'Dust1', 'Dust2_5', 'Dust10']
+    let col_names1 = ['BOX_ID', 'Time_sent', 'Decibels', 'Distance1', 'Distance2', 'Distance3', 'Distance4', 'Distance5', 'Distance6', 'Distance7']
 
     tokens.map((value, index)=>{
 
@@ -25,28 +25,11 @@ function extract(data: String){
     let time = times.slice(3, 6).join(":")
     values["Time_sent"] = date + " " + time
 
-    // boxID 
-    // day month year second minute hour
-    // dust 1 2.5 10
-
-    let col_names2 = ['BOX_ID', 'Temperature', 'Humidity', 'CO2', 'Presence']
-    if(tokens.includes('')){
-        return null
-    }
-    tokens.map((value, index)=>{
-        values[col_names2[index]] = value
-    })
-
-    values['Presence'] = values['Presence'] == '1'
-    values['Temperature'] = Number(values['Temperature']) / 100
-    values['Humidity'] = Number(values['Temperature']) / 100
-
     return values
 }
 
 async function query(connection, query: String, values: any){
     if(!has(values, null)){
-            // let query = 
             let query
             try{
                 query = await connection.query('INSERT INTO arduino set ?' , values)
@@ -79,27 +62,20 @@ export var server = net.createServer((socket)=>{
     socket.write("Connected")
     console.log("Connected");
 
-    // let data = data.toString("UTF8")
     socket.on("data", (data)=>{
 
         let received = data.toString("UTF8")
         console.log(received)
         
-        // let isHTTP : boolean = received.includes("GET") || received.includes("POST") || received.includes("http")
-        
-        // if(!isHTTP){
         isNotHTTP(received, ()=>{
             let values = extract(received)
             console.log(values)
             store(values, connection)
         })
             
-        // }
     })
 
     socket.pipe(socket)
-
-    // socket.end()
 })
 
 server.listen(80, '0.0.0.0', ()=>{
