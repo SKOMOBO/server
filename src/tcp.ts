@@ -131,12 +131,13 @@ function isNotHTTP(received, callback: Function){
 export var server = net.createServer((socket)=>{
     let connection = config_db()
 
-    socket.write("Connected")
-    console.log("Connected");
+    // socket.write("Connected")
+    console.log("Connected")
 
     // let data = data.toString("UTF8")
     socket.on("data", (data)=>{
 
+        console.log("got data")
         let received = data.toString("UTF8")
         console.log(received)
         
