@@ -16,8 +16,8 @@ function extract(data: String){
 
     tokens.map((value, index)=>{
 
-        // converts from octal HEX or whatever is thrown at it to string integers
-        values[col_names1[index]] = String(parseInt(value))
+        // converts from HEX to string integers
+        values[col_names1[index]] = String(parseInt("0x" + value))
     })
 
     let times: String[] = values['Time_sent'].split("-")
