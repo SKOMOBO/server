@@ -36,7 +36,7 @@ async function query(connection, query: String, values: any){
     if(!has(values, null)){
             let query
             try{
-                query = await connection.query('INSERT INTO arduino set ?' , values)
+                query = await connection.query('INSERT INTO raspi set ?' , values)
                 console.log("SQL: ", query.sql)
             }
             catch(err){
@@ -83,7 +83,9 @@ export var server = net.createServer((socket)=>{
         console.log(error)
     })
 
+    socket.write("ack")
     socket.pipe(socket)
+    
 })
 
 server.listen(81, '0.0.0.0', ()=>{
