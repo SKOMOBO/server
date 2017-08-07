@@ -20,7 +20,8 @@
     "tsc": "tsc",
     "start": "nodemon Compiled/src/server.js",
     "raspi": "nodemon Compiled/src/raspi.js",
-    "tcp": "nodemon Compiled/src/tcp.js"
+    "tcp": "nodemon Compiled/src/tcp.js",
+    "hex_tcp": "nodemon Compiled/src/hex_tcp.js"
   },
   "devDependencies": {
     "@types/config": "0.0.32",
