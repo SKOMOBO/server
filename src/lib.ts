@@ -150,9 +150,10 @@ export function no_favicon(url:String, Callback: Function){
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
-export async function store(response: ServerResponse, database_name: String, values: any){
 
-    let connection = config_db()
+var connection = config_db()
+
+export async function store(response: ServerResponse, database_name: String, values: any){
 
     if(!has(values, null)){
         await connection.query('INSERT INTO ' + database_name + ' set ?' , values)

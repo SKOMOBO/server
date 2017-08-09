@@ -2,7 +2,7 @@ import * as http from "http"
 
 import {config_db,  has} from "./lib"
 
-function extract(data: String){
+function extract_raspi(data: String){
 
     // breaks up each value by a dash and removes / in the front
     let tokens: string[] = data.split('_')
