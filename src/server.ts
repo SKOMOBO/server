@@ -158,14 +158,17 @@ async function handler(request:IncomingMessage, response:ServerResponse)
     if(data.length !== 0 && data !== "/" && data != "/favicon.ico"){
 
         if(data.slice(0, 5) == "raspi"){
-            let values = extract_raspi(data)
+            let values = extract_raspi(data.slice(6))
             console.log(values)
             store(response, "raspi", values)
         }
-        let values = extract(data)
-        console.log(values)
-        // store(response, Number(data[1]), values)
-        store(response, "arduino", values)
+        else{
+            let values = extract(data)
+            console.log(values)
+            // store(response, Number(data[1]), values)
+            store(response, "arduino", values)
+        }
+    
     }
     else{
         response.writeHead(400)
