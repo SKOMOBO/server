@@ -151,7 +151,7 @@ export function no_favicon(url:String, Callback: Function){
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
 
-var connection = config_db()
+export var connection = config_db()
 
 export async function store(response: ServerResponse, database_name: String, values: any){
 

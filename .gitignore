@@ -8,6 +8,7 @@ yarn-error.log*
 Compiled
 Dist
 prod-password.json
+download_password.json
 
 # Runtime data
 pids

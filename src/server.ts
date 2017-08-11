@@ -1,120 +1,10 @@
 import {createServer, Server,IncomingMessage, ServerResponse} from "http"
 
-import {config_db, has, extract, store} from "./lib"
+import {connection, config_db, has, extract, store} from "./lib"
 
-// export async function store(response: ServerResponse, route: number, values: any){
+import *  as URL from "url"
 
-//     let connection = config_db()
-
-//     if(route === 1){
-//        // Create new record
-//         if(!has(values, null)){
-//             // let query = 
-//             await connection.query('INSERT INTO arduino set ?' , values)
-//             // tell the client everything is ok
-//             response.writeHead(200, {"Content-Type": "text/HTML"})
-//         }
-//         else{
-//             console.log("Invalid request!")
-//             response.writeHead(400, {"Content-Type": "text/HTML"})
-//         }
-//     }
-//     if(route === 2){
-//          // insert data into existing most recent record
-//         if(!has(values, null)){
-//             // let query = 
-//             // let query = 
-//             // console.log(values['BOX_ID'])
-//             // console.log(query)
-            
-//             //! need to fix bug where it does not append if there is no record yet abd where it overwrites previous record if first one not sent
-
-//             // use received because it means that if the time sent wasnt received we still have a time to use
-//             let query = await connection.query( 'UPDATE arduino SET ? WHERE BOX_ID = ? ORDER BY Time_received DESC LIMIT 1' , [ values, values['BOX_ID']])
-//             // console.log(query.sql)
-//             // tell the client everything is ok
-//             response.writeHead(200, {"Content-Type": "text/HTML"})
-//         }
-//         else{
-//             console.log("Invalid request!")
-//             response.writeHead(400, {"Content-Type": "text/HTML"})
-//         }
-//     }
-       
-//     //send the response
-//     response.end()
-// }
-
-
-// use this to get values into values object
-
-// returns values object
-
-// also does the null check
-// function parse(tokens: string[], colnames: string[]){
-
-// }
-
-// function extract(data: String){
-
-//     // breaks up each value by a dash and removes / in the front
-//     let tokens: string[] = data.slice(3).split('_')
-    
-//     let values = {}
-//     // route 1
-//     if(data[1] == '1'){
-        
-//         //! server needs to create a new record not insert
-//         let col_names1 = ['BOX_ID', 'Time_sent', 'Dust1', 'Dust2_5', 'Dust10']
-//         if(tokens.includes('')){
-//             return null
-//         }
-//         tokens.map((value, index)=>{
-//             values[col_names1[index]] = value
-//         })
-
-//         let times: String[] = values['Time_sent'].split("-")
-//         let date = times.slice(0, 3).join("-")
-//         let time = times.slice(3, 6).join(":")
-//         values["Time_sent"] = date + " " + time
-
-//         // boxID 
-//         // day month year second minute hour
-//         // dust 1 2.5 10
-
-
-
-//     } // route 2
-//     else if(data[1] == '2'){
-
-//         //! server needs to insert new record not create
-//         let col_names2 = ['BOX_ID', 'Temperature', 'Humidity', 'CO2', 'Presence']
-//         if(tokens.includes('')){
-//             return null
-//         }
-//         tokens.map((value, index)=>{
-//             values[col_names2[index]] = value
-//         })
-
-//         values['Presence'] = values['Presence'] == '1'
-//         // values['Temperature'] = Number(values['Temperature']) / 100
-//         // values['Humidity'] = Number(values['Temperature']) / 100
-//         // insert into the latest record that has the same box ID
-        
-//         // boxID
-//         //
-//         // Temp * 100
-//         // humidity * 100
-//         // CO2
-//         // PIR
-//     }
-//     else{
-//         console.log('invalid route')
-//     }
-
-//     return values
-// }
-
+import * as express from "express"
 
 function extract_raspi(data: String){
 
@@ -152,7 +42,9 @@ async function handler(request:IncomingMessage, response:ServerResponse)
     console.log(request.url)
 
     // remove leading /
-    let data = request.url.slice(1)
+    let url = request.url
+    let data = url.slice(1)
+
     // evil but it works for now
  
     if(data.length !== 0 && data !== "/" && data != "/favicon.ico"){
@@ -161,6 +53,30 @@ async function handler(request:IncomingMessage, response:ServerResponse)
             let values = extract_raspi(data.slice(6))
             console.log(values)
             store(response, "raspi", values)
+        }
+        else if(data.slice(0, 2) == "get"){
+            
+            let pass = require('../../download_password.json')
+            let values: URL.Url = URL.parse(url)
+
+            if(values.query !== null){
+                if(values.query.pass == pass){
+                    
+                    if(values.query.ID !== null){
+                        // return only this boxes data
+                        let arduino = await connection.query('SELECT * from arduino where Box_ID = ?', values.query.ID )
+                        let raspi = await connection.query('SELECT * from raspi where Box_ID = ?', values.query.ID )
+                        
+                        // add in express use it to clean all this shit
+                        // attach the file to the response and send the response
+                        response.attach()
+                    }
+                    else{
+                        // return all data
+                    }
+                }
+            }
+        
         }
         else{
             let values = extract(data)
