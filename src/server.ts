@@ -54,30 +54,30 @@ async function handler(request:IncomingMessage, response:ServerResponse)
             console.log(values)
             store(response, "raspi", values)
         }
-        else if(data.slice(0, 2) == "get"){
+        // else if(data.slice(0, 2) == "get"){
             
-            let pass = require('../../download_password.json')
-            let values: URL.Url = URL.parse(url)
+        //     let pass = require('../../download_password.json')
+        //     let values: URL.Url = URL.parse(url)
 
-            if(values.query !== null){
-                if(values.query.pass == pass){
+        //     if(values.query !== null){
+        //         if(values.query.pass == pass){
                     
-                    if(values.query.ID !== null){
-                        // return only this boxes data
-                        let arduino = await connection.query('SELECT * from arduino where Box_ID = ?', values.query.ID )
-                        let raspi = await connection.query('SELECT * from raspi where Box_ID = ?', values.query.ID )
+        //             if(values.query.ID !== null){
+        //                 // return only this boxes data
+        //                 let arduino = await connection.query('SELECT * from arduino where Box_ID = ?', values.query.ID )
+        //                 let raspi = await connection.query('SELECT * from raspi where Box_ID = ?', values.query.ID )
                         
-                        // add in express use it to clean all this shit
-                        // attach the file to the response and send the response
-                        response.attach()
-                    }
-                    else{
-                        // return all data
-                    }
-                }
-            }
+        //                 // add in express use it to clean all this shit
+        //                 // attach the file to the response and send the response
+        //                 response.attach()
+        //             }
+        //             else{
+        //                 // return all data
+        //             }
+        //         }
+        //     }
         
-        }
+        // }
         else{
             let values = extract(data)
             console.log(values)

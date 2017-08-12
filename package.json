@@ -21,7 +21,8 @@
     "start": "nodemon Compiled/src/server.js",
     "raspi": "nodemon Compiled/src/raspi.js",
     "tcp": "nodemon Compiled/src/tcp.js",
-    "hex_tcp": "nodemon Compiled/src/hex_tcp.js"
+    "hex_tcp": "nodemon Compiled/src/hex_tcp.js",
+    "express": "nodemon Compiled/src/server-express2.js"
   },
   "devDependencies": {
     "@types/config": "0.0.32",
