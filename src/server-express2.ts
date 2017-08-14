@@ -95,7 +95,7 @@ app.get("/get*", async (req, resp) =>{
                 connection.query('SELECT * from arduino where Box_ID = ' + String(req.query.id), (err, results , fields)=>{
                     // console.log(results)
 
-                    if(results.length !== 0){
+                    if(results !== null && results.length !== 0){
                         send_file('arduino.csv', buff_to_bit(results), resp)
                     }
                     else{
@@ -106,7 +106,7 @@ app.get("/get*", async (req, resp) =>{
             
             else if(req.query.type == 'raspi'){
                 connection.query('SELECT * from raspi where Box_ID = ' + String(req.query.id), (err, results , fields)=>{
-                    if(results.length !== 0){
+                    if(results !== null && results.length !== 0){
                         send_file('raspi.csv', results, resp)
                     }
                     else{
@@ -141,7 +141,7 @@ app.get("/get*", async (req, resp) =>{
 
             if(req.query.type == 'arduino'){
                 connection.query('SELECT * from arduino', (err, results , fields)=>{
-                    if(results.length !== 0){
+                    if( results !== null && results.length !== 0){
                         send_file('arduino.csv', buff_to_bit(results), resp)
                     }
                     else{
@@ -152,7 +152,7 @@ app.get("/get*", async (req, resp) =>{
             
             else if(req.query.type == 'raspi'){
                 connection.query('SELECT * from raspi', (err, results , fields)=>{
-                    if(results.length !== 0){
+                    if(results !== null && results.length !== 0){
                         send_file('raspi.csv', results, resp)
                     }
                     else{
