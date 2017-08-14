@@ -242,6 +242,9 @@ app.get("/get*", async (req, resp) =>{
             // return all data
         }
     }
+    else{
+        resp.send("invalid password")
+    }
 })
 
 app.get("/favicon.ico", (req, resp) =>{
