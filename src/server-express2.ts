@@ -91,9 +91,9 @@ app.get("/get*", async (req, resp) =>{
          if(req.query.id != null){
             
             if(req.query.type == 'arduino'){
-                console.log(req.query.id)
+                // console.log(req.query.id)
                 connection.query('SELECT * from arduino where Box_ID = ' + String(req.query.id), (err, results , fields)=>{
-                    console.log(results)
+                    // console.log(results)
 
                     if(results.length !== 0){
                         send_file('arduino.csv', buff_to_bit(results), resp)
