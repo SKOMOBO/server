@@ -4,25 +4,3 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/skomobo/server/badge.svg)](https://snyk.io/test/github/skomobo/server)
 
 The nodejs server for the skomobo project
-
-typescript
-
-artilleryjs
-
-super test
-
-nyc
-
-avajs
-
-setup ways to test both production server and local using artillery and super test, both with and without database connection,
-
-make a test database that it connects to that stores dud data keep normal for real data
-
-local data is fine just for production.
-
-maybe can use production db just need to be able to reset auto increment index and delete all the test data
-
-ask ITS if I may do a load test before conducting one to ensure that they are ready
-
-keymetrics make sure typescript compiles might need to  be post pull hook or something
