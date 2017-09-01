@@ -67,6 +67,16 @@ function buff_to_bit(data){
     return data
 }
 
+
+/**
+ * This function will correct the timestamp issue found in the csv file
+ * 
+ * @param {any} data 
+ */
+function fix_timestamp(data){
+
+}
+
 function send_file(file, data, resp){
     
     let csv = json2csv({data: data})
@@ -145,7 +155,7 @@ app.get("/get*", async (req, resp) =>{
                         send_file('arduino.csv', buff_to_bit(results), resp)
                     }
                     else{
-                        resp.send("No box with ID " + req.query.id)
+                        resp.send("No arduino data stored in database")
                     }
                 })
             }
@@ -156,7 +166,7 @@ app.get("/get*", async (req, resp) =>{
                         send_file('raspi.csv', results, resp)
                     }
                     else{
-                        resp.send("No box with ID " + req.query.id)
+                        resp.send("No Raspberry pi data stored in database")
                     }
                 })
             }
