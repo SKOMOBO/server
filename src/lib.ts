@@ -194,14 +194,14 @@ export function handler_generator(data:any, decoder: Function, db_name: String){
 }
 
 import {createServer, Server, IncomingMessage, ServerResponse} from "http"
-export function spawn(port: Number, handler: (request: IncomingMessage, response: ServerResponse) => void): Server{
-    let server = createServer(handler)
+// export function spawn(port: Number, handler: (request: IncomingMessage, response: ServerResponse) => void): Server{
+//     let server = createServer(handler)
 
-    //Lets start our server
-    server.listen(port, '0.0.0.0', function(){
-        //Callback triggered when server is successfully listening. Hurray!
-        console.log("Server listening on: http://%s:%s", require("ip").address(), port);
-    });
+//     //Lets start our server
+//     server.listen(port, '0.0.0.0', function(){
+//         //Callback triggered when server is successfully listening. Hurray!
+//         console.log("Server listening on: http://%s:%s", require("ip").address(), port);
+//     });
 
-    return server
-}
+//     return server
+// }
