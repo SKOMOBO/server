@@ -1,7 +1,4 @@
-import {app} from './server'
-import {store} from './lib'
-
-function extract_raspi(data: String){
+export function extract_raspi(data: String){
     
     // breaks up each value by a dash and removes / in the front
     let tokens: string[] = data.split('_')
