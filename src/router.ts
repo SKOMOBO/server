@@ -35,12 +35,10 @@ app.get("/get*", async (req, resp) =>{
 
             else if(req.query.type == 'all'){
 
-                // resp.send("This will send a zip file with both raspberry pi and arduino data in the near future")
                 send_zip(resp, {})
             }
             else{
                 please_send_type(resp)
-                // resp.send("Please set board type by adding &type= to your URL. \n eg: http://seat-skomobo.massey.ac.nz/get?pass=8888888888&type=arduino")
             }
 
         }
@@ -62,10 +60,4 @@ app.get("/get*", async (req, resp) =>{
             }
         }
     })
-})
-     
-
-// should we move the app listen to server or leave here? leave here for now
-app.listen(81, '0.0.0.0', function () {
-    console.log("Server listening on: http://%s:%s", require("ip").address(), 81);
 })

@@ -27,11 +27,3 @@ export function extract_raspi(data: String){
     return values
 }
 
-app.get("/raspi*", (req, resp) =>{
-
-    let data = req.url.slice(7)
-    console.log(data)
-    let values = extract_raspi(data)
-    console.log(values)
-    store(resp, "raspi", values)
-})

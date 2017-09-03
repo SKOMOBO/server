@@ -1,6 +1,65 @@
 // // write tdd style tests here using avajs
 
-// import test from "ava"
+import test from "ava"
+
+import {authenticate} from '../src/authentication_manger'
+
+test('authentication_fails', t=>{
+    let failed = false
+    authenticate('1345', ()=>{ failed = true }, ()=>{})
+
+    t.true(failed)
+})
+
+test('authentication_works', t=>{
+    let success = false
+
+    let right_password = require('../../src/download_password.json').password
+
+    authenticate(right_password, ()=>{}, ()=>{ success = true  })
+
+    t.true(success)
+})
+
+import {extract} from '../src/lib'
+test('extract works', t=>{
+
+    let data = extract('0_2016-6-23-12-23-2_12332_12_31_23434_12_2434_1')
+    let true_data = { 
+        Box_ID: '0',
+        Time_sent: '2016-6-23 12:23:2',
+        Dust1: '12332',
+        Dust2_5: '12',
+        Dust10: '31',
+        Temperature: '23434',
+        Humidity: '12',
+        CO2: '2434',
+        Presence: true 
+    }
+
+    t.deepEqual(data, true_data)
+})
+
+test('extract fails', t=>{
+    
+    let data = extract('0_2017-6-23-12-23-2_12332_12_31_23434_12_2434_1')
+    let true_data = { 
+        Box_ID: '0',
+        Time_sent: '2016-6-23 12:23:2',
+        Dust1: '12332',
+        Dust2_5: '12',
+        Dust10: '31',
+        Temperature: '23434',
+        Humidity: '12',
+        CO2: '2434',
+        Presence: true 
+    }
+
+    t.notDeepEqual(data, true_data)
+})
+
+// succeed requires the password
+
 
 // import {has, repeat, config_production} from "../src/lib"
 
