@@ -112,7 +112,7 @@ export function config_production(){
 export function extract(data:String){
 
     // make sure there is actually data available  
-    if( data !== '' && data !== ' ' && data !== null){
+    if( data !== '' && data !== ' ' && data != undefined){
           // breaks up each value by a dash and removes / in the front
         let tokens: string[] = data.split('_')
         

@@ -2,7 +2,7 @@
 import * as express from "express"
 
 import {no_favicon, store_arduino, store_raspi} from "./server"
-import {get_arduino, get_raspi, get_all_arduino, get_all_raspi} from "./database_manager"
+import {get_type} from "./database_manager"
 
 export var app = express()
 
@@ -12,52 +12,26 @@ export var app = express()
 // need a way to make my functions protocol agnostic too?? how to do that I think it might be already
 
 app.get("/favicon.ico", no_favicon)
-
-app.get("/*", store_arduino)
 app.get("/raspi*", store_raspi)
 
 import {authenticate} from './authentication_manger'
 import {send_zip} from './file_manager'
 import {please_send_type} from './message_manager'
 
+var supported_types = ['arduino', 'raspi']
 app.get("/get*", async (req, resp) =>{
     
     authenticate(req.query.pass, resp.send, ()=>{
-        if(req.query.id != null){
-            
-            if(req.query.type == 'arduino'){
-                get_arduino(req, resp)
-            }
-            
-            else if(req.query.type == 'raspi'){
-                get_raspi(req, resp)
-            }
-
-            else if(req.query.type == 'all'){
-
-                send_zip(resp, {})
-            }
-            else{
-                please_send_type(resp)
-            }
-
+        if(req.query.type == 'all'){
+            send_zip(resp, {})
+        }
+        else if(supported_types.includes(req.query.type)){
+            get_type(req.query.type, req, resp)
         }
         else{
-
-            if(req.query.type == 'arduino'){
-                get_all_arduino(req, resp)
-            }
-            
-            else if(req.query.type == 'raspi'){
-                get_all_raspi(req,resp)
-            }
-
-            else if(req.query.type == 'all'){
-                send_zip(resp, {})
-            }
-            else{
-                please_send_type(resp)
-            }
+            please_send_type(resp)
         }
     })
 })
+
+app.get("/*", store_arduino)
