@@ -1,20 +1,4 @@
 
-//? for tcp
-//import * as net from "net"
-
-// export var server = net.createServer((socket)=>{
-//     let connection = config_db()
-
-//     // socket.write("Connected")
-//     console.log("Connected")
-
-//     // let data = data.toString("UTF8")
-//     socket.on("data", (data)=>{
-
-//         console.log("got data")
-//         let received = data.toString("UTF8")
-//         console.log(received)
-        
 
 
 //  let values = JSON.parse(request.headers)
@@ -34,16 +18,6 @@
 // }
 
 
-
-/**
- * This function will correct the timestamp issue found in the csv file
- * 
- * @param {any} data 
- */
-function fix_timestamp(data){
-
-}
-
 // import * as archiver from "archiver"
 
 import {send_zip, send_file} from './file_manager'
@@ -55,26 +29,39 @@ export function no_favicon(req, resp){
 
 import {extract_raspi} from './raspi'
 
-export function store_raspi(req,resp){
-    let data = req.url.slice(7)
-    console.log(data)
-    let values = extract_raspi(data)
-    console.log(values)
-    store(resp, "raspi", values)
-}
-
 
 // should we make basic functions in here and just call them from router? i think so to make things
 // more legible
 
 import { has, extract, store} from "./lib"
 
+export function validate_data(data, handler){
+    console.log(data)
+    if (data != undefined && data !== '' && data !== ' ' && data !== 'raspi' && data !== 'raspi/'){
+        handler(data)
+    }
+}
+
 export function store_arduino(req, resp){
+
     let url = req.url.slice(1)
-    console.log(url)
-    let values = extract(url)
-    console.log(values)
-    store(resp, "arduino", values)
+    validate_data(url, (data)=>{
+        console.log(data)
+        let values = extract(url)
+        console.log(values)
+        store(resp, "arduino", values)
+    })
+}
+
+export function store_raspi(req,resp){
+
+    let url = req.url.slice(1)
+    validate_data(url, (data)=>{
+        console.log(data)
+        let values = extract_raspi(url)
+        console.log(values)
+        store(resp, "raspi", values)
+    })
 }
 
 

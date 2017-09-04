@@ -58,6 +58,17 @@ test('extract fails', t=>{
     t.notDeepEqual(data, true_data)
 })
 
+import {fix_timestamp} from '../src/database_manager'
+test('Time formatting works', t=>{
+    let actual = fix_timestamp(new Date('2017-08-21T09:50:57.000Z'))
+    let expected = '2017-8-21 21:50:57'
+
+    t.is(actual, expected)
+})  
+
+
+
+
 // succeed requires the password
 
 

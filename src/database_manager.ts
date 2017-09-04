@@ -22,29 +22,13 @@ function fix_formatting(data){
 }
 
 
-function fix_timestamp(data: Date){
+// below two timestamp functions were retrieved from https://stackoverflow.com/a/5133807/6142189
+
+
+export function fix_timestamp(data: Date){
     
-    //! apparently there is a date object we somehow need to get the correct timestamp and datefrom it
+    return data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate() + " " + data.getHours() + ":" + data.getMinutes() + ":" + data.getSeconds();
 
-
-
-    // let [date, time] = data.split('T')
-
-    // // remove .000Z at end
-    // time = time.slice(0, -4);
-
-    // // swap pm to am and vice versa in 24 hour time
-    // let hour = Number(time.slice(0, 2))
-    
-    // // add 12 hours to swap from pm to am etc 
-    // hour += 12
-
-    // // set to remainder of 24 to get actual am or pm time
-    // hour = hour % 24
-
-    // time = String(hour) + time.slice(2)
-    
-    // return date + ' ' + time
 }
 
 import {connection} from './lib'
