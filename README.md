@@ -4,3 +4,5 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/skomobo/server/badge.svg)](https://snyk.io/test/github/skomobo/server)
 
 The nodejs server for the skomobo project
+
+Do not delete the start-server.cmd script! it should autostart the server if the virtual machine gets rebooted
