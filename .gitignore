@@ -10,6 +10,8 @@ Dist
 prod-password.json
 download_password.json
 
+*.csv
+
 # Runtime data
 pids
 *.pid
