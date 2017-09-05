@@ -13,8 +13,12 @@ export function send_file(file, data, resp){
     
     let csv = json2csv({data: data})
     
-    fs.writeFile(file, csv, function(err) {
-        if (err) throw err;
-        resp.download(file)
-    });
+    // telling the browser to treat the text as a attachment
+    resp.set({'Content-Disposition': 'attachment; filename="' + file + '"'})
+    resp.send(csv);
+
+    // fs.writeFile(file, csv, function(err) {
+    //     if (err) throw err;
+    //     resp.download(file)
+    // });
 }

@@ -7,6 +7,7 @@
     "@types/ip": "0.0.30",
     "@types/node": "^7.0.13",
     "@types/ramda": "^0.0.7",
+    "@types/request": "^2.0.3",
     "archiver": "^2.0.0",
     "config": "^1.26.1",
     "express": "^4.15.4",
@@ -15,6 +16,7 @@
     "mysql": "^2.13.0",
     "mysql2": "^1.2.0",
     "rambda": "^0.5.6",
+    "request": "^2.81.0",
     "toml": "^2.3.2",
     "typeorm": "0.0.11"
   },
