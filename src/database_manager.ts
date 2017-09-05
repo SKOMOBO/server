@@ -37,9 +37,14 @@ import {connection} from './lib'
 // so that we only get x number of rows will have to calculate chunks
 
 export function get_type(name: String, req, resp){
+    if(req.query.id == undefined){
+        resp.send("Please specify a box ID by adding &id=yourID to the end of your URL ")
+        return
+    }
+    
     let query = 'SELECT * from ' + name
     
-    if(req.query.id != null){ 
+    if(req.query.id != "all"){ 
         query += ' where Box_ID = ' + String(req.query.id)
     }
     connection.query(query, (err, results , fields)=>{ 
