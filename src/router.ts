@@ -14,6 +14,10 @@ export var app = express()
 app.get("/favicon.ico", no_favicon)
 app.get("/raspi*", store_raspi)
 
+//! make a route called /web* to forward data to the keystonejs website
+//!
+//! 
+
 import {authenticate} from './authentication_manger'
 import {send_zip} from './file_manager'
 import {please_send_type} from './message_manager'
