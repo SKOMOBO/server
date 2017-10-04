@@ -9,7 +9,26 @@ export function send_zip(resp, data){
     no_zip(resp)
 }
 
-export function send_file(file, data, resp){
+export function send_file(file, resp){
+
+    // telling the browser to treat the text as a file with a specific name
+    resp.set({'Content-Disposition': 'attachment; filename="' + file + '"'})
+
+    fs.readFile(file, (err, text)=>{
+        resp.send(text)
+    })
+}
+
+export function send_firmware(file, version, resp){
+    
+    // update the file to match version in config
+    // let text = String(fs.readFileSync(file)[0]).replace("version = \d", "version = " + String(version))
+    // fs.writeFileSync(file, text)
+    send_file(file, resp)
+
+}
+
+export function send_csv(file, data, resp){
     
     let csv = json2csv({data: data})
     

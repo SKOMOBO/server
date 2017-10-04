@@ -1,5 +1,5 @@
 
-import {send_file} from './file_manager'
+import {send_csv} from './file_manager'
 import {no_box} from './message_manager'
 
 /**
@@ -49,7 +49,7 @@ export function get_type(name: String, req, resp){
     }
     connection.query(query, (err, results , fields)=>{ 
         if(results !== null && results.length !== 0){
-            send_file(name + '.csv', fix_formatting(results), resp)
+            send_csv(name + '.csv', fix_formatting(results), resp)
         }
         else{
             no_box(resp, req.query.id)
