@@ -1,5 +1,5 @@
 
-import {send_csv} from './file_manager'
+import {send_csv, send_json} from './file_manager'
 import {no_box} from './message_manager'
 
 /**
@@ -8,7 +8,7 @@ import {no_box} from './message_manager'
  * @param {any} data 
  * @returns 
  */
-function fix_formatting(data){
+export function fix_formatting(data){
     if(data[0].Presence != undefined){
         // for each text row
         for(let row=0; row<data.length; row++){
@@ -36,7 +36,7 @@ import {connection} from './lib'
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
-export function get_type(name: String, req, resp){
+export function get_type(name: String, req, resp, format){
     if(req.query.id == undefined){
         resp.send("Please specify a box ID by adding &id=yourID to the end of your URL ")
         return
@@ -49,7 +49,12 @@ export function get_type(name: String, req, resp){
     }
     connection.query(query, (err, results , fields)=>{ 
         if(results !== null && results.length !== 0){
-            send_csv(name + '.csv', fix_formatting(results), resp)
+
+            if(format === 'json'){
+                send_json(results, resp)
+            }else{
+                send_csv(name + '.csv', fix_formatting(results), resp)
+            }
         }
         else{
             no_box(resp, req.query.id)

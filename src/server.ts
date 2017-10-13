@@ -20,7 +20,7 @@
 
 // import * as archiver from "archiver"
 
-import {send_zip, send_file} from './file_manager'
+import {send_zip, send_csv} from './file_manager'
 import {no_box, please_send_type} from './message_manager'
 
 export function no_favicon(req, resp){

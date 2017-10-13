@@ -47,12 +47,12 @@ app.get("/update*", (req, resp) =>{
 
 app.get("/get*", async (req, resp) =>{
     
-    authenticate(req.query.pass, resp.send, ()=>{
+    authenticate(req.query.pass, resp, ()=>{
         if(req.query.type == 'all'){
             send_zip(resp, {})
         }
         else if(supported_types.includes(req.query.type)){
-            get_type(req.query.type, req, resp)
+            get_type(req.query.type, req, resp, req.query.format)
         }
         else{
             please_send_type(resp)

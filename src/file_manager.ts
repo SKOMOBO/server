@@ -41,3 +41,9 @@ export function send_csv(file, data, resp){
     //     resp.download(file)
     // });
 }
+
+import {fix_formatting} from './database_manager'
+
+export function send_json(data, resp){
+    resp.send(fix_formatting(data))
+}

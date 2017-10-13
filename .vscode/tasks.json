@@ -10,4 +10,5 @@
     "showOutput": "silent",
     "isBackground": true,
     "problemMatcher": "$tsc-watch"
+
 }
