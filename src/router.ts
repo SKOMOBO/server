@@ -4,7 +4,12 @@ import * as express from "express"
 import {no_favicon, store_arduino, store_raspi} from "./server"
 import {get_type} from "./database_manager"
 
+var compress = require("compression")
 export var app = express()
+
+// Enable GZIP compression
+app.use(compress())
+
 
 // to make my own router for tcp just need to match first number to a route and send the rest
 // to the function

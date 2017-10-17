@@ -37,8 +37,11 @@ import {connection} from './lib'
 // so that we only get x number of rows will have to calculate chunks
 
 export function get_type(name: String, req, resp, format){
-    if(req.query.id == undefined){
-        resp.send("Please specify a box ID by adding &id=yourID to the end of your URL ")
+
+    if(req.query.id == undefined || isNaN(req.query.id) && req.query.id != 'all'){
+        resp.send(`Please specify a box ID by adding <b>&id=yourID</b> to the end of your URL <br>
+        EG: <b>http://seat-skomobo.massey.ac.nz/get?type=arduino&pass=8888888888&id=0</b><br>
+        Please note using this example link only has dummy data`)
         return
     }
     

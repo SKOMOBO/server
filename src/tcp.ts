@@ -1,14 +1,14 @@
 import * as net from "net"
 
 export var app = net.createServer((socket)=>{
-    console.log("Connected")
+    // console.log("Connected")
 
     socket.on("data", (data)=>{
 
         // console.log("got data")
         let received = data.toString("UTF8")
 
-        console.log(received)
+        // console.log(received)
 
         to_massey(received)
     })
@@ -40,9 +40,9 @@ function to_massey(data: string){
     }
 
     request('http://seat-skomobo.massey.ac.nz' + route, function (error, response, body) {
-        console.log('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body); // Print the HTML for the Google homepage.
+        // console.log('error:', error); // Print the error if one occurred
+        // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        // console.log('body:', body); // Print the HTML for the Google homepage.
     });
     // remove first routing values
     // options.path = route + data.slice(2)
