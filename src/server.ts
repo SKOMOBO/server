@@ -36,7 +36,7 @@ import {extract_raspi} from './raspi'
 import { has, extract, store} from "./lib"
 
 export function validate_data(data, handler){
-    console.log(data)
+    // console.log(data)
     if (data != undefined && data !== '' && data !== ' ' && data !== 'raspi' && data !== 'raspi/'){
         handler(data)
     }
@@ -46,9 +46,9 @@ export function store_arduino(req, resp){
 
     let url = req.url.slice(1)
     validate_data(url, (data)=>{
-        console.log(data)
+        // console.log(data)
         let values = extract(url)
-        console.log(values)
+        // console.log(values)
         store(resp, "arduino", values)
     })
 }
@@ -57,9 +57,9 @@ export function store_raspi(req,resp){
 
     let url = req.url.slice(1)
     validate_data(url, (data)=>{
-        console.log(data)
+        // console.log(data)
         let values = extract_raspi(url)
-        console.log(values)
+        // console.log(values)
         store(resp, "raspi", values)
     })
 }

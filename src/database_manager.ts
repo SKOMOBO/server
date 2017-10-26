@@ -1,6 +1,6 @@
 
 import {send_csv, send_json} from './file_manager'
-import {no_box} from './message_manager'
+import {no_box, please_send_id} from './message_manager'
 
 /**
  * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
@@ -36,19 +36,45 @@ import {connection} from './lib'
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
+function 
+
 export function get_type(name: String, req, resp, format){
 
-    if(req.query.id == undefined || isNaN(req.query.id) && req.query.id != 'all'){
-        resp.send(`Please specify a box ID by adding <b>&id=yourID</b> to the end of your URL <br>
-        EG: <b>http://seat-skomobo.massey.ac.nz/get?type=arduino&pass=8888888888&id=0</b><br>
-        Please note using this example link only has dummy data`)
+
+
+    // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
+    // if(req.query.id == undefined || isNaN(req.query.id) && req.query.id != 'all'){
+    //     if(req.query.prototype.indexOf('_') === -1){
+    //         please_send_id(resp)
+    //         return
+    //     }
+    // }
+
+    // check if it is a valid number if it is we carry on without issues
+    if(isNaN(req.query.id)){
+        resp.query.id =  String(resp.query.id)
+
+        //check to see if it is underscore seperated
+        if(req.query.prototype.indexOf('_') === -1){
+            please_send_id(resp)
+            return
+        }
+    }
+    else if(req.query.id == undefined){
+        please_send_id(resp)
         return
     }
-    
+
     let query = 'SELECT * from ' + name
     
     if(req.query.id != "all"){ 
-        query += ' where Box_ID = ' + String(req.query.id)
+        resp.query.id =  String(resp.query.id)
+        if(resp.query.id.prototype.indexOf('_') > -1){
+            query += ' where Box_ID in (' + resp.query.id.replace('_', ',') + ')'
+            console.log(query)
+        }else{
+            query += ' where Box_ID = ' + req.query.id
+        }
     }
     connection.query(query, (err, results , fields)=>{ 
         if(results !== null && results.length !== 0){

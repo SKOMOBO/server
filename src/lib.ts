@@ -77,7 +77,7 @@ export function connect_db(details: any){
     try{
         connection = mysql.createConnection(details)
     }catch(e){
-        console.log("Database not started")
+        // console.log("Database not started")
 
         // change this so that it executes cmd cmmand to start DB
     }
@@ -166,7 +166,7 @@ export async function store(response: ServerResponse, database_name: String, val
         response.writeHead(200, {"Content-Type": "text/HTML"})
     }
     else{
-        console.log("Invalid request!")
+        // console.log("Invalid request!")
         response.writeHead(400, {"Content-Type": "text/HTML"})
     }
        
@@ -178,19 +178,19 @@ export function handler_generator(data:any, decoder: Function, db_name: String){
     return async (request:IncomingMessage, response:ServerResponse)=>{
         
         no_favicon(request.url, ()=>{
-            console.log(request.url)
+            // console.log(request.url)
         
             // evil but it works for now
             data = eval(data)
             let values
             if(data.length !== 0 && data !== "/"){
                 values = decoder(data)
-                console.log(values)
+                // console.log(values)
                 store(response, db_name, values)
             }
             else{
                 response.writeHead(400)
-                console.log("No data")
+                // console.log("No data")
             }
             
         })
