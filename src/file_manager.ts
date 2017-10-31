@@ -3,6 +3,8 @@ import {no_zip} from './message_manager'
 
 import * as fs from "fs"
 
+//! this desperately needs to be cleaned up to make dependency tree simpler
+
 let json2csv = require('json2csv')  
 
 export function send_zip(resp, data){

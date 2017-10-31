@@ -1,3 +1,6 @@
+
+//! will probably replace this with ESP32 instead
+
 export function extract_raspi(data: String){
     
     // breaks up each value by a dash and removes / in the front

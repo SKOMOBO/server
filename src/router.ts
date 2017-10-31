@@ -11,6 +11,10 @@ export var app = express()
 app.use(compress())
 
 
+//! look through here for abstraction oppurtunities
+//! create unit tests for all the things!!!
+
+
 // to make my own router for tcp just need to match first number to a route and send the rest
 // to the function
 
