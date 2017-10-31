@@ -4,6 +4,11 @@ import * as express from "express"
 import {no_favicon, store_arduino, store_raspi} from "./server"
 import {get_type} from "./database_manager"
 
+
+// bugsnag integration
+import {register} from "bugsnag"
+register(require("../../src/global_keys.json").bugsnag_key)
+
 var compress = require("compression")
 export var app = express()
 

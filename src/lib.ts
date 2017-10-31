@@ -33,6 +33,10 @@ export function repeat(col: string, times: number){
 
 // import * as R from "ramda"
 
+
+//? probably a lodash function for this too, check and create my own custom lib
+// make sure it excludes things like map partial etc that ES6 already provides
+
 /**
  * Checks if the object contains any children with value or if it itself is that value
  * 

@@ -36,7 +36,7 @@ import {connection} from './lib'
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
-function 
+// function 
 
 export function get_type(name: String, req, resp, format){
 
@@ -52,10 +52,10 @@ export function get_type(name: String, req, resp, format){
 
     // check if it is a valid number if it is we carry on without issues
     if(isNaN(req.query.id)){
-        resp.query.id =  String(resp.query.id)
+        req.query.id =  String(req.query.id)
 
         //check to see if it is underscore seperated
-        if(req.query.prototype.indexOf('_') === -1){
+        if(req.query.id.indexOf('_') === -1){
             please_send_id(resp)
             return
         }
@@ -68,10 +68,9 @@ export function get_type(name: String, req, resp, format){
     let query = 'SELECT * from ' + name
     
     if(req.query.id != "all"){ 
-        resp.query.id =  String(resp.query.id)
-        if(resp.query.id.prototype.indexOf('_') > -1){
-            query += ' where Box_ID in (' + resp.query.id.replace('_', ',') + ')'
-            console.log(query)
+        req.query.id =  String(req.query.id)
+        if(req.query.id.indexOf('_') > -1){
+            query += ' where Box_ID in (' + req.query.id.replace('_', ',') + ')'
         }else{
             query += ' where Box_ID = ' + req.query.id
         }

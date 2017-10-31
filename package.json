@@ -9,6 +9,7 @@
     "@types/ramda": "^0.0.7",
     "@types/request": "^2.0.3",
     "archiver": "^2.0.0",
+    "bugsnag": "^2.0.1",
     "compression": "^1.7.1",
     "config": "^1.26.1",
     "express": "^4.15.4",
@@ -28,6 +29,7 @@
     "tcp": "nodemon Compiled/src/tcp.js"
   },
   "devDependencies": {
+    "@types/bugsnag": "^2.5.28",
     "@types/config": "0.0.32",
     "@types/supertest": "^2.0.1",
     "ava": "^0.19.0",
