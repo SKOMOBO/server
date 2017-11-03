@@ -40,18 +40,12 @@ import {connection} from './lib'
 
 export function get_type(name: String, req, resp, format){
 
-
-
     // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
-    // if(req.query.id == undefined || isNaN(req.query.id) && req.query.id != 'all'){
-    //     if(req.query.prototype.indexOf('_') === -1){
-    //         please_send_id(resp)
-    //         return
-    //     }
-    // }
+
 
     // check if it is a valid number if it is we carry on without issues
-    if(isNaN(req.query.id)){
+    if(isNaN(req.query.id) && req.query.id != "all" ){
+        console.log(req.query.id)
         req.query.id =  String(req.query.id)
 
         //check to see if it is underscore seperated
@@ -75,6 +69,7 @@ export function get_type(name: String, req, resp, format){
             query += ' where Box_ID = ' + req.query.id
         }
     }
+
     connection.query(query, (err, results , fields)=>{ 
         if(results !== null && results.length !== 0){
 
