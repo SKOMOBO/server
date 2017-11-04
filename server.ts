@@ -20,20 +20,20 @@
 
 // import * as archiver from "archiver"
 
-import {send_zip, send_csv} from './file_manager'
-import {no_box, please_send_type} from './message_manager'
+import {send_zip, send_csv} from './src/file_manager'
+import {no_box, please_send_type} from './src/message_manager'
 
 export function no_favicon(req, resp){
     resp.send("We really need to get an icon for this")
 }
 
-import {extract_raspi} from './raspi'
+import {extract_raspi} from './src/raspi'
 
 
 // should we make basic functions in here and just call them from router? i think so to make things
 // more legible
 
-import { has, extract, store} from "./lib"
+import { has, extract, store} from "./src/lib"
 
 export function validate_data(data, handler){
     // console.log(data)
@@ -65,7 +65,7 @@ export function store_raspi(req,resp){
 }
 
 
-import {app} from './router'
+import {app} from './src/router'
 
 app.listen(81, '0.0.0.0', function () {
     console.log("Server listening on: http://%s:%s", require("ip").address(), 81);

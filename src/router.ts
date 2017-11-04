@@ -1,7 +1,7 @@
 // move app and all the routes here they call functions in server
 import * as express from "express"
 
-import {no_favicon, store_arduino, store_raspi} from "./server"
+import {no_favicon, store_arduino, store_raspi} from "../server"
 import {get_type} from "./database_manager"
 
 
