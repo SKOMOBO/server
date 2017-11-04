@@ -7,7 +7,7 @@ import {get_type} from "./database_manager"
 
 // bugsnag integration
 import {register} from "bugsnag"
-register(require("../../src/global_keys.json").bugsnag_key)
+register(require("./global_keys.json").bugsnag_key)
 
 var helmet = require("helmet")
 var compress = require("compression")
@@ -51,7 +51,7 @@ import {send_firmware} from "./file_manager"
 app.get("/update*", (req, resp) =>{
 
     // doing some cheeky dependency resolution by storing the version in a text file we can update whilst its running    
-    let current_version = require("../../raspi_version.json").version   
+    let current_version = require("raspi_version.json").version   
 
     if(Number(req.query.v) <  current_version){
         send_firmware("firmware/test.py", current_version, resp)

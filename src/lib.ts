@@ -103,7 +103,7 @@ export function config_production(){
 
     //get all the publicly available config values
     let the_config = config.get('Dbconfig')
-    let login_details = require('..//../src/prod-password.json')
+    let login_details = require('./prod-password.json')
 
     for(let prop in the_config){
 

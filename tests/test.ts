@@ -14,7 +14,7 @@ test('authentication_fails', t=>{
 test('authentication_works', t=>{
     let success = false
 
-    let right_password = require('../../src/download_password.json').password
+    let right_password = require('../src/download_password.json').password
 
     authenticate(right_password, ()=>{}, ()=>{ success = true  })
 
