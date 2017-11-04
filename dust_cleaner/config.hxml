@@ -1,0 +1,10 @@
+# -python compiled.py
+# -main Main
+
+-main Client
+-js client.js
+
+--next
+
+-main Server
+-js remoting.js
