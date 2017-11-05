@@ -10,10 +10,10 @@
 # -js remoting.js
 
 
--main ServerSocket
--python serverSocket.py
+# -main ServerSocket
+# -python serverSocket.py
 
---next
+# --next
 -dce full
 -lib hxnodejs
 -D js_es=6
