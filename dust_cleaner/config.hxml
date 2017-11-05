@@ -1,10 +1,21 @@
 # -python compiled.py
 # -main Main
 
--main Client
--js client.js
+# -main Client
+# -js client.js
+
+# --next
+
+# -main Server
+# -js remoting.js
+
+
+-main ServerSocket
+-python serverSocket.py
 
 --next
-
--main Server
--js remoting.js
+-dce full
+-lib hxnodejs
+-D js_es=6
+-main ClientSocket
+-js clientSocket.js

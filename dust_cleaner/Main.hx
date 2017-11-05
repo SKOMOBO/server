@@ -1,5 +1,5 @@
 
-import haxe.Http;
+// import haxe.Http;
 
 // import the depickling library ! there must be no new line after 
 // the import macro
@@ -12,6 +12,10 @@ extern class Model{
     function predict(features:Array<Array<Int>>):Array<Int>;
 }
 
+// make more externs for http module in python for now
+// also make some for nodejs http to get this working for now, 
+// use Haxes built in remoting library once they get back to me
+
 class Main {
 
     static public function main()
@@ -22,7 +26,7 @@ class Main {
         var pm2_5Model = Joblib.load('PM2_5Model.pkl');
         var outlierDetectorPM2_5 = Joblib.load('outlierDetectorPM2_5.pkl');
 
-        var entry = new Http("")
+        // var entry = new Http("")
         var dust_vals = [[2, 1]];
         trace(pm10Model.predict(dust_vals)[0]);
     }
