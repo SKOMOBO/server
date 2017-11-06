@@ -1,6 +1,0 @@
--main Test
--js bin/test.js
-
---next
--main Test2
--python bin/test2.py

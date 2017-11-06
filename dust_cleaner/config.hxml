@@ -9,13 +9,17 @@
 # -main Server
 # -js remoting.js
 
-
+--connect 6000
+# -main ServerSocket2_1
 # -main ServerSocket
 # -python serverSocket.py
 
+
 # --next
 -dce full
+# -lib hxnodejs msgpack-haxe
 -lib hxnodejs
+# -lib msgpack-haxe
 -D js_es=6
 -main ClientSocket
 -js clientSocket.js
