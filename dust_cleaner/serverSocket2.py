@@ -1,5 +1,4 @@
 import SocketServer
-# import msgpack
 import json
 import joblib
 
@@ -20,10 +19,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         # self.request is the TCP socket connected to the client
         self.data = json.loads(self.request.recv(1024).strip())
-        # self.data = msgpack.unpack(self.request.recv(1024).strip())
-        # self.data 
-        # self.data = msgpack.unpack(self.data)
 
+        print(outlierPredictorPM10.predict(self.data["PM10"])[0])
         # if it is not a outlier make a prediction
         if(outlierPredictorPM10.predict(self.data["PM10"])[0] == 1 and outlierPredictorPM2_5.predict(self.data["PM2_5"])[0] == 1):
             result = {}
@@ -32,21 +29,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         else:
             result = None
 
-        # make predictions
-        # print "{} wrote:".format(self.client_address[0])
-        # print self.data
-        # just send back the same data, but upper-cased
-        # self.request.sendall(self.data.upper())
         self.request.sendall(json.dumps(result))
-        # self.request.sendall(msgpack.pack(result))
-
-# if __name__ == "__main__":
-    # HOST, PORT = "localhost", 9999
 
 # Create the server, binding to localhost on port 9999
-# server = SocketServer.TCPServer(("localhost", 9999), MyTCPHandler)
 
 SocketServer.TCPServer(("localhost", 9999), MyTCPHandler).serve_forever()
 # Activate the server; this will keep running until you
 # interrupt the program with Ctrl-C
-# server.serve_forever()

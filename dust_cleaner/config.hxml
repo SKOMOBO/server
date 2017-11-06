@@ -21,5 +21,6 @@
 -lib hxnodejs
 # -lib msgpack-haxe
 -D js_es=6
--main ClientSocket
+ClientSocket
+# -main ClientSocket
 -js clientSocket.js

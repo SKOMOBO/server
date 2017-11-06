@@ -2,11 +2,17 @@ package;
 import js.node.net.Socket;
 import haxe.Json;
 
+// rewrite this so that it becomes function call instead
+
+@:expose
 class ClientSocket {
-    static function main() {
-        var socket =  new Socket();
+    private var socket = new Socket();
+
+    @:expose
+    public function clean(data){
+        // var socket =  
         socket.connect(9999, 'localhost', function(){
-            var data = {'PM10': 1, 'PM10_diff': 1,'PM2_5': 1, 'PM2_5_diff': 1 };
+            // var data = {'PM10': 1, 'PM10_diff': 1,'PM2_5': 1, 'PM2_5_diff': 1 };
             socket.write(Json.stringify(data));
         });
 
@@ -18,7 +24,6 @@ class ClientSocket {
             }else{
                 trace(result);
             }
-            
         });
     }
 }
