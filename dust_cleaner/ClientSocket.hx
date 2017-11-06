@@ -4,11 +4,13 @@ import haxe.Json;
 
 // rewrite this so that it becomes function call instead
 
-@:expose
+
+@:keep @:expose
 class ClientSocket {
     private var socket = new Socket();
+    public var result: Any;
+    public function new(){}
 
-    @:expose
     public function clean(data){
         // var socket =  
         socket.connect(9999, 'localhost', function(){
@@ -17,13 +19,16 @@ class ClientSocket {
         });
 
         socket.on('data', function(data){
-            var result = Json.parse(data.toString('utf8'));
-            
-            if(result == null){
-                trace("Outlier, exclude it!");
-            }else{
-                trace(result);
-            }
+            result = Json.parse(data.toString('utf8'));
+
+            // var result =Json.parse(data.toString('utf8'));
+             
+            // if(result == null){
+            //     trace("Outlier, exclude it!");
+            // }else{
+            //     // trace(result);
+            //     return result;
+            // }
         });
     }
 }
