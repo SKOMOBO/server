@@ -1,0 +1,12 @@
+--connect 6000
+
+-main MyTestRunner
+
+# for c++ compiling if I want to go that route, very slow
+# -main ClientSocket
+# -cpp cpp
+# -D HXCPP_M64
+
+-dce full
+-D js_es=6
+-js test_runner.js
