@@ -21,7 +21,9 @@
 -lib hxnodejs
 # -lib msgpack-haxe
 -D js_es=6
-DustCleanerClient
+# DustCleanerClient
+ClientSocket
 # -main ClientSocket
--js dustCleanerClient.js
+-js clientSocket.js
+# -js dustCleanerClient.js
 
