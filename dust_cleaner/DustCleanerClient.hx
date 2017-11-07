@@ -13,7 +13,7 @@ class DustCleanerClient {
     private var prev_PM10:Float = 0.0;
     private  var prev_PM2_5:Float= 0.0;
 
-    public function prep_data(pm10:Float, pm2_5:Float){
+    public function prep_data(pm10:Float, pm2_5:Float):Any{
         pm10 = pm10 / 1000;
         pm2_5 = pm2_5 / 1000;
                 
@@ -21,29 +21,17 @@ class DustCleanerClient {
         prev_PM10 = pm10;
         prev_PM2_5 = pm2_5;
         return result;
-         
-        // var data = {"PM10": pm10 / 1000.0, 
-        // "PM2_5": pm2_5/ 1000.0}
     }
 
-    public function clean(data){
-        // var socket =  
-        socket.connect(9999, 'localhost', function(){
-            // var data = {'PM10': 1, 'PM10_diff': 1,'PM2_5': 1, 'PM2_5_diff': 1 };
+    public function clean(pm10:Float, pm2_5:Float){ 
+        trace(Socket);
+        socket.connect(9999, function(){
+            var data = prep_data(pm10, pm2_5);
             socket.write(Json.stringify(data));
         });
 
         socket.on('data', function(data){
             result = Json.parse(data.toString('utf8'));
-
-            // var result =Json.parse(data.toString('utf8'));
-             
-            // if(result == null){
-            //     trace("Outlier, exclude it!");
-            // }else{
-            //     // trace(result);
-            //     return result;
-            // }
         });
     }
 }
