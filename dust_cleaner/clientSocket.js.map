@@ -1,8 +1,0 @@
-{
-"version":3,
-"file":"clientSocket.js",
-"sourceRoot":"file:///",
-"sources":["c:/Users/Ryan/Source/Repos/skomobo/server/dust_cleaner/ClientSocket.hx"],
-"names":[],
-"mappings":";;;iDAcW,WAPX;AAAA,CAGmC,AAHnC,kBAGmC;CADD,AAFlC,iBAEkC;CAM1B,cAAS;CACT,YAAM;;;YAGH,qBAA2C;AAAA,EAC9C,QAAc;EACd,SAAgB;EAEhB,aAAa,WAAS,gBAAe,qBAAoB,OAAO,+BAAyB,QAAQ;EACjG,iBAAY;EACZ,kBAAa;EACb,OAAO;;SAMJ,qBAAuC;AAAA,EAAvC;EACH,oBAAoB,KAAM,WAAU;AAAA,GAChC,WAAW,iBAAU,KAAM;GAC3B,oBAAkB,eAAe;;EAGrC,eAAgB,OAAO,gBACnB;AAAA,GAAoB,yBAAe;GAAnC,gBAAS,WAAW;;;;;;;;;"
-}

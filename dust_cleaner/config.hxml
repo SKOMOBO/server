@@ -23,8 +23,8 @@
 -D js_es=6
 -debug
 # DustCleanerClient
-ClientSocket
+DustCleanerClient
 # -main ClientSocket
--js clientSocket.js
+-js dustCleanerClient.js
 # -js dustCleanerClient.js
 

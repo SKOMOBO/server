@@ -5,17 +5,13 @@ import haxe.Json;
 // rewrite this so that it becomes function call instead
 
 @:keep @:expose
-class ClientSocket {
+class DustCleanerClient {
     
     private var prev_PM10:Float = 0.0;
     private  var prev_PM2_5:Float= 0.0;
 
-    private var socket:Socket;
+    private var socket = new Socket();
     public var result: Any;
-    public function new(){
-        socket = new Socket();
-        trace(socket);
-    }
 
     public function prep_data(pm10:Float, pm2_5:Float){
         pm10 = pm10 / 1000;
