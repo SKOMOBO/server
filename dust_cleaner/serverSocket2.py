@@ -20,7 +20,6 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         # self.request is the TCP socket connected to the client
         self.data = json.loads(self.request.recv(1024).strip())
 
-        print(outlierPredictorPM10.predict(self.data["PM10"])[0])
         # if it is not a outlier make a prediction
         if(outlierPredictorPM10.predict(self.data["PM10"])[0] == 1 and outlierPredictorPM2_5.predict(self.data["PM2_5"])[0] == 1):
             result = {}

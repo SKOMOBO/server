@@ -22,6 +22,21 @@ export function fix_formatting(data){
 }
 
 
+var dust_cleaner = require("../dust_cleaner/dustCleanerClient.js")
+var client = new dust_cleaner.DustCleanerClient
+/**
+ * this function will correct the dust data using our models
+ * @todo finish this function has to return JSON like original with outliers removed
+ *       and values adjusted
+ * 
+ * @export
+ * @param {any} data 
+ */
+export function clean_data(data){
+    client.clean(1,1)
+}
+
+
 // below two timestamp functions were retrieved from https://stackoverflow.com/a/5133807/6142189
 
 

@@ -41,10 +41,15 @@ import {please_send_type} from './message_manager'
 
 var supported_types = ['arduino', 'raspi']
 
-app.get("/web*", (req, resp) =>{
-    resp.send("A awesome website is coming here soon stay tuned.")
+app.get("/dash*", (req, resp) =>{
+    resp.send("A awesome dashboard is coming here soon stay tuned.")
 
     // make a request using http to the website node process and then just send the response
+})
+
+import {clean_data} from "./database_manager"
+app.get("/clean*", (req, resp) =>{
+    resp.send(clean_data("hi"))
 })
 
 import {send_firmware} from "./file_manager"
