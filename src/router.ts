@@ -5,6 +5,9 @@ import {no_favicon, store_arduino, store_raspi} from "../server"
 import {get_type} from "./database_manager"
 
 
+
+// move the below to a seperate module called config
+
 // bugsnag integration
 import {register} from "bugsnag"
 register(require("./global_keys.json").bugsnag_key)
