@@ -49,7 +49,7 @@ app.get("/dash*", (req, resp) =>{
 
 import {clean_data} from "./database_manager"
 app.get("/clean*", (req, resp) =>{
-    resp.send(clean_data("hi"))
+    resp.send(clean_data(1,1))
 })
 
 import {send_firmware} from "./file_manager"

@@ -44,6 +44,7 @@ export function send_csv(file, data, resp){
     // });
 }
 
+// abstract formatting to format manager
 import {fix_formatting} from './database_manager'
 
 export function send_json(data, resp){

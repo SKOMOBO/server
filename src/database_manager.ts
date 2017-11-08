@@ -32,8 +32,8 @@ var client = new dust_cleaner.DustCleanerClient
  * @export
  * @param {any} data 
  */
-export function clean_data(data){
-    client.clean(1,1)
+export function clean_data(pm10, pm2_5){
+    client.clean(pm10, pm2_5)
 }
 
 
