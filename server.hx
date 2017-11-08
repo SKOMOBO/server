@@ -2,6 +2,7 @@
 import {send_zip, send_csv} from './src/file_manager'
 import {no_box, please_send_type} from './src/message_manager'
 
+//  should be in format manager? or message manager
 export function no_favicon(req, resp){
     resp.send("We really need to get an icon for this")
 }

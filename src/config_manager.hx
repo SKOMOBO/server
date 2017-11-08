@@ -16,8 +16,8 @@ package;
 //! Fix headers to make things more secure
 // app.use(helmet())
 
-class config_manager {
-    public function new() {
-        
-    }
+// should improve dependency graph too
+class config_manager {  
+    public var app = express();
+
 }
