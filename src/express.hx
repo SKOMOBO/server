@@ -1,7 +1,7 @@
 package;
 
-
-class format_manager {
+@:jsRequire("express")
+extern class express {
     public function new() {
         
     }
