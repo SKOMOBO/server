@@ -34,6 +34,8 @@ var client = new dust_cleaner.DustCleanerClient
  */
 export function clean_data(pm10, pm2_5){
     client.clean(pm10, pm2_5)
+    // console.log(client.result)
+    return client.result
 }
 
 

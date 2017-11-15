@@ -9,7 +9,7 @@
 # -main Server
 # -js remoting.js
 
---connect 6000
+# --connect 6000
 # -main ServerSocket2_1
 # -main ServerSocket
 # -python serverSocket.py

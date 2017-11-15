@@ -52,7 +52,8 @@ app.get("/dash*", (req, resp) =>{
 
 import {clean_data} from "./database_manager"
 app.get("/clean*", (req, resp) =>{
-    resp.send(clean_data(1,1))
+    // console.log("Cleaning data!", req.query.one, req.query.two)
+    resp.send(clean_data(req.query.one, req.query.two))
 })
 
 import {send_firmware} from "./file_manager"

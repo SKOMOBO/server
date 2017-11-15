@@ -9,9 +9,8 @@ class DustCleanerClient {
     
     private var prev_PM10:Float = 0.0;
     private  var prev_PM2_5:Float= 0.0;
-
-    private var socket = new Socket();
     public var result: Any;
+    private var socket = new Socket();
 
     public function prep_data(pm10:Float, pm2_5:Float){
         pm10 = pm10 / 1000;
@@ -27,13 +26,16 @@ class DustCleanerClient {
 
     // fix the nameing change to dust cleaner cliet
     public function clean(pm10:Float, pm2_5:Float){ 
-        this.socket.connect(9999, function(){
+        socket = new Socket();
+
+        socket.connect(9999, function(){
             var data = prep_data(pm10, pm2_5);
-            this.socket.write(Json.stringify(data));
+            socket.write(Json.stringify(data));
         });
 
-        this.socket.on('data', function(data){
-            result = Json.parse(data.toString('utf8'));
+        socket.on('data', function(data){
+            this.result = Json.parse(data.toString('utf8'));
+            socket.destroy();
         });
     }
 }
