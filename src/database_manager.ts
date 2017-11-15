@@ -34,8 +34,15 @@ var client = new dust_cleaner.DustCleanerClient
  */
 export function clean_data(pm10, pm2_5){
     client.clean(pm10, pm2_5)
+    let data = client.result
+
+    if(data != undefined){
+        data.PM10 = data.PM10[0]
+        data.PM2_5 = data.PM2_5[0]
+    }
+    
     // console.log(client.result)
-    return client.result
+    return data
 }
 
 
