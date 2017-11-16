@@ -1,6 +1,5 @@
-FROM python:3.7-rc-alpine
-COPY ./serverSocket.py ./serverSocket.py
-ADD ./models ./models/
+FROM python:2.7.14-alpine
+ADD ./code ./
 RUN pip install joblib
 EXPOSE 9999
 ENTRYPOINT ["python", "serverSocket.py"]
