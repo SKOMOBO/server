@@ -1,0 +1,6 @@
+FROM python:3.7-rc-alpine
+COPY ./serverSocket.py ./serverSocket.py
+ADD ./models ./models/
+RUN pip install joblib
+EXPOSE 9999
+ENTRYPOINT ["python", "serverSocket.py"]

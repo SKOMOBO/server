@@ -2,10 +2,10 @@ import SocketServer
 import json
 import joblib
 
-outlierPredictorPM10 = joblib.load("outlierDetectorPM10.pkl")
-outlierPredictorPM2_5 = joblib.load("outlierDetectorPM2_5.pkl")
-PM10Model = joblib.load("PM10Model.pkl")
-PM2_5Model = joblib.load("PM2_5Model.pkl")
+outlierPredictorPM10 = joblib.load("models/outlierDetectorPM10.pkl")
+outlierPredictorPM2_5 = joblib.load("models/outlierDetectorPM2_5.pkl")
+PM10Model = joblib.load("models/PM10Model.pkl")
+PM2_5Model = joblib.load("models/PM2_5Model.pkl")
 
 class MyTCPHandler(SocketServer.BaseRequestHandler):
     """
