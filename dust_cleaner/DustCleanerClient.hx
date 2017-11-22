@@ -7,6 +7,7 @@ import haxe.Json;
 @:keep @:expose
 class DustCleanerClient {
     
+    //! sending null here for some reason
     private var prev_PM10:Float = 0.0;
     private  var prev_PM2_5:Float= 0.0;
     public var result: Any;

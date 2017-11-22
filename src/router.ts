@@ -50,11 +50,11 @@ app.get("/dash*", (req, resp) =>{
     // make a request using http to the website node process and then just send the response
 })
 
-import {clean_data} from "./database_manager"
-app.get("/clean*", (req, resp) =>{
-    // console.log("Cleaning data!", req.query.one, req.query.two)
-    resp.send(clean_data(req.query.one, req.query.two))
-})
+// import {clean_data} from "./database_manager"
+// app.get("/clean*", (req, resp) =>{
+//     // console.log("Cleaning data!", req.query.one, req.query.two)
+//     resp.send(clean_data(req.query.one, req.query.two))
+// })
 
 import {send_firmware} from "./file_manager"
 app.get("/update*", (req, resp) =>{

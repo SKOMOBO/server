@@ -15,15 +15,17 @@ export function fix_formatting(data){
             data[row].Presence = String(data[row].Presence[0])
             data[row].Time_received = fix_timestamp(data[row].Time_received)
             data[row].Time_sent = fix_timestamp(data[row].Time_sent)
+            
+            let clean_dust = clean_data(data[row].pm10, data[row].pm2_5)
+            data[row].pm10 = clean_dust.PM10
+            data[row].pm2_5 = clean_dust.PM2_5
         }
     }
    
    return data
 }
 
-
 var dust_cleaner = require("../dust_cleaner/dustCleanerClient.js")
-var client = new dust_cleaner.DustCleanerClient
 /**
  * this function will correct the dust data using our models
  * @todo finish this function has to return JSON like original with outliers removed
@@ -33,12 +35,21 @@ var client = new dust_cleaner.DustCleanerClient
  * @param {any} data 
  */
 export function clean_data(pm10, pm2_5){
+    
+    let client = new dust_cleaner.DustCleanerClient
+
     client.clean(pm10, pm2_5)
     let data = client.result
 
     if(data != undefined){
         data.PM10 = data.PM10[0]
         data.PM2_5 = data.PM2_5[0]
+    }
+    else{
+        data = {}
+        // just zero out invalid data for now
+        data.PM10 = 0
+        data.PM2_5 = 0
     }
     
     // console.log(client.result)
