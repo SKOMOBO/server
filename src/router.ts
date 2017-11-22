@@ -4,8 +4,6 @@ import * as express from "express"
 import {no_favicon, store_arduino, store_raspi} from "../server"
 import {get_type} from "./database_manager"
 
-
-
 // move the below to a seperate module called config
 
 // bugsnag integration

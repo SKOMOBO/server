@@ -34,6 +34,8 @@ var dust_cleaner = require("../dust_cleaner/dustCleanerClient.js")
  * @export
  * @param {any} data 
  */
+
+ //! rewrite dust cleaner client in typescript for now to fix issue convert haxe later
 export function clean_data(pm10, pm2_5){
     
     let client = new dust_cleaner.DustCleanerClient
