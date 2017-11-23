@@ -25,38 +25,7 @@ export function fix_formatting(data){
    return data
 }
 
-var dust_cleaner = require("../dust_cleaner/dustCleanerClient.js")
-/**
- * this function will correct the dust data using our models
- * @todo finish this function has to return JSON like original with outliers removed
- *       and values adjusted
- * 
- * @export
- * @param {any} data 
- */
-
- //! rewrite dust cleaner client in typescript for now to fix issue convert haxe later
-export function clean_data(pm10, pm2_5){
-    
-    let client = new dust_cleaner.DustCleanerClient
-
-    client.clean(pm10, pm2_5)
-    let data = client.result
-
-    if(data != undefined){
-        data.PM10 = data.PM10[0]
-        data.PM2_5 = data.PM2_5[0]
-    }
-    else{
-        data = {}
-        // just zero out invalid data for now
-        data.PM10 = 0
-        data.PM2_5 = 0
-    }
-    
-    // console.log(client.result)
-    return data
-}
+// var dust_cleaner = require("../dust_cleaner/dustCleanerClient.js")
 
 
 // below two timestamp functions were retrieved from https://stackoverflow.com/a/5133807/6142189

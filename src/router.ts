@@ -85,3 +85,7 @@ app.get("/get*", async (req, resp) =>{
 })
 
 app.get("/*", store_arduino)
+
+const proxy = require('http-proxy-middleware')
+
+app.use("/clean", proxy("localhost:82/"))
