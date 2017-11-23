@@ -23,8 +23,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         # if it is not a outlier make a prediction
         if(outlierPredictorPM10.predict(self.data["PM10"])[0] == 1 and outlierPredictorPM2_5.predict(self.data["PM2_5"])[0] == 1):
             result = {}
-            result["PM10"] = PM10Model.predict([[self.data["PM10"], self.data["PM10_diff"]]]).tolist()
-            result["PM2_5"] = PM2_5Model.predict([[self.data["PM2_5"], self.data["PM2_5_diff"]]]).tolist()
+            result["PM10"] = PM10Model.predict([[self.data["PM10"], self.data["PM10_diff"]]]).tolist()[0]
+            result["PM2_5"] = PM2_5Model.predict([[self.data["PM2_5"], self.data["PM2_5_diff"]]]).tolist()[0]
         else:
             result = None
 

@@ -2,6 +2,51 @@
 import {send_csv, send_json} from './file_manager'
 import {no_box, please_send_id} from './message_manager'
 
+
+/**
+ * this function will correct the dust data using our models
+ * @todo finish this function has to return JSON like original with outliers removed
+ *       and values adjusted
+ * 
+ * @export
+ * @param {any} data 
+ */
+
+ //! rewrite dust cleaner client in typescript for now to fix issue convert haxe later
+ export function clean_data(pm10, pm2_5){
+    
+    // ! interface with python
+
+    // ! make nodejs http route to receive data and respond
+
+    // ! if undefined then exclude that row from the csv
+
+    // ! this should consume a json document with all the rows in the csv 
+    // / db not single values so we can omit outliers in final csv
+
+    // let client = new dust_cleaner.DustCleanerClient
+
+    // client.clean(pm10, pm2_5)
+    // let data = client.result
+
+    // make thing to talk to python and get responses 
+    let data = {"PM10":0, "PM2_5":0};
+    if(data != undefined){
+        data.PM10 = data.PM10[0]
+        data.PM2_5 = data.PM2_5[0]
+    }
+    else{
+        // data = {}
+        // just zero out invalid data for now
+        data.PM10 = 0
+        data.PM2_5 = 0
+    }
+    
+    // console.log(client.result)
+    return data
+}
+
+
 /**
  * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
  * 

@@ -6,9 +6,6 @@ import {get_type} from "./database_manager"
 
 // move the below to a seperate module called config
 
-// bugsnag integration
-import {register} from "bugsnag"
-register(require("./global_keys.json").bugsnag_key)
 
 var helmet = require("helmet")
 var compress = require("compression")
@@ -42,6 +39,23 @@ import {please_send_type} from './message_manager'
 
 var supported_types = ['arduino', 'raspi']
 
+const proxy = require('http-proxy-middleware')
+
+app.use("/clean", proxy({target: 'http://localhost:82', changeOrigin: true}))
+
+// bugsnag integration only enable if we are in production
+import {register} from "bugsnag"
+if (app.settings.env !== "development"){
+    register(require("./global_keys.json").bugsnag_key)
+}
+
+
+app.get("/test", (req, resp)=>{
+    resp.sendFile(__dirname.substr(0, __dirname.length - 3) + "file_thing.html")
+})
+// app.use("/test", proxy({target: 'http://localhost:82', changeOrigin: true}))
+
+
 app.get("/dash*", (req, resp) =>{
     resp.send("A awesome dashboard is coming here soon stay tuned.")
 
@@ -69,6 +83,7 @@ app.get("/update*", (req, resp) =>{
 })
 
 
+
 app.get("/get*", async (req, resp) =>{
     
     authenticate(req.query.pass, resp, ()=>{
@@ -84,8 +99,5 @@ app.get("/get*", async (req, resp) =>{
     })
 })
 
+
 app.get("/*", store_arduino)
-
-const proxy = require('http-proxy-middleware')
-
-app.use("/clean", proxy("localhost:82/"))
