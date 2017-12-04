@@ -20,15 +20,19 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         # self.request is the TCP socket connected to the client
         self.data = json.loads(self.request.recv(1024).strip())
         print(self.data)
-        # if it is not a outlier make a prediction
-        if(outlierPredictorPM10.predict(self.data["PM10"])[0] == 1 and outlierPredictorPM2_5.predict(self.data["PM2_5"])[0] == 1):
-            result = {}
-            result["PM10"] = PM10Model.predict([[self.data["PM10"], self.data["PM10_diff"]]]).tolist()[0]
-            result["PM2_5"] = PM2_5Model.predict([[self.data["PM2_5"], self.data["PM2_5_diff"]]]).tolist()[0]
-        else:
-            result = None
 
-        self.request.sendall(json.dumps(result))
+        results = []
+        for item in self.data:
+            # if it is not a outlier make a prediction
+            if(outlierPredictorPM10.predict(item["PM10"])[0] == 1 and outlierPredictorPM2_5.predict(item["PM2_5"])[0] == 1):
+                result = {}
+                result["PM10"] = PM10Model.predict([[item["PM10"], item["PM10_diff"]]]).tolist()
+                result["PM2_5"] = PM2_5Model.predict([[item["PM2_5"], item["PM2_5_diff"]]]).tolist()
+                results.push(result)
+            else:
+                result = None
+
+        self.request.sendall(json.dumps(results))
 
 # Create the server, binding to localhost on port 9999
 
