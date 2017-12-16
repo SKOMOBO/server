@@ -28,7 +28,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 result = {}
                 result["PM10"] = PM10Model.predict([[item["PM10"], item["PM10_diff"]]]).tolist()
                 result["PM2_5"] = PM2_5Model.predict([[item["PM2_5"], item["PM2_5_diff"]]]).tolist()
-                results.push(result)
+                results.append(result)
             else:
                 result = None
 
