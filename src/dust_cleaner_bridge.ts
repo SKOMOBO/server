@@ -91,6 +91,8 @@ app.post("/clean", upload.single("file"), (req, resp)=>{
         return prep_data(item.Dust10,item.Dust2_5)
     })
 
+    console.log(prepped)
+    
     client.connect(9999, 'localhost', ()=>{
         console.log('Connected');
         client.write(JSON.stringify(prepped));
