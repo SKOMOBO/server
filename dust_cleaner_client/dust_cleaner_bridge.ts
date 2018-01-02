@@ -1,4 +1,4 @@
-import {clean_data} from "./database_manager"
+import {clean_data} from "../src/database_manager"
 
 import * as express from "express"
 
