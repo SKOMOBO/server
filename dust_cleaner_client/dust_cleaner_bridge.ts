@@ -70,9 +70,8 @@ function prep_data(pm10:number, pm2_5:number){
 
 const net = require('net');
 
-const client = new net.Socket();
-
-
+// const client = new net.Socket();
+import * as http from "http"
 
 const upload = multer()
 const json2csv = require('json2csv');
@@ -93,10 +92,12 @@ app.post("/clean", upload.single("file"), (req, resp)=>{
 
     console.log(prepped)
     
-    client.connect(9999, 'localhost', ()=>{
-        console.log('Connected');
-        client.write(JSON.stringify(prepped));
-    });
+    // rewrite to use http instead
+
+    // client.connect(9999, 'localhost', ()=>{
+    //     console.log('Connected');
+    //     client.write(JSON.stringify({"data":prepped}));
+    // });
     
     client.on('data', (data) =>{
         console.log('Received: ' + data);

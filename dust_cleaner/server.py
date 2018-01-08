@@ -16,9 +16,13 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
     client.
     """
 
+    # rewrite this as a pipe and use flask
+
     def handle(self):
         # self.request is the TCP socket connected to the client
-        self.data = json.loads(self.request.recv(1024).strip())
+        request = self.request.recv().strip()
+        print(request)
+        self.data = json.loads(request)
         print(self.data)
 
         results = []
