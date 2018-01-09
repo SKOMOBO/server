@@ -72,6 +72,7 @@ const net = require('net');
 
 // const client = new net.Socket();
 import * as http from "http"
+import * as request from "request"
 
 const upload = multer()
 const json2csv = require('json2csv');
@@ -90,7 +91,8 @@ app.post("/clean", upload.single("file"), (req, resp)=>{
         return prep_data(item.Dust10,item.Dust2_5)
     })
 
-    console.log(prepped)
+    let prepped_wrapped = {"data": prepped}
+    // console.log(prepped_wrapped)
     
     // rewrite to use http instead
 
@@ -98,21 +100,28 @@ app.post("/clean", upload.single("file"), (req, resp)=>{
     //     console.log('Connected');
     //     client.write(JSON.stringify({"data":prepped}));
     // });
-    
-    client.on('data', (data) =>{
-        console.log('Received: ' + data);
 
-        let updated_text = json2csv(data)     
-    
-        //  send the final csv
+    request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped_wrapped), json:true}, (error, response, body)=>{
+        // console.log(body)
+        let updated_text = json2csv(JSON.parse(body)["data"])
         resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
         resp.send(updated_text);
-        // client.destroy(); // kill client after server's response
-    });
+    })
+ 
+    // client.on('data', (data) =>{
+    //     console.log('Received: ' + data);
+
+    //     let updated_text = json2csv(data)     
     
-    client.on('close', function() {
-        console.log('Connection closed');
-    });
+    //     //  send the final csv
+    //     resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
+    //     resp.send(updated_text);
+    //     // client.destroy(); // kill client after server's response
+    // });
+    
+    // client.on('close', function() {
+    //     console.log('Connection closed');
+    // });
 })
 
 
