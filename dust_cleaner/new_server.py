@@ -23,7 +23,6 @@ def decode_json(data):
 
 def is_not_outlier(data):
     isvalid = outlierPredictorPM10.predict(data["PM10"])[0] != 1 and outlierPredictorPM2_5.predict(data["PM2_5"])[0] != 1
-    print(isvalid)
     return isvalid
 
 def correct_data(data):
@@ -47,7 +46,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["POST"])
 def recieve_data():
-    data_response = json.dumps({"data": dust_cleaner.open(request)})
+    data_response = jsonify(dust_cleaner.open(request))
     # print(data_response.get_data())
     return data_response
 

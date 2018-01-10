@@ -2,9 +2,20 @@ import {clean_data} from "../src/database_manager"
 
 import * as express from "express"
 
+
 // const parser = require("body-parser")
 
 const app = express()
+
+// bugsnag integration only enable if we are in production
+import * as bugsnag from "bugsnag"
+if (app.settings.env !== "development"){
+    bugsnag.register(require("./global_keys.json").bugsnag_key)
+    app.use(bugsnag.requestHandler);
+    app.use(bugsnag.errorHandler);
+}
+
+
 //var csv is the CSV file with headers
 function csvJSON(csv: String){
     var lines=csv.split("\n");
@@ -76,6 +87,21 @@ import * as request from "request"
 
 const upload = multer()
 const json2csv = require('json2csv');
+
+function data_valid(data){
+    let i = 0
+
+    while(data[i] === null){
+        i++
+    }
+    if(i == data.length ){
+        return false
+    }else{
+        return true
+    }
+}
+
+
 app.post("/clean", upload.single("file"), (req, resp)=>{
     
     // adust the original file name to include _clean at the end
@@ -92,36 +118,24 @@ app.post("/clean", upload.single("file"), (req, resp)=>{
     })
 
     let prepped_wrapped = {"data": prepped}
-    // console.log(prepped_wrapped)
-    
-    // rewrite to use http instead
-
-    // client.connect(9999, 'localhost', ()=>{
-    //     console.log('Connected');
-    //     client.write(JSON.stringify({"data":prepped}));
-    // });
-
-    request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped_wrapped), json:true}, (error, response, body)=>{
-        // console.log(body)
-        let updated_text = json2csv(JSON.parse(body)["data"])
-        resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
-        resp.send(updated_text);
-    })
  
-    // client.on('data', (data) =>{
-    //     console.log('Received: ' + data);
+    request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped_wrapped), json:true}, (error, response, body)=>{
+  
+        if(error === null){
+            if(data_valid(body)){
+               
+                resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
+                resp.send(json2csv(body));
+            }
+            else{
+                resp.send("File contains no salvagable values, please contact the developer Ryan, Mikael or Yu Wang")
+            }
+        }else{
+            resp.send("Server error, please contact the developer and try again later :)")
+            bugsnag.notify(Error(JSON.stringify(error)))
+        }
+    })
 
-    //     let updated_text = json2csv(data)     
-    
-    //     //  send the final csv
-    //     resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
-    //     resp.send(updated_text);
-    //     // client.destroy(); // kill client after server's response
-    // });
-    
-    // client.on('close', function() {
-    //     console.log('Connection closed');
-    // });
 })
 
 

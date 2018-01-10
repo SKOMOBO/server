@@ -44,9 +44,11 @@ const proxy = require('http-proxy-middleware')
 app.use("/clean", proxy({target: 'http://localhost:82', changeOrigin: true}))
 
 // bugsnag integration only enable if we are in production
-import {register} from "bugsnag"
+import * as bugsnag from "bugsnag"
 if (app.settings.env !== "development"){
-    register(require("./global_keys.json").bugsnag_key)
+    bugsnag.register(require("./global_keys.json").bugsnag_key)
+    app.use(bugsnag.requestHandler);
+    app.use(bugsnag.errorHandler);
 }
 
 
@@ -59,7 +61,9 @@ app.get("/test", (req, resp)=>{
 app.get("/dash*", (req, resp) =>{
     resp.send("A awesome dashboard is coming here soon stay tuned.")
 
-    // make a request using http to the website node process and then just send the response
+    // make a request using http to the website node process and then just send the response via a proxy
+
+
 })
 
 // import {clean_data} from "./database_manager"
