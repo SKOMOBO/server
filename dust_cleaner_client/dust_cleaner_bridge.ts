@@ -3,9 +3,11 @@ import {clean_data} from "../src/database_manager"
 import * as express from "express"
 
 
-// const parser = require("body-parser")
+const parser = require("body-parser")
 
 const app = express()
+
+app.use(parser)
 
 // bugsnag integration only enable if we are in production
 import * as bugsnag from "bugsnag"
@@ -101,8 +103,7 @@ function data_valid(data){
     }
 }
 
-
-app.post("/clean", upload.single("file"), (req, resp)=>{
+app.post("/clean", (req, resp)=>{
     
     // adust the original file name to include _clean at the end
     const file_name = req.file.originalname.substr(0, req.file.originalname.length - 4) + "_clean.csv"
@@ -143,6 +144,48 @@ app.post("/clean", upload.single("file"), (req, resp)=>{
     })
 
 })
+
+// app.post("/clean", upload.single("file"), (req, resp)=>{
+    
+//     // adust the original file name to include _clean at the end
+//     const file_name = req.file.originalname.substr(0, req.file.originalname.length - 4) + "_clean.csv"
+//     let file_text = req.file.buffer.toString("utf8")
+
+//     let data = csvJSON(file_text)
+    
+//     //! file donwload works just make python integration now
+//     //! male tjat seperate function that gets called directly from the other server
+    
+//     // Change this to send individual items instead so move below logic into this map and have it
+//     // be the final result that gets turned into csv and sent back
+
+//     // will need to change source as well to stream result???
+//     // so javascript on client streams invidual entries and progresses progress bar 
+//     // make tool a bit prettier with css
+//     let prepped = data.map((item)=>{
+//         return prep_data(item.Dust10,item.Dust2_5)
+//     })
+
+//     let prepped_wrapped = {"data": prepped}
+ 
+//     request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped_wrapped), json:true}, (error, response, body)=>{
+  
+//         if(error === null){
+//             if(data_valid(body)){
+               
+//                 resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
+//                 resp.send(json2csv(body));
+//             }
+//             else{
+//                 resp.send("File contains no salvagable values, please contact the developer Ryan, Mikael or Yu Wang")
+//             }
+//         }else{
+//             resp.send("Server error, please contact the developer and try again later :)")
+//             bugsnag.notify(Error(JSON.stringify(error)))
+//         }
+//     })
+
+// })
 
 
 
