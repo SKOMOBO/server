@@ -41,7 +41,12 @@ var supported_types = ['arduino', 'raspi']
 
 const proxy = require('http-proxy-middleware')
 
+// app.use("/dust-tool*", express.static("../static"))
+
+app.use(express.static("static"))
+
 app.use("/clean", proxy({target: 'http://localhost:82', changeOrigin: true}))
+// app.use("/get_file", proxy({target: 'http://localhost:82', changeOrigin: true}))
 
 // bugsnag integration only enable if we are in production
 import * as bugsnag from "bugsnag"
@@ -52,9 +57,9 @@ if (app.settings.env !== "development"){
 }
 
 
-app.get("/test", (req, resp)=>{
-    resp.sendFile(__dirname.substr(0, __dirname.length - 3) + "file_thing.html")
-})
+// app.get("/dust-tool", (req, resp)=>{
+//     resp.sendFile(__dirname.substr(0, __dirname.length - 3) + "file_thing.html")
+// })
 // app.use("/test", proxy({target: 'http://localhost:82', changeOrigin: true}))
 
 
@@ -103,5 +108,5 @@ app.get("/get*", async (req, resp) =>{
     })
 })
 
-
-app.get("/*", store_arduino)
+// interpret a random group of numbers seperated by underscores as arduino transmissions
+app.get(/\/(d+)_?.*/g, store_arduino)

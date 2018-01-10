@@ -106,10 +106,10 @@ function data_valid(data){
 app.post("/clean", (req, resp)=>{
     
     // adust the original file name to include _clean at the end
-    const file_name = req.file.originalname.substr(0, req.file.originalname.length - 4) + "_clean.csv"
-    let file_text = req.file.buffer.toString("utf8")
+    // const file_name = req.file.originalname.substr(0, req.file.originalname.length - 4) + "_clean.csv"
+    // let file_text = req.file.buffer.toString("utf8")
 
-    let data = csvJSON(file_text)
+    // let data = csvJSON(file_text)
     
     //! file donwload works just make python integration now
     //! male tjat seperate function that gets called directly from the other server
@@ -119,19 +119,28 @@ app.post("/clean", (req, resp)=>{
 
     // will need to change source as well to stream result???
     // so javascript on client streams invidual entries and progresses progress bar 
-    // make tool a bit prettier with css
-    let prepped = data.map((item)=>{
-        return prep_data(item.Dust10,item.Dust2_5)
-    })
 
-    let prepped_wrapped = {"data": prepped}
+
+    let input = JSON.parse(req.body)
+
+    let prepped = prep_data(input.Dust10, input.Dust2_5)
+
+    // let prepped = data.map((item)=>{
+        // return prep_data(item.Dust10,item.Dust2_5)
+    // })
+
+    // let prepped_wrapped = {"data": prepped}
  
-    request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped_wrapped), json:true}, (error, response, body)=>{
-  
+    request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped), json:true}, (error, response, body)=>{
+    
+
+        // move this logic to client client spawns file or move to seperate route
+
+        // needs to append to existing data so that Co2 etc will be in downloaded file
         if(error === null){
             if(data_valid(body)){
                
-                resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
+                // resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
                 resp.send(json2csv(body));
             }
             else{
