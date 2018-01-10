@@ -112,7 +112,13 @@ app.post("/clean", upload.single("file"), (req, resp)=>{
     
     //! file donwload works just make python integration now
     //! male tjat seperate function that gets called directly from the other server
+    
+    // Change this to send individual items instead so move below logic into this map and have it
+    // be the final result that gets turned into csv and sent back
 
+    // will need to change source as well to stream result???
+    // so javascript on client streams invidual entries and progresses progress bar 
+    // make tool a bit prettier with css
     let prepped = data.map((item)=>{
         return prep_data(item.Dust10,item.Dust2_5)
     })
