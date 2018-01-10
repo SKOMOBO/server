@@ -4,18 +4,29 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
+        <title>Dust cleaning tool</title>
+        <link rel="stylesheet" type="text/css" href="dust.css">
+    
     </head>
     <body>
-        <p>
-            This is a tool for fixing the dust data in your SKOMOBO CSV files. <br><br>
-
-            DISCLAIMER: This tool does not currently clean the PM1 measurements. <br><br>
-            Add your csv files here 
+        <h1>SKOMOBO dust cleaner tool</h1>
+        <p class = "intro">
+            This is a tool for fixing the dust data in your SKOMOBO CSV files. <br>
         </p>
-        <form action = "/clean" method= "POST" enctype="multipart/form-data">
+        <p style="color:darkred">DISCLAIMER: This tool does not currently clean the PM1 measurements.</p>
+         
+  
+        <form action = "/clean" method= "POST" enctype="multipart/form-data">   
             <input id="uploader" type="file" name="file" accept=".csv">
             <input type="submit" value = "submit">
         </form>
+        <br>
+        
+        
+        <div id="myProgress">
+            <b>Cleaning Progress Bar</b>
+            <div id="myBar">0%</div>
+        </div>
+            
     </body>
 </html>
