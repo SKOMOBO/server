@@ -31,6 +31,11 @@ def correct_data(data):
         data["PM2_5"] = PM2_5Model.predict(np.reshape([data["PM2_5"], data["PM2_5_diff"]], (1, -1)))[0]
     return data
 
+# consider load balancing here to speed things up, will chew through more resources though 
+# add a thread limiter
+
+# try progress bar first cus its good to have, then do parralisation later, means I won't need thread
+# limiter cus I can chunk it on the client side
 dust_cleaner = Pipe(
     decode_json,
     stream(
