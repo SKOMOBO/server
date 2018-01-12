@@ -17,7 +17,7 @@
          
         
         <input id="uploader" type="file" name="file" accept=".csv">
-        <input type="submit" value = "submit" onclick="upload()">
+        <input type="submit" id="submit" value = "submit" onclick="upload()">
 
         
         <!-- <form action = "/clean" method= "POST" enctype="multipart/form-data">   
@@ -26,10 +26,12 @@
         </form> -->
         <br>
         
-        
         <div id="myProgress">
-            <b>Cleaning Progress Bar</b>
-            <div id="myBar">0%</div>
+            <b class="progress_heading">Cleaning Progress Bar</b>
+            <div id="bar_background">
+                <div id="myBar">0%</div>
+            </div>
+            
         </div>
             
     </body>

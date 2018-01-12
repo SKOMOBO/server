@@ -1,9 +1,14 @@
 #myProgress {
-    width: 100%;
-    background-color: #ddd;
+    margin-top: 50px;
     display: none;
 }
-  
+
+#bar_background{
+    width: 100%;
+    margin-top:10px;
+    background-color: #ddd;
+}
+
 .intro{
     font-weight: bold
 }

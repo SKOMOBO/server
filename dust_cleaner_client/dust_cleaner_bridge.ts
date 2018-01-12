@@ -141,7 +141,10 @@ app.post("/clean", (req, resp)=>{
             if(data_valid(body)){
                
                 // resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
-                resp.send(json2csv(body));
+                // resp.send(json2csv(body));
+                input["Dust10"] = body["PM10"]
+                input["Dust2_5"] = body["PM2_5"]
+                resp.send(JSON.stringify(input))
             }
             else{
                 resp.send("File contains no salvagable values, please contact the developer Ryan, Mikael or Yu Wang")

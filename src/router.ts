@@ -108,5 +108,7 @@ app.get("/get*", async (req, resp) =>{
     })
 })
 
+// fix the regex here to match any number ___
+
 // interpret a random group of numbers seperated by underscores as arduino transmissions
-app.get(/\/(d+)_?.*/g, store_arduino)
+app.get(/\/[0-9]_.*/g, store_arduino)   
