@@ -16,7 +16,7 @@
         <p style="color:darkred">DISCLAIMER: This tool does not currently clean the PM1 measurements.</p>
          
         
-        <input id="uploader" type="file" name="file" accept=".csv">
+        <input id="uploader" type="file" name="file" accept=".csv" onchange="file_attached(this.files)">
         <input type="submit" id="submit" value = "submit" onclick="upload()">
 
         
