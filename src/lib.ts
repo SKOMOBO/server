@@ -103,7 +103,7 @@ export function config_production(){
 
     //get all the publicly available config values
     let the_config = config.get('Dbconfig')
-    let login_details = require('./prod-password.json')
+    let login_details = require('../keys/prod-password.json')
 
     for(let prop in the_config){
 
@@ -153,16 +153,14 @@ export function extract(data:String){
    
 }
 
-export function no_favicon(url:String, Callback: Function){
-   if (url != '/favicon.ico') Callback()
-}
-
 // integrate into vscode task system?? so that tsc happens and ava happens at the sane time
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
 
 export var connection = config_db()
+
+import {ServerResponse} from "http"
 
 export async function store(response: ServerResponse, database_name: String, values: any){
 
@@ -179,40 +177,3 @@ export async function store(response: ServerResponse, database_name: String, val
     //send the response
     response.end()
 }
-
-export function handler_generator(data:any, decoder: Function, db_name: String){
-    return async (request:IncomingMessage, response:ServerResponse)=>{
-        
-        no_favicon(request.url, ()=>{
-            // console.log(request.url)
-        
-            // evil but it works for now
-            data = eval(data)
-            let values
-            if(data.length !== 0 && data !== "/"){
-                values = decoder(data)
-                // console.log(values)
-                store(response, db_name, values)
-            }
-            else{
-                response.writeHead(400)
-                // console.log("No data")
-            }
-            
-        })
-
-    }
-}
-
-import {createServer, Server, IncomingMessage, ServerResponse} from "http"
-// export function spawn(port: Number, handler: (request: IncomingMessage, response: ServerResponse) => void): Server{
-//     let server = createServer(handler)
-
-//     //Lets start our server
-//     server.listen(port, '0.0.0.0', function(){
-//         //Callback triggered when server is successfully listening. Hurray!
-//         console.log("Server listening on: http://%s:%s", require("ip").address(), port);
-//     });
-
-//     return server
-// }

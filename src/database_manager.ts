@@ -2,7 +2,6 @@
 import {send_csv, send_json} from './file_manager'
 import {no_box, please_send_id} from './message_manager'
 
-
 /**
  * this function will correct the dust data using our models
  * @todo finish this function has to return JSON like original with outliers removed
@@ -101,12 +100,12 @@ export function get_type(name: String, req, resp, format){
 
         //check to see if it is underscore seperated
         if(req.query.id.indexOf('_') === -1){
-            please_send_id(resp)
+            resp.send(please_send_id)
             return
         }
     }
     else if(req.query.id == undefined){
-        please_send_id(resp)
+        resp.send(please_send_id)
         return
     }
 

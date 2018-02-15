@@ -8,7 +8,7 @@ import * as fs from "fs"
 let json2csv = require('json2csv')  
 
 export function send_zip(resp, data){
-    no_zip(resp)
+    resp.send(no_zip)
 }
 
 export function send_file(file, resp){
