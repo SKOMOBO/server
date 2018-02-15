@@ -1,45 +1,63 @@
-import SocketServer
+from pipe import * 
 import json
+# import pandas as pd
+import numpy as np
 import joblib
+from flask import Flask
 
-outlierPredictorPM10 = joblib.load("outlierDetectorPM10.pkl")
-outlierPredictorPM2_5 = joblib.load("outlierDetectorPM2_5.pkl")
-PM10Model = joblib.load("PM10Model.pkl")
-PM2_5Model = joblib.load("PM2_5Model.pkl")
+# maybe just use its function
+# def decode_json(data):
+#     return json.loads(data)
 
-class MyTCPHandler(SocketServer.BaseRequestHandler):
-    """
-    The request handler class for our server.
+load_model = lambda name : joblib.load("pickles/" + name + ".pkl")
 
-    It is instantiated once per connection to the server, and must
-    override the handle() method to implement communication to the
-    client.
-    """
+# convert this to a run concurrently friendly format later
+outlierPredictorPM10 = load_model("outlierDetectorPM10")
+outlierPredictorPM2_5 = load_model("outlierDetectorPM2_5")
+PM10Model = load_model("PM10Model")
+PM2_5Model = load_model("PM2_5Model")
 
-    # rewrite this as a pipe and use flask
+def decode_json(data):
+    # print(data.json)
+    return json.loads(data.json)["data"]
+    # return json.loads(data)["data"]
 
-    def handle(self):
-        # self.request is the TCP socket connected to the client
-        request = self.request.recv().strip()
-        print(request)
-        self.data = json.loads(request)
-        print(self.data)
 
-        results = []
-        for item in self.data:
-            # if it is not a outlier make a prediction
-            if(outlierPredictorPM10.predict(item["PM10"])[0] == 1 and outlierPredictorPM2_5.predict(item["PM2_5"])[0] == 1):
-                result = {}
-                result["PM10"] = PM10Model.predict([[item["PM10"], item["PM10_diff"]]]).tolist()
-                result["PM2_5"] = PM2_5Model.predict([[item["PM2_5"], item["PM2_5_diff"]]]).tolist()
-                results.append(result)
-            else:
-                result = None
+def is_not_outlier(data):
+    isvalid = outlierPredictorPM10.predict(data["PM10"])[0] != 1 and outlierPredictorPM2_5.predict(data["PM2_5"])[0] != 1
+    return isvalid
 
-        self.request.sendall(json.dumps(results))
+def correct_data(data):
+    if(data != None):
+        data["PM10"] = PM10Model.predict(np.reshape([data["PM10"], data["PM10_diff"]], (1, -1)))[0]
+        data["PM2_5"] = PM2_5Model.predict(np.reshape([data["PM2_5"], data["PM2_5_diff"]], (1, -1)))[0]
+    return data
 
-# Create the server, binding to localhost on port 9999
+# consider load balancing here to speed things up, will chew through more resources though 
+# add a thread limiter
 
-SocketServer.TCPServer(("localhost", 9999), MyTCPHandler).serve_forever()
-# Activate the server; this will keep running until you
-# interrupt the program with Ctrl-C
+# try progress bar first cus its good to have, then do parralisation later, means I won't need thread
+# limiter cus I can chunk it on the client side
+dust_cleaner = Pipe(
+    decode_json,
+    stream(
+        validate(is_not_outlier),
+        correct_data,
+    )
+    
+)
+
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route("/", methods=["POST"])
+def recieve_data():
+    data_response = jsonify(dust_cleaner.open(request))
+    # print(data_response.get_data())
+    return data_response
+
+app.run(port = 9999)
+# make flask server here and feed requests into pipe
+
+# make sure it accepts post requests change nodejs server to send post requests

@@ -1,11 +1,10 @@
 // move app and all the routes here they call functions in server
 import * as express from "express"
 
-import {no_favicon, store_arduino, store_raspi} from "../server"
+import {store_arduino, store_raspi} from "../server"
 import {get_type} from "./database_manager"
 
 // move the below to a seperate module called config
-
 
 var helmet = require("helmet")
 var compress = require("compression")
@@ -26,8 +25,7 @@ app.use(helmet())
 
 // need a way to make my functions protocol agnostic too?? how to do that I think it might be already
 
-app.get("/favicon.ico", no_favicon)
-app.get("/raspi*", store_raspi)
+// app.get("/raspi*", store_raspi)
 
 //! make a route called /web* to forward data to the keystonejs website
 //!
@@ -76,20 +74,6 @@ app.get("/dash*", (req, resp) =>{
 //     // console.log("Cleaning data!", req.query.one, req.query.two)
 //     resp.send(clean_data(req.query.one, req.query.two))
 // })
-
-import {send_firmware} from "./file_manager"
-app.get("/update*", (req, resp) =>{
-
-    // doing some cheeky dependency resolution by storing the version in a text file we can update whilst its running    
-    let current_version = require("raspi_version.json").version   
-
-    if(Number(req.query.v) <  current_version){
-        send_firmware("firmware/test.py", current_version, resp)
-        
-    }else{
-        resp.send("No update available")
-    }
-})
 
 
 

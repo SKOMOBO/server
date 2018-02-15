@@ -21,15 +21,6 @@ export function send_file(file, resp){
     })
 }
 
-export function send_firmware(file, version, resp){
-    
-    // update the file to match version in config
-    // let text = String(fs.readFileSync(file)[0]).replace("version = \d", "version = " + String(version))
-    // fs.writeFileSync(file, text)
-    send_file(file, resp)
-
-}
-
 export function send_csv(file, data, resp){
     
     let csv = json2csv({data: data})
@@ -37,11 +28,6 @@ export function send_csv(file, data, resp){
     // telling the browser to treat the text as a attachment
     resp.set({'Content-Disposition': 'attachment; filename="' + file + '"'})
     resp.send(csv);
-
-    // fs.writeFile(file, csv, function(err) {
-    //     if (err) throw err;
-    //     resp.download(file)
-    // });
 }
 
 // abstract formatting to format manager
