@@ -1,39 +1,4 @@
 
-
-//? is this required or does it just make things complicated? only repeat uses this 
-/**
- * Like the python range function, returns number array starting at start and ending at end
- * 
- * @param {number} start 
- * @param {number} end 
- * @returns {number[]} 
- */
-function range(start: number, end: number): number[]{
-    let nums = Array.apply(null, Array(end + 1)).map(function (_, i) {return i;});
-    return nums.slice(start)
-}
-
-
-
-//? could replace with lodash times function? or just a lodash function?
-/**
- * 
- * 
- * @export
- * @param {string} col 
- * @param {number} times 
- * @returns 
- */
-export function repeat(col: string, times: number){
-
-    return range(1, times).map((value)=>{
-        return col + String(value)
-    })
-}
-
-// import * as R from "ramda"
-
-
 //? probably a lodash function for this too, check and create my own custom lib
 // make sure it excludes things like map partial etc that ES6 already provides
 
@@ -89,7 +54,6 @@ export function connect_db(details: any){
     }
 
     return connection
-    
 }
 
 /**
