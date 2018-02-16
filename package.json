@@ -19,11 +19,12 @@
   "scripts": {
     "test": "ava Compiled/tests/test.js --watch",
     "tsc": "tsc",
-    "start": "cd compiled && nodemon server.js",
+    "start": "concurrently -n \"server,transmitter,python\" \"nodemon server.js\" \"nodemon dust_cleaner/transmit.js\" \"python dust_cleaner/server.py\" --kill-others",
     "tcp": "nodemon Compiled/src/tcp.js"
   },
   "devDependencies": {
     "ava": "^0.19.0",
+    "concurrently": "^3.5.1",
     "nodemon": "^1.11.0",
     "nyc": "^11.0.3",
     "supertest": "^3.0.0"

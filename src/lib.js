@@ -128,6 +128,8 @@ var connection = config_db()
 
 // import {ServerResponse} from "http"
 
+// _ = require('lodash')
+
 async function store(response, database_name, values){
 
     if(!has(values, null)){
