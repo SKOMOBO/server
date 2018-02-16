@@ -7,7 +7,7 @@
  * 
  * @param {*} object 
  */
-export function has(object: any, val: any){
+function has(object, val){
 
     if(object != val){
         for (let prop in object){
@@ -22,9 +22,10 @@ export function has(object: any, val: any){
 
 }
 
-import * as config from "config"
+const config = require("config")
+// import * as config from "config"
 
-export function config_db(){
+function config_db(){
     if(config.util.getEnv('NODE_ENV') === 'production'){
     
         let login_details = config_production()
@@ -40,8 +41,9 @@ export function config_db(){
 
 
 // fix this so that it has proper typescript definitions
-let mysql = require("mysql2")
-export function connect_db(details: any){
+const mysql = require("mysql2")
+
+function connect_db(details){
 
     let connection
 
@@ -62,7 +64,7 @@ export function connect_db(details: any){
  * @export
  * @returns 
  */
-export function config_production(){
+function config_production(){
     let config = require('config')
 
     //get all the publicly available config values
@@ -79,12 +81,12 @@ export function config_production(){
     return login_details
 }
 
-export function extract(data:String){
+function extract(data){
 
     // make sure there is actually data available  
     if( data !== '' && data !== ' ' && data != undefined){
           // breaks up each value by a dash and removes / in the front
-        let tokens: string[] = data.split('_')
+        let tokens = data.split('_')
         
         // layout how the data is going to be mapped
         // use javascript array.map for this somehow
@@ -92,7 +94,7 @@ export function extract(data:String){
         // let col_names: string[] = ['Dust1', 'Dust2_5', 'Dust10', 'Box_ID', 'Temperature', 'Humidity', 'CO2', 'Decibals']
         // .concat(repeat('Distance', 7)).concat(['Presence', 'Time'])
     
-        let col_names: string[] = ['Box_ID','Time_sent','Dust1', 'Dust2_5', 'Dust10', 'Temperature', 'Humidity', 'CO2', 'Presence']
+        let col_names = ['Box_ID','Time_sent','Dust1', 'Dust2_5', 'Dust10', 'Temperature', 'Humidity', 'CO2', 'Presence']
     
         let values = {}
     
@@ -103,7 +105,7 @@ export function extract(data:String){
             values[col_names[index]] = value
         })
     
-        let times: String[] = values['Time_sent'].split("-")
+        let times = values['Time_sent'].split("-")
         let date = times.slice(0, 3).join("-")
         let time = times.slice(3, 6).join(":")
         values["Time_sent"] = date + " " + time
@@ -122,11 +124,11 @@ export function extract(data:String){
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
 
-export var connection = config_db()
+var connection = config_db()
 
-import {ServerResponse} from "http"
+// import {ServerResponse} from "http"
 
-export async function store(response: ServerResponse, database_name: String, values: any){
+async function store(response, database_name, values){
 
     if(!has(values, null)){
         await connection.query('INSERT INTO ' + database_name + ' set ?' , values)

@@ -1,17 +1,16 @@
 
-import {no_zip} from './message_manager'
-
-import * as fs from "fs"
+const no_zip = require('./message_manager').no_zip
+const fs = require("fs")
 
 //! this desperately needs to be cleaned up to make dependency tree simpler
 
-let json2csv = require('json2csv')  
+const json2csv = require('json2csv')  
 
-export function send_zip(resp, data){
+function send_zip(resp, data){
     resp.send(no_zip)
 }
 
-export function send_file(file, resp){
+function send_file(file, resp){
 
     // telling the browser to treat the text as a file with a specific name
     resp.set({'Content-Disposition': 'attachment; filename="' + file + '"'})
@@ -21,7 +20,7 @@ export function send_file(file, resp){
     })
 }
 
-export function send_csv(file, data, resp){
+function send_csv(file, data, resp){
     
     let csv = json2csv({data: data})
     
@@ -33,6 +32,6 @@ export function send_csv(file, data, resp){
 // abstract formatting to format manager
 import {fix_formatting} from './database_manager'
 
-export function send_json(data, resp){
+function send_json(data, resp){
     resp.send(fix_formatting(data))
 }

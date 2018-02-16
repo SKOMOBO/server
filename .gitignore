@@ -5,10 +5,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-Compiled/**/*.js
-Compiled/**/*.js.map
-Compiled/**/*.json
-
 Dist
 prod-password.json
 download_password.json
@@ -68,3 +64,6 @@ typings/
 .env
 
 global_keys.json
+
+keys
+config

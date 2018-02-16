@@ -19,7 +19,7 @@ if (app.settings.env !== "development"){
 
 
 //var csv is the CSV file with headers
-function csvJSON(csv: String){
+function csvJSON(csv){
     var lines=csv.split("\n");
 
     var result = [];
@@ -32,7 +32,7 @@ function csvJSON(csv: String){
     })
     for(var i=1;i<lines.length;i++){
 
-        let obj: any = {};
+        let obj = {};
         let currentline=lines[i].split(",");
 
         for(var j=0;j<headers.length;j++){
@@ -65,13 +65,13 @@ app.use(compress())
 app.use(helmet())
 
 
-var prev_PM10:number = 0.0;
-var prev_PM2_5:number= 0.0;
-var result: any;
+var prev_PM10 = 0.0;
+var prev_PM2_5= 0.0;
+var result;
 var socket = require("net").Socket
 // var socket = new Socket();
 
-function prep_data(pm10:number, pm2_5:number){
+function prep_data(pm10, pm2_5){
     pm10 = pm10 / 1000;
     pm2_5 = pm2_5 / 1000;
             

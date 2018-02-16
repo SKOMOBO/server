@@ -1,20 +1,25 @@
 // move app and all the routes here they call functions in server
 
-import {store_arduino} from "../server"
-import {get_type} from "./database_manager"
+// import {store_arduino} from "../server"
+// import {get_type} from "./database_manager"
 
-import {authenticate} from './authentication_manger'
-import {send_zip, send_file} from './file_manager'
-import {please_send_type} from './message_manager'
-import {app} from './config'
+// import {authenticate} from './authentication_manger'
+// import {send_zip, send_file} from './file_manager'
+// import {please_send_type} from './message_manager'
+// import {app} from './config'
 
-var supported_types = ['arduino', 'raspi']
+const get_type = require('./database_manager').get_type
+const app = require('./config').app
+
+var supported_types = ['arduino']
 
 const proxy = require('http-proxy-middleware')
 
 app.use("/clean", proxy({target: 'http://localhost:82', changeOrigin: true}))
 
-import * as bugsnag from "bugsnag"
+// import * as bugsnag from "bugsnag"
+const bugsnag = require("bugsnag")
+
 if (app.settings.env !== "development"){
     bugsnag.register(require("../keys/global_keys.json").bugsnag_key)
     app.use(bugsnag.requestHandler);
@@ -44,5 +49,3 @@ app.get("/get*", async (req, resp) =>{
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]_.*/g, store_arduino)   
-
-export {app}

@@ -7,12 +7,11 @@ import {no_box, please_send_id} from './message_manager'
  * @todo finish this function has to return JSON like original with outliers removed
  *       and values adjusted
  * 
- * @export
  * @param {any} data 
  */
 
  //! rewrite dust cleaner client in typescript for now to fix issue convert haxe later
- export function clean_data(pm10, pm2_5){
+ function clean_data(pm10, pm2_5){
     
     // ! interface with python
 
@@ -52,7 +51,7 @@ import {no_box, please_send_id} from './message_manager'
  * @param {any} data 
  * @returns 
  */
-export function fix_formatting(data){
+function fix_formatting(data){
     if(data[0].Presence != undefined){
         // for each text row
         for(let row=0; row<data.length; row++){
@@ -72,10 +71,10 @@ export function fix_formatting(data){
 // var dust_cleaner = require("../dust_cleaner/dustCleanerClient.js")
 
 
-// below two timestamp functions were retrieved from https://stackoverflow.com/a/5133807/6142189
+// below two timestampfunctions were retrieved from https://stackoverflow.com/a/5133807/6142189
 
 
-export function fix_timestamp(data: Date){
+function fix_timestamp(data){
     
     return data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate() + " " + data.getHours() + ":" + data.getMinutes() + ":" + data.getSeconds();
 
@@ -86,9 +85,9 @@ import {connection} from './lib'
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
-// function 
+//function 
 
-export function get_type(name: String, req, resp, format){
+function get_type(name, req, resp, format){
 
     // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
 
