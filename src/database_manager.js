@@ -1,6 +1,9 @@
-
-import {send_csv, send_json} from './file_manager'
-import {no_box, please_send_id} from './message_manager'
+const file_manager = require('./file_manager')
+const send_csv = file_manager.send_csvs
+const send_json = file_manager.send_json
+const messages = require('./messages')
+const no_box = messages.no_box
+const please_send_id = messages.please_send_id
 
 /**
  * this function will correct the dust data using our models
@@ -10,22 +13,8 @@ import {no_box, please_send_id} from './message_manager'
  * @param {any} data 
  */
 
- //! rewrite dust cleaner client in typescript for now to fix issue convert haxe later
- function clean_data(pm10, pm2_5){
+function clean_data(pm10, pm2_5){
     
-    // ! interface with python
-
-    // ! make nodejs http route to receive data and respond
-
-    // ! if undefined then exclude that row from the csv
-
-    // ! this should consume a json document with all the rows in the csv 
-    // / db not single values so we can omit outliers in final csv
-
-    // let client = new dust_cleaner.DustCleanerClient
-
-    // client.clean(pm10, pm2_5)
-    // let data = client.result
 
     // make thing to talk to python and get responses 
     let data = {"PM10":0, "PM2_5":0};
@@ -40,7 +29,6 @@ import {no_box, please_send_id} from './message_manager'
         data.PM2_5 = 0
     }
     
-    // console.log(client.result)
     return data
 }
 
@@ -80,12 +68,9 @@ function fix_timestamp(data){
 
 }
 
-import {connection} from './lib'
-
+const connection = require('./lib').connection
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
-
-//function 
 
 function get_type(name, req, resp, format){
 

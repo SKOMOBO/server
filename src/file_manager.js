@@ -1,5 +1,5 @@
 
-const no_zip = require('./message_manager').no_zip
+const no_zip = require('./messages').no_zip
 const fs = require("fs")
 
 //! this desperately needs to be cleaned up to make dependency tree simpler
@@ -30,7 +30,7 @@ function send_csv(file, data, resp){
 }
 
 // abstract formatting to format manager
-import {fix_formatting} from './database_manager'
+const fix_formatting = require('./database_manager').fix_formatting
 
 function send_json(data, resp){
     resp.send(fix_formatting(data))

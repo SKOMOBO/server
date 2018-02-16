@@ -1,5 +1,3 @@
-
-//? probably a lodash function for this too, check and create my own custom lib
 // make sure it excludes things like map partial etc that ES6 already provides
 
 /**
@@ -89,10 +87,6 @@ function extract(data){
         let tokens = data.split('_')
         
         // layout how the data is going to be mapped
-        // use javascript array.map for this somehow
-    
-        // let col_names: string[] = ['Dust1', 'Dust2_5', 'Dust10', 'Box_ID', 'Temperature', 'Humidity', 'CO2', 'Decibals']
-        // .concat(repeat('Distance', 7)).concat(['Presence', 'Time'])
     
         let col_names = ['Box_ID','Time_sent','Dust1', 'Dust2_5', 'Dust10', 'Temperature', 'Humidity', 'CO2', 'Presence']
     
@@ -126,10 +120,6 @@ function extract(data){
 
 var connection = config_db()
 
-// import {ServerResponse} from "http"
-
-// _ = require('lodash')
-
 async function store(response, database_name, values){
 
     if(!has(values, null)){
@@ -145,3 +135,14 @@ async function store(response, database_name, values){
     //send the response
     response.end()
 }
+
+const _ = require('lodash')
+function export_them(){
+   let result = {}
+   _.forEach(arguments, (arg)=>{
+        result[arg.name] = arg
+   })
+   return result
+}
+
+module.exports = export_them(store, config_db, export_them)

@@ -1,4 +1,4 @@
-import * as net from "net"
+const net = require('net')
 
 export var app = net.createServer((socket)=>{
     // console.log("Connected")
@@ -22,7 +22,7 @@ import * as request from "request"
  * 
  * @param {string} data 
  */
-function to_massey(data: string){
+function to_massey(data){
 
     // let options = {
     //     host: "seat-skomobo.massey.ac.nz",

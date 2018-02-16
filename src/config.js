@@ -1,9 +1,8 @@
-var helmet = require("helmet")
-var compress = require("compression")
+const helmet = require("helmet")
+const compress = require("compression")
 
-import * as express from "express"
-
-export var app = express()
+const express = require("express")
+var app = express()
 
 app.use(express.static("static"))
 
@@ -12,3 +11,5 @@ app.use(compress())
 
 // Fix headers to make things more secure
 app.use(helmet())
+
+module.exports.app = app

@@ -1,4 +1,4 @@
-export function authenticate(entered_password, resp, onsuccess){
+function authenticate(entered_password, resp, onsuccess){
     let correct_pass = require("../keys/download_password.json").password
    
     if(entered_password === correct_pass){
@@ -8,3 +8,5 @@ export function authenticate(entered_password, resp, onsuccess){
         resp.send("invalid password")
     }
 }
+
+module.exports.authenticate = authenticate

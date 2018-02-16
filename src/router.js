@@ -1,15 +1,14 @@
 // move app and all the routes here they call functions in server
 
 // import {store_arduino} from "../server"
-// import {get_type} from "./database_manager"
-
-// import {authenticate} from './authentication_manger'
-// import {send_zip, send_file} from './file_manager'
-// import {please_send_type} from './message_manager'
-// import {app} from './config'
+const authenticate = require('./authentication').authenticate
 
 const get_type = require('./database_manager').get_type
-const app = require('./config').app
+const store_arduino = require('../server').store_arduino
+const my_config = require('./config')
+var app = my_config.app
+
+const please_send_type = require("./messages").please_send_type
 
 var supported_types = ['arduino']
 
@@ -49,3 +48,5 @@ app.get("/get*", async (req, resp) =>{
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]_.*/g, store_arduino)   
+
+module.exports.app = app
