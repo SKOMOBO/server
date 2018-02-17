@@ -68,7 +68,7 @@ function fix_timestamp(data){
 
 }
 
-const connection = require('./lib').connection
+const connection = require('./lib').config_db()
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 

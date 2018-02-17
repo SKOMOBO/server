@@ -7,7 +7,7 @@
  */
 function has(object, val){
 
-    if(object != val){
+    if(object !== val){
         for (let prop in object){
             if (object[prop] === val){
                 return true
@@ -117,9 +117,6 @@ function extract(data){
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
-
-var connection = config_db()
-
 async function store(response, database_name, values){
 
     if(!has(values, null)){
@@ -145,4 +142,4 @@ function export_them(){
    return result
 }
 
-module.exports = export_them(store, config_db, export_them)
+module.exports = export_them(has, store, config_db, export_them)
