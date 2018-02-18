@@ -6,7 +6,6 @@
  * @param {*} object 
  */
 function has(object, val){
-
     if(object !== val){
         for (let prop in object){
             if (object[prop] === val){
@@ -17,6 +16,8 @@ function has(object, val){
     else{
         return object === val
     }
+
+    return false
 
 }
 

@@ -3,7 +3,6 @@
 // import {store_arduino} from "../server"
 
 const get_type = require('./database_manager').get_type
-const store_arduino = require('../server').store_arduino
 const my_config = require('./config')
 var app = my_config.app
 const send_zip = require('./file_manager').send_zip
@@ -11,6 +10,8 @@ const send_zip = require('./file_manager').send_zip
 const please_send_type = require("./messages").please_send_type
 
 var supported_types = ['arduino']
+
+const lib = require('./lib')
 
 const proxy = require('http-proxy-middleware')
 
@@ -33,7 +34,7 @@ app.get("/dash*", (req, resp) =>{
 
 const correct_pass = require("../keys/download_password.json").password
 
-const authenticate = require('authenticate').authenticate
+const authenticate = require('./authenticate').authenticate
 
 app.get("/get*", async (req, resp) =>{
     
@@ -50,7 +51,28 @@ app.get("/get*", async (req, resp) =>{
     }, resp.send)
 })
 
+
+
+function validate_data(data, handler){
+    // console.log(data)
+    if (data != undefined && data !== '' && data !== ' ' && data !== 'raspi' && data !== 'raspi/'){
+        handler(data)
+    }
+}
+
+function store_arduino(req, resp){
+
+    let url = req.url.slice(1)
+    validate_data(url, (data)=>{
+        // console.log(data)
+        let values = lib.extract(url)
+        // console.log(values)
+        lib.store(resp, "arduino", values)
+    })
+}
+
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]_.*/g, store_arduino)   
 
+module.exports = lib.export_them(store_arduino)
 module.exports.app = app

@@ -1,5 +1,5 @@
-function no_box(resp, id){
-    resp.send("No box with ID " + id)
+function no_box(id){
+    return "No box with ID " + id
 }
 
 const no_zip = "This will send a zip file with both raspberry pi and arduino data in the near future"

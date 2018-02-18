@@ -68,14 +68,32 @@ function fix_timestamp(data){
 
 }
 
-const connection = require('./lib').config_db()
+var connection = null
+
+function resolve_db(){
+
+    if(connection === null){
+        try{
+            connection = require('./lib').config_db()
+        }
+        catch(error){
+            console.error("DB not running or not accessible")
+            connection = null
+        }
+    }
+    else{
+        return connection
+    }
+    
+}
+
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
 function get_type(name, req, resp, format){
 
     // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
-
+    resolve_db()
 
     // check if it is a valid number if it is we carry on without issues
     if(isNaN(req.query.id) && req.query.id != "all" ){
@@ -114,7 +132,7 @@ function get_type(name, req, resp, format){
             }
         }
         else{
-            no_box(resp, req.query.id)
+            resp.send(no_box(req.query.id))
         }
     })
 }
