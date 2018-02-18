@@ -1,9 +1,5 @@
-const file_manager = require('./file_manager')
-const send_csv = file_manager.send_csvs
-const send_json = file_manager.send_json
-const messages = require('./messages')
-const no_box = messages.no_box
-const please_send_id = messages.please_send_id
+const {send_json, send_csv} = require('./file_manager')
+const {no_box, please_send_id} = require('./messages')
 
 /**
  * this function will correct the dust data using our models

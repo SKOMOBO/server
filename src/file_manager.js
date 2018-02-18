@@ -1,5 +1,5 @@
 
-const no_zip = require('./messages').no_zip
+const {no_zip} = require('./messages')
 const fs = require("fs")
 
 //! this desperately needs to be cleaned up to make dependency tree simpler

@@ -77,6 +77,7 @@ function update_progress(index, total_rows){
     
 }
 
+var URL = 'localhost:81/'
 
 // transmits data to server just need to put payload in body somehow then return result and turn into csv on client
 function clean_row(row, on_received){
@@ -92,7 +93,7 @@ function clean_row(row, on_received){
     
     var xhr = new XMLHttpRequest();
     
-    xhr.open("POST", "localhost:81/clean", true);
+    xhr.open("POST", URL + "clean", true);
 
     xhr.ontimeout = function(ev){
         console.error("Connection timed out")

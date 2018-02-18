@@ -9,7 +9,7 @@ from flask import Flask
 # def decode_json(data):
 #     return json.loads(data)
 
-load_model = lambda name : joblib.load("pickles/" + name + ".pkl")
+load_model = lambda name : joblib.load("./dust_cleaner/pickles/" + name + ".pkl")
 
 # convert this to a run concurrently friendly format later
 outlierPredictorPM10 = load_model("outlierDetectorPM10")

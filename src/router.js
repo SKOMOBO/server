@@ -2,12 +2,11 @@
 
 // import {store_arduino} from "../server"
 
-const get_type = require('./database_manager').get_type
-const my_config = require('./config')
-var app = my_config.app
-const send_zip = require('./file_manager').send_zip
+const {get_type} = require('./database_manager')
+var {app} = require('./config')
+const {send_zip} = require('./file_manager')
 
-const please_send_type = require("./messages").please_send_type
+const {please_send_type} = require("./messages")
 
 var supported_types = ['arduino']
 

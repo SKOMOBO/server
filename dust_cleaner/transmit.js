@@ -1,6 +1,8 @@
-import {clean_data} from "../src/database_manager"
+// import {clean_data} from "../src/database_manager"
 
-import * as express from "express"
+const clean_data = require('../src/database_manager').clean_data
+// import * as express from "express"
+const express = require('express')
 
 
 const parser = require("body-parser")
@@ -10,7 +12,8 @@ const app = express()
 app.use(parser)
 
 // bugsnag integration only enable if we are in production
-import * as bugsnag from "bugsnag"
+// import * as bugsnag from "bugsnag"
+const bugsnag = require('bugsnag')
 if (app.settings.env !== "development"){
     bugsnag.register(require("./global_keys.json").bugsnag_key)
     app.use(bugsnag.requestHandler);
@@ -53,9 +56,10 @@ function csvJSON(csv){
     // return JSON.stringify(result); //JSON
 }
 
-import * as multer from "multer"
-var helmet = require("helmet")
-var compress = require("compression")
+// import * as multer from "multer"
+const multer = require('multer')
+const helmet = require("helmet")
+const compress = require("compression")
 // export var app = express()
 
 // Enable GZIP compression for improved performance
@@ -84,8 +88,10 @@ function prep_data(pm10, pm2_5){
 const net = require('net');
 
 // const client = new net.Socket();
-import * as http from "http"
-import * as request from "request"
+// import * as http from "http"
+// import * as request from "request"
+const http = require('http')
+const request = require('request')
 
 const upload = multer()
 const json2csv = require('json2csv');
