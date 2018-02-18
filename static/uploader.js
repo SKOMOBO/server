@@ -77,7 +77,7 @@ function update_progress(index, total_rows){
     
 }
 
-var URL = 'localhost:81/'
+var my_url = 'localhost:81/'
 
 // transmits data to server just need to put payload in body somehow then return result and turn into csv on client
 function clean_row(row, on_received){
@@ -93,7 +93,7 @@ function clean_row(row, on_received){
     
     var xhr = new XMLHttpRequest();
     
-    xhr.open("POST", URL + "clean", true);
+    xhr.open("POST", my_url + "clean", true);
 
     xhr.ontimeout = function(ev){
         console.error("Connection timed out")
@@ -133,32 +133,26 @@ function decode(csv){
         clean_row(json[i], (cleaned)=>{
             json[i].Dust10 = cleaned.Dust10
             json[i].Dust2_5 = cleaned.Dust2_5
-            console.log(json)
             index = i
             update_progress(index, total_rows)
         })
 
     }
-    // json.forEach(row => {
-    //     // result.append(clean_row(row))
-    //     update_progress(index, total_rows)
-    //     index = index + 1
 
-    //     clean_row(row, (cleaned)=>{
-            
-    //     })
-    //     // send request to server with data and get response
-    // });
-    // add last 1%
     update_progress(index, total_rows)
+
+    json = {"keys": json[0].keys, "data": json}
 
     // insert library reference in HTML
     // variable for the final download
     CSV = json2csv(json)
 
+    // correct weird formatting
+    CSV = CSV.replace(/"""/g, '"')
+
     // get the final name here and data
     // might have to stream this somehow
-    save('clean.csv', CSV)
+    save(data_file.name.slice(0, -4) + '_clean.csv', CSV)
 }
 
 function save(filename, data) {

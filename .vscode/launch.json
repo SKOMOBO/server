@@ -6,7 +6,7 @@
             "type": "firefox",
             "request": "launch",
             "reAttach": true,
-            "file": "${workspaceFolder}/Compiled/static/tool.html"
+            "file": "${workspaceFolder}/static/tool.html"
         }
     ]
 }
