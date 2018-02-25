@@ -82,43 +82,42 @@ var my_url = 'localhost:81/'
 // transmits data to server just need to put payload in body somehow then return result and turn into csv on client
 function clean_row(row, on_received){
 
-    // $.post(
-    //     "localhost:81/clean",
-    //     data = row,
-    //     function(data){
-    //         on_received(JSON.parse(data))
-    //     }
-    // )
+    $.post(
+        my_url + "clean",
+        data = row,
+        function(data){
+            on_received(JSON.parse(data))
+        }
+    )
     // configuring request data
     
-    var xhr = new XMLHttpRequest();
-    
-    xhr.open("POST", my_url + "clean", true);
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("POST", my_url + "clean", true);
 
-    xhr.ontimeout = function(ev){
-        console.error("Connection timed out")
-    }
+    // xhr.ontimeout = function(ev){
+    //     console.error("Connection timed out")
+    // }
 
-    xhr.onerror = function(error){
-        console.error(error)
-    }
+    // xhr.onerror = function(error){
+    //     console.error(error)
+    // }
 
-    xhr.onprogress = function(){
-        console.log("loading")
-    }
+    // xhr.onprogress = function(){
+    //     console.log("loading")
+    // }
 
-    xhr.setRequestHeader("Content-type", "application/json");
+    // xhr.setRequestHeader("Content-type", "application/json");
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            on_received(JSON.parse(xhr.responseText))
-            // var json = JSON.parse(xhr.responseText);
-            // console.log(json.email + ", " + json.password);
+    // xhr.onreadystatechange = function () {
+    //     if (this.readyState === 4 && this.status == 200) {
+    //         on_received(JSON.parse(this.responseText))
+    //         // var json = JSON.parse(xhr.responseText);
+    //         // console.log(json.email + ", " + json.password);
 
-        }
-    };
+    //     }
+    // };
 
-    xhr.send(JSON.stringify(row));
+    // xhr.send(JSON.stringify(row));
 }
 
 function decode(csv){
