@@ -14,8 +14,6 @@ const lib = require('./lib')
 
 const proxy = require('http-proxy-middleware')
 
-app.use("/clean", proxy({target: 'http://localhost:82', changeOrigin: true}))
-
 // import * as bugsnag from "bugsnag"
 const bugsnag = require("bugsnag")
 
