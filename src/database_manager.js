@@ -135,6 +135,21 @@ function get_type(name, req, resp, format){
     })
 }
 
+async function store(response, database_name, values){
+
+    if(!has(values, null)){
+        await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+        // tell the client everything is ok
+        response.writeHead(200, {"Content-Type": "text/HTML"})
+    }
+    else{
+        response.writeHead(400, {"Content-Type": "text/HTML"})
+    }
+       
+    //send the response
+    response.end()
+}
+
 const {validate_data} = require('./validator')
 function store_arduino(req, resp){
 
@@ -145,7 +160,7 @@ function store_arduino(req, resp){
         // console.log(data)
         let values = lib.extract(url)
         // console.log(values)
-        lib.store(resp, "arduino", values)
+        store(resp, "arduino", values)
     },()=>{
         resp.send("Invalid data")
     })

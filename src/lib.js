@@ -43,12 +43,19 @@ function config_db(){
 // fix this so that it has proper typescript definitions
 const mysql = require("mysql2")
 
+class fake_connection{
+    query(){
+        return {1: 2, 3: 4}
+    }
+}
+
 function connect_db(details){
 
     let connection
     console.log(details)
     try{
         connection = mysql.createConnection(details)
+    
     }catch(e){
         console.log("Database not started")
 
@@ -119,24 +126,6 @@ function extract(data){
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
-async function store(response, database_name, values){
-
-    if(!has(values, null)){
-        await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
-        // tell the client everything is ok
-        response.send(200)
-        // response.writeHead(200, {"Content-Type": "text/HTML"})
-    }
-    else{
-        // console.log("Invalid request!")
-        response.send(400)
-        // response.writeHead(400, {"Content-Type": "text/HTML"})
-    }
-       
-    //send the response
-    response.end()
-}
-
 const _ = require('lodash')
 function export_them(){
    let result = {}
@@ -146,4 +135,4 @@ function export_them(){
    return result
 }
 
-module.exports = export_them(has, store, extract, config_db, export_them)
+module.exports = export_them(has, extract, config_db, export_them)

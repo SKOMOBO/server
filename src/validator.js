@@ -2,9 +2,13 @@ function validate_data(data, handler, invalid = null){
     // console.log(data)
     if(data != undefined && data !== '' && data !== ' '){
         handler(data)
+        return true
     }
     else{
-        invalid(data)
+        if(invalid !== null){
+            invalid(data)
+        }
+        return false
     }
 }
 
