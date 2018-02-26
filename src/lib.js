@@ -25,6 +25,7 @@ const config = require("config")
 // import * as config from "config"
 
 function config_db(){
+    console.log("configuring")
     if(config.util.getEnv('NODE_ENV') === 'production'){
     
         let login_details = config_production()
@@ -45,11 +46,11 @@ const mysql = require("mysql2")
 function connect_db(details){
 
     let connection
-
+    console.log(details)
     try{
         connection = mysql.createConnection(details)
     }catch(e){
-        // console.log("Database not started")
+        console.log("Database not started")
 
         // change this so that it executes cmd cmmand to start DB
     }
@@ -123,11 +124,13 @@ async function store(response, database_name, values){
     if(!has(values, null)){
         await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
         // tell the client everything is ok
-        response.writeHead(200, {"Content-Type": "text/HTML"})
+        response.send(200)
+        // response.writeHead(200, {"Content-Type": "text/HTML"})
     }
     else{
         // console.log("Invalid request!")
-        response.writeHead(400, {"Content-Type": "text/HTML"})
+        response.send(400)
+        // response.writeHead(400, {"Content-Type": "text/HTML"})
     }
        
     //send the response
@@ -143,4 +146,4 @@ function export_them(){
    return result
 }
 
-module.exports = export_them(has, store, config_db, export_them)
+module.exports = export_them(has, store, extract, config_db, export_them)

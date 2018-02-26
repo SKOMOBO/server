@@ -1,4 +1,4 @@
-const authenticate = require("../src/authenticate").authenticate
+const {authenticate} = require("../src/validator")
 
 test('it fails to authenticate', ()=>{
     expect(authenticate('1234', '2345', ()=>{}, ()=>{})).toBe('invalid password')

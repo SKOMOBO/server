@@ -66,11 +66,13 @@ function fix_timestamp(data){
 
 var connection = null
 
+const {config_db} = require('./lib')
+
 function resolve_db(){
 
     if(connection === null){
         try{
-            connection = require('./lib').config_db()
+            connection = config_db()
         }
         catch(error){
             console.error("DB not running or not accessible")
@@ -132,3 +134,21 @@ function get_type(name, req, resp, format){
         }
     })
 }
+
+const {validate_data} = require('./validator')
+function store_arduino(req, resp){
+
+    resolve_db()
+
+    let url = req.url.slice(1)
+    validate_data(url, (data)=>{
+        // console.log(data)
+        let values = lib.extract(url)
+        // console.log(values)
+        lib.store(resp, "arduino", values)
+    },()=>{
+        resp.send("Invalid data")
+    })
+}
+
+module.exports.store_arduino = store_arduino
