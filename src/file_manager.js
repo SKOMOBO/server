@@ -35,3 +35,6 @@ const fix_formatting = require('./database_manager').fix_formatting
 function send_json(data, resp){
     resp.send(fix_formatting(data))
 }
+
+const {export_them} = require('./lib')
+module.exports = export_them(send_zip, send_csv, send_file, send_json)

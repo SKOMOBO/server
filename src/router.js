@@ -14,10 +14,9 @@ const lib = require('./lib')
 
 const proxy = require('http-proxy-middleware')
 
-// import * as bugsnag from "bugsnag"
 const bugsnag = require("bugsnag")
 
-if (app.settings.env !== "development"){
+if (app.settings.env !== "development" && app.settings.env !== "test"){
     bugsnag.register(require("../keys/global_keys.json").bugsnag_key)
     app.use(bugsnag.requestHandler);
     app.use(bugsnag.errorHandler);
@@ -34,7 +33,10 @@ const correct_pass = require("../keys/download_password.json").password
 const {authenticate} = require('./validator')
 
 app.get("/get*", async (req, resp) =>{
-    
+    function invalid(message){
+        resp.send(400, message)
+    }
+
     authenticate(correct_pass, req.query.pass, ()=>{
         if(req.query.type == 'all'){
             send_zip(resp, {})
@@ -45,7 +47,7 @@ app.get("/get*", async (req, resp) =>{
         else{
             resp.send(please_send_type)
         }
-    }, resp.send)
+    }, invalid)
 })
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
