@@ -11,3 +11,8 @@ test('also true', ()=>{
 test('this fails', ()=>{
     expect(lib.has({"a_thing": 12}, 1)).toBe(false)
 })
+
+test('exports functions correctly', ()=>{
+    function test(){}
+    expect(lib.export_functs(test)).toMatchObject({'test': test})
+})

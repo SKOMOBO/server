@@ -10,6 +10,6 @@ const please_send_id = `Please specify a box ID by adding <b>&id=yourID</b> to t
     EG: <b>http://seat-skomobo.massey.ac.nz/get?type=arduino&pass=8888888888&id=0</b><br>
     Please note using this example link only has dummy data`
 
-const lib = require('./lib')
+// replace with lodash merge later?
 
-module.exports = lib.export_them(no_box, no_zip, please_send_id, please_send_type)
+module.exports = {"no_box": no_box, "no_zip": no_zip, "please_send_id":please_send_id, "please_send_type": please_send_type}

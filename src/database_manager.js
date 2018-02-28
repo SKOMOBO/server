@@ -166,4 +166,4 @@ function store_arduino(req, resp){
     })
 }
 
-module.exports.store_arduino = store_arduino
+exports.store_arduino = store_arduino

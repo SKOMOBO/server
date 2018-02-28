@@ -4,8 +4,11 @@ test('The app is defined', ()=>{
     expect(app).toBeDefined()
 })
 
-
 var request = require('supertest')(app)
+
+const {password} = require('../keys/download_password')
+// const {no_zip} = require('../src/messages')
+const {no_zip} = require('../src/messages')
 
 describe('the routes work correctly', ()=>{
     test('returns invalid route', ()=>{
@@ -15,9 +18,6 @@ describe('the routes work correctly', ()=>{
     test('returns invalid password', ()=>{
         return request.get('/get?type=arduino&id=2').expect(400)
     })
-
-    const {password} = require('../keys/download_password')
-    const {no_zip} = require('../src/messages')
 
     test('returns no zip', ()=>{
         return request.get('/get?type=all&id=2&pass=' + password).expect(no_zip)

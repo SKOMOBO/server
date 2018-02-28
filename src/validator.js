@@ -25,5 +25,5 @@ function authenticate(correct_pass, entered_password, onsuccess, onfail){
     }
 }
 
-module.exports.authenticate = authenticate
-module.exports.validate_data = validate_data
+exports.authenticate = authenticate
+exports.validate_data = validate_data

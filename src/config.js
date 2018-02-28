@@ -10,4 +10,4 @@ app.use(compress())
 // Fix headers to make things more secure
 app.use(helmet())
 
-module.exports.app = app
+exports.app = app

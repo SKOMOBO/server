@@ -127,12 +127,15 @@ function extract(data){
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
 const _ = require('lodash')
-function export_them(){
+function export_functs(){
    let result = {}
    _.forEach(arguments, (arg)=>{
-        result[arg.name] = arg
+        if(arg.name !== undefined){
+            result[arg.name] = arg
+        }
    })
    return result
 }
 
-module.exports = export_them(has, extract, config_db, export_them)
+
+module.exports = export_functs(has, extract, config_db, export_functs)
