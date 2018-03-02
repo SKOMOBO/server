@@ -167,3 +167,4 @@ function store_arduino(req, resp){
 }
 
 exports.store_arduino = store_arduino
+exports.connection = connection

@@ -43,18 +43,17 @@ function config_db(){
 // fix this so that it has proper typescript definitions
 const mysql = require("mysql2")
 
-class fake_connection{
-    query(){
-        return {1: 2, 3: 4}
-    }
-}
-
 function connect_db(details){
 
     let connection
     console.log(details)
     try{
-        connection = mysql.createConnection(details)
+        if(details.host !== 'test'){
+            connection = mysql.createConnection(details)
+        }
+        else{
+            connection = require('jest').fn()
+        }
     
     }catch(e){
         console.log("Database not started")
