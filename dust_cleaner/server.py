@@ -1,27 +1,7 @@
 from pipe import * 
-import json
-# import pandas as pd
 import numpy as np
-import joblib
 from flask import Flask
-
-# maybe just use its function
-# def decode_json(data):
-#     return json.loads(data)
-
-load_model = lambda name : joblib.load("./dust_cleaner/pickles/" + name + ".pkl")
-
-# convert this to a run concurrently friendly format later
-outlierPredictorPM10 = load_model("outlierDetectorPM10")
-outlierPredictorPM2_5 = load_model("outlierDetectorPM2_5")
-PM10Model = load_model("PM10Model")
-PM2_5Model = load_model("PM2_5Model")
-
-def decode_json(data):
-    # print(data.json)
-    return json.loads(data.json)["data"]
-    # return json.loads(data)["data"]
-
+from server_lib import *
 
 def is_not_outlier(data):
     isvalid = outlierPredictorPM10.predict(data["PM10"])[0] != 1 and outlierPredictorPM2_5.predict(data["PM2_5"])[0] != 1
@@ -54,7 +34,6 @@ app = Flask(__name__)
 @app.route("/", methods=["POST"])
 def recieve_data():
     data_response = jsonify(dust_cleaner.open(request))
-    # print(data_response.get_data())
     return data_response
 
 app.run(port = 9999)
