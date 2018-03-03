@@ -2,7 +2,7 @@
 
 // import {store_arduino} from "../server"
 
-const {get_type} = require('./database_manager')
+const {get_type, store_arduino} = require('./database_manager')
 var {app} = require('./config')
 const {send_zip} = require('./file_manager')
 
@@ -14,12 +14,9 @@ const lib = require('./lib')
 
 const proxy = require('http-proxy-middleware')
 
-app.use("/clean", proxy({target: 'http://localhost:82', changeOrigin: true}))
-
-// import * as bugsnag from "bugsnag"
 const bugsnag = require("bugsnag")
 
-if (app.settings.env !== "development"){
+if (app.settings.env !== "development" && app.settings.env !== "test"){
     bugsnag.register(require("../keys/global_keys.json").bugsnag_key)
     app.use(bugsnag.requestHandler);
     app.use(bugsnag.errorHandler);
@@ -33,45 +30,28 @@ app.get("/dash*", (req, resp) =>{
 
 const correct_pass = require("../keys/download_password.json").password
 
-const authenticate = require('./authenticate').authenticate
+const {authenticate} = require('./validator')
 
 app.get("/get*", async (req, resp) =>{
-    
+    function invalid(message){
+        resp.send(400, message)
+    }
+
     authenticate(correct_pass, req.query.pass, ()=>{
         if(req.query.type == 'all'){
             send_zip(resp, {})
         }
         else if(supported_types.includes(req.query.type)){
-            get_type(req.query.type, req, resp, req.query.format)
+            get_type(req.query.type, req.query.id, resp, req.query.format)
         }
         else{
             resp.send(please_send_type)
         }
-    }, resp.send)
+    }, invalid)
 })
-
-
-
-function validate_data(data, handler){
-    // console.log(data)
-    if (data != undefined && data !== '' && data !== ' ' && data !== 'raspi' && data !== 'raspi/'){
-        handler(data)
-    }
-}
-
-function store_arduino(req, resp){
-
-    let url = req.url.slice(1)
-    validate_data(url, (data)=>{
-        // console.log(data)
-        let values = lib.extract(url)
-        // console.log(values)
-        lib.store(resp, "arduino", values)
-    })
-}
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]_.*/g, store_arduino)   
 
-module.exports = lib.export_them(store_arduino)
+module.exports.store_arduino = store_arduino
 module.exports.app = app

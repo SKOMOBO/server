@@ -18,15 +18,13 @@
   },
   "scripts": {
     "test": "jest",
-    "tsc": "tsc",
     "start": "concurrently -n \"server,transmitter,python\" \"nodemon server.js\" \"nodemon dust_cleaner/transmit.js\" \"python dust_cleaner/server.py\" --kill-others",
     "tcp": "nodemon Compiled/src/tcp.js"
   },
   "devDependencies": {
-    "ava": "^0.19.0",
     "concurrently": "^3.5.1",
     "jest": "^22.3.0",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.17.1",
     "nyc": "^11.0.3",
     "supertest": "^3.0.0"
   }

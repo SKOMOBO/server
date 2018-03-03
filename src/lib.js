@@ -44,16 +44,20 @@ const mysql = require("mysql2")
 
 function connect_db(details){
 
-    let connection
-
+    let connection = null
     try{
-        connection = mysql.createConnection(details)
+        if(details.host === 'test'){
+            connection = {'query':jest.fn()}
+        }
+        else{
+            connection = mysql.createConnection(details)
+        }
+    
     }catch(e){
-        // console.log("Database not started")
-
+        console.error(e)
+        console.log("Database not started")
         // change this so that it executes cmd cmmand to start DB
     }
-
     return connection
 }
 
@@ -85,7 +89,7 @@ function extract(data){
     // make sure there is actually data available  
     if( data !== '' && data !== ' ' && data != undefined){
           // breaks up each value by a dash and removes / in the front
-        let tokens = data.split('_')
+        let tokens = data.split('_').slice(1)
         
         // layout how the data is going to be mapped
     
@@ -106,8 +110,6 @@ function extract(data){
         values["Time_sent"] = date + " " + time
     
         values['Presence'] = values['Presence'] == '1'
-        // values['Temperature'] = Number(values['Temperature']) / 100
-        // values['Humidity'] = Number(values['Temperature']) / 100
     
         return values
     }
@@ -118,29 +120,16 @@ function extract(data){
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
-async function store(response, database_name, values){
-
-    if(!has(values, null)){
-        await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
-        // tell the client everything is ok
-        response.writeHead(200, {"Content-Type": "text/HTML"})
-    }
-    else{
-        // console.log("Invalid request!")
-        response.writeHead(400, {"Content-Type": "text/HTML"})
-    }
-       
-    //send the response
-    response.end()
-}
-
 const _ = require('lodash')
-function export_them(){
+function export_functs(){
    let result = {}
    _.forEach(arguments, (arg)=>{
-        result[arg.name] = arg
+        if(arg.name !== undefined){
+            result[arg.name] = arg
+        }
    })
    return result
 }
 
-module.exports = export_them(has, store, config_db, export_them)
+
+module.exports = export_functs(has, extract, config_db, export_functs)
