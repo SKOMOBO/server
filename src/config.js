@@ -4,6 +4,9 @@ const compress = require("compression")
 const express = require("express")
 var app = express()
 
+// serve static content
+app.use(express.static("static"))
+
 // Enable GZIP compression for improved performance
 app.use(compress())
 

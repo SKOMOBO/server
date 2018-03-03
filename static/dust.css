@@ -1,0 +1,22 @@
+#myProgress {
+    margin-top: 50px;
+    display: none;
+}
+
+#bar_background{
+    width: 100%;
+    margin-top:10px;
+    background-color: #ddd;
+}
+
+.intro{
+    font-weight: bold
+}
+#myBar {
+    width: 0%;
+    height: 30px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}

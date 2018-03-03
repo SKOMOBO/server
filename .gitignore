@@ -9,6 +9,7 @@ Dist
 prod-password.json
 download_password.json
 
+*.pyc
 *.csv
 
 # Runtime data
