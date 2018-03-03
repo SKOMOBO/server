@@ -25,7 +25,6 @@ const config = require("config")
 // import * as config from "config"
 
 function config_db(){
-    console.log("configuring")
     if(config.util.getEnv('NODE_ENV') === 'production'){
     
         let login_details = config_production()
@@ -45,22 +44,20 @@ const mysql = require("mysql2")
 
 function connect_db(details){
 
-    let connection
-    console.log(details)
+    let connection = null
     try{
-        if(details.host !== 'test'){
-            connection = mysql.createConnection(details)
+        if(details.host === 'test'){
+            connection = {'query':jest.fn()}
         }
         else{
-            connection = require('jest').fn()
+            connection = mysql.createConnection(details)
         }
     
     }catch(e){
+        console.error(e)
         console.log("Database not started")
-
         // change this so that it executes cmd cmmand to start DB
     }
-
     return connection
 }
 
@@ -92,7 +89,7 @@ function extract(data){
     // make sure there is actually data available  
     if( data !== '' && data !== ' ' && data != undefined){
           // breaks up each value by a dash and removes / in the front
-        let tokens = data.split('_')
+        let tokens = data.split('_').slice(1)
         
         // layout how the data is going to be mapped
     
@@ -113,8 +110,6 @@ function extract(data){
         values["Time_sent"] = date + " " + time
     
         values['Presence'] = values['Presence'] == '1'
-        // values['Temperature'] = Number(values['Temperature']) / 100
-        // values['Humidity'] = Number(values['Temperature']) / 100
     
         return values
     }

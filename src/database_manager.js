@@ -2,34 +2,6 @@ const {send_json, send_csv} = require('./file_manager')
 const {no_box, please_send_id} = require('./messages')
 
 /**
- * this function will correct the dust data using our models
- * @todo finish this function has to return JSON like original with outliers removed
- *       and values adjusted
- * 
- * @param {any} data 
- */
-
-function clean_data(pm10, pm2_5){
-    
-
-    // make thing to talk to python and get responses 
-    let data = {"PM10":0, "PM2_5":0};
-    if(data != undefined){
-        data.PM10 = data.PM10[0]
-        data.PM2_5 = data.PM2_5[0]
-    }
-    else{
-        // data = {}
-        // just zero out invalid data for now
-        data.PM10 = 0
-        data.PM2_5 = 0
-    }
-    
-    return data
-}
-
-
-/**
  * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
  * 
  * @param {any} data 
@@ -43,9 +15,9 @@ function fix_formatting(data){
             data[row].Time_received = fix_timestamp(data[row].Time_received)
             data[row].Time_sent = fix_timestamp(data[row].Time_sent)
             
-            let clean_dust = clean_data(data[row].pm10, data[row].pm2_5)
-            data[row].pm10 = clean_dust.PM10
-            data[row].pm2_5 = clean_dust.PM2_5
+            // let clean_dust = clean_data(data[row].pm10, data[row].pm2_5)
+            // data[row].pm10 = clean_dust.PM10
+            // data[row].pm2_5 = clean_dust.PM2_5
         }
     }
    
@@ -66,7 +38,7 @@ function fix_timestamp(data){
 
 var connection = null
 
-const {config_db} = require('./lib')
+const {config_db, extract, has} = require('./lib')
 
 function resolve_db(){
 
@@ -75,9 +47,11 @@ function resolve_db(){
             connection = config_db()
         }
         catch(error){
+            console.error(error)
             console.error("DB not running or not accessible")
             connection = null
         }
+        return connection
     }
     else{
         return connection
@@ -88,35 +62,28 @@ function resolve_db(){
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
-function get_type(name, req, resp, format){
+function get_type(name, id, resp, format){
 
     // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
     resolve_db()
 
     // check if it is a valid number if it is we carry on without issues
-    if(isNaN(req.query.id) && req.query.id != "all" ){
-        console.log(req.query.id)
-        req.query.id =  String(req.query.id)
-
-        //check to see if it is underscore seperated
-        if(req.query.id.indexOf('_') === -1){
-            resp.send(please_send_id)
-            return
-        }
+    if(isNaN(id) && id != "all" ){
+        id = String(id)
     }
-    else if(req.query.id == undefined){
+    else if(id == undefined){
         resp.send(please_send_id)
         return
     }
 
     let query = 'SELECT * from ' + name
     
-    if(req.query.id != "all"){ 
-        req.query.id =  String(req.query.id)
-        if(req.query.id.indexOf('_') > -1){
-            query += ' where Box_ID in (' + req.query.id.replace('_', ',') + ')'
+    if(id != "all"){ 
+        id =  String(id)
+        if(id.indexOf('_') > -1){
+            query += ' where Box_ID in (' + id.replace('_', ',') + ')'
         }else{
-            query += ' where Box_ID = ' + req.query.id
+            query += ' where Box_ID = ' + id
         }
     }
 
@@ -130,7 +97,7 @@ function get_type(name, req, resp, format){
             }
         }
         else{
-            resp.send(no_box(req.query.id))
+            resp.send(no_box(id))
         }
     })
 }
@@ -155,16 +122,22 @@ function store_arduino(req, resp){
 
     resolve_db()
 
-    let url = req.url.slice(1)
+    let url = req.url
+
     validate_data(url, (data)=>{
-        // console.log(data)
-        let values = lib.extract(url)
-        // console.log(values)
+        let values = extract(url)
         store(resp, "arduino", values)
     },()=>{
         resp.send("Invalid data")
     })
 }
 
+function get_connection(){
+    return connection
+}
+
+exports.get_connection = get_connection
+exports.get_type = get_type
 exports.store_arduino = store_arduino
-exports.connection = connection
+exports.resolve_db = resolve_db
+exports.fix_formatting = fix_formatting

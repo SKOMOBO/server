@@ -42,7 +42,7 @@ app.get("/get*", async (req, resp) =>{
             send_zip(resp, {})
         }
         else if(supported_types.includes(req.query.type)){
-            get_type(req.query.type, req, resp, req.query.format)
+            get_type(req.query.type, req.query.id, resp, req.query.format)
         }
         else{
             resp.send(please_send_type)
