@@ -1,0 +1,6 @@
+{
+    "Dbconfig": {
+        "host":"localhost",
+        "database": "skomobo"
+    }
+}

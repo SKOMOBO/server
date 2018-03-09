@@ -88,7 +88,7 @@ function extract(data){
 
     // make sure there is actually data available  
     if( data !== '' && data !== ' ' && data != undefined){
-          // breaks up each value by a dash and removes / in the front
+        // breaks up each value by a dash and removes /0 in the front
         let tokens = data.split('_').slice(1)
         
         // layout how the data is going to be mapped
