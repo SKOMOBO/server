@@ -16,7 +16,7 @@ describe('the database stores data correctly', ()=>{
 
     test('The database manager parses the URL correctly', ()=>{
        
-        let url = '123_2014-12-30-12-59-59_12_16_1000_30.00_90.00_400_1'
+        let url = '/123_2014-12-30-12-59-59_12_16_1000_30.00_90.00_400_1'
         let expected = {"Box_ID": "123", "Dust1": "12", "Dust10": "1000", 
             "Dust2_5": "16", "Presence": true, "Time_sent": "2014-12-30 12:59:59",
             'Temperature': "30.00", 'Humidity':"90.00", 'CO2':"400"}

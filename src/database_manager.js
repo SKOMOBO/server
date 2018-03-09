@@ -103,7 +103,6 @@ function get_type(name, id, resp, format){
 }
 
 async function store(response, database_name, values){
-
     if(!has(values, null)){
         await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
         // tell the client everything is ok
@@ -122,8 +121,8 @@ function store_arduino(req, resp){
 
     resolve_db()
 
-    let url = req.url
-
+    let url = req.url.slice(1)
+    console.log(url)
     validate_data(url, (data)=>{
         let values = extract(url)
         store(resp, "arduino", values)

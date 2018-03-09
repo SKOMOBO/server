@@ -92,7 +92,6 @@ function extract(data){
         let tokens = data.split('_')
         
         // layout how the data is going to be mapped
-    
         let col_names = ['Box_ID','Time_sent','Dust1', 'Dust2_5', 'Dust10', 'Temperature', 'Humidity', 'CO2', 'Presence']
     
         let values = {}
