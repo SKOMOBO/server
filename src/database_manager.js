@@ -118,11 +118,10 @@ async function store(response, database_name, values){
 
 const {validate_data} = require('./validator')
 function store_arduino(req, resp){
-
     resolve_db()
 
     let url = req.url.slice(1)
-    console.log(url)
+    
     validate_data(url, (data)=>{
         let values = extract(url)
         store(resp, "arduino", values)

@@ -1,7 +1,8 @@
-function validate_data(data, handler, invalid = null){
-    // console.log(data)
-    if(data != undefined && data !== '' && data !== ' '){
-        handler(data)
+function validate_data(data, handler = null, invalid = null){
+    if(data !== undefined && data !== null && data !== '' && data !== ' '){
+        if(handler !== null){
+            handler(data)
+        }
         return true
     }
     else{

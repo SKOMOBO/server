@@ -51,7 +51,18 @@ app.get("/get*", async (req, resp) =>{
 })
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
-app.get(/\/[0-9]+_.*/g, store_arduino)   
+app.get(/\/[0-9]+_.*/g, store_arduino)
+
+// the regex above fails on every second request for some reason?
+// monkey patching to make it work for now
+app.get('*', (req, resp)=>{
+    if(req.url.indexOf('_') > -1){
+        store_arduino(req, resp)
+    }
+    else{
+        resp.send(404)
+    }
+})
 
 module.exports.store_arduino = store_arduino
 module.exports.app = app
