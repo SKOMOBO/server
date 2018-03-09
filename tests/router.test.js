@@ -27,6 +27,10 @@ describe('the routes work correctly', ()=>{
         return request.get('/dashboard').expect('A awesome dashboard is coming here soon stay tuned.')
     })
 
+    test('storing route works', ()=>{
+        return request.get('/123_2014-12-30-12-59-59_12_16_1000_30.00_90.00_400_1').expect(200)
+    })
+
     //  test it stores correctly
 })
 
