@@ -7,4 +7,8 @@ cache:
 os:
   - linux
   - osx
-  - windows
+
+branches:
+  only:
+  - gh-pages
+  - /.*/
