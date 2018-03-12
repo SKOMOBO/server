@@ -8,6 +8,7 @@ const {no_box, please_send_id} = require('./messages')
  * @returns 
  */
 function fix_formatting(data){
+
     if(data[0].Presence != undefined){
         // for each text row
         for(let row=0; row<data.length; row++){

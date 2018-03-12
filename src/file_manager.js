@@ -20,14 +20,15 @@ function send_file(file, resp){
 
 // const Readable = require('stream').Readable
 
-const csv = require('csv-express')
+// const csv = require('csv-express')
+const csv = require('./express-csv-stream')
 
 function send_csv(file_name, data, resp){
     // Excel stupidly assumes that a CSV starting with ID as the first column is a SYLK file
     data = JSON.parse(JSON.stringify(data).replace(/ID/g, 'Id'))
     // telling the browser to treat the text as a attachment
     resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
-    resp.csv(data, true)
+    resp.csv(data, true, stream=true)
 }
 
 // abstract formatting to format manager
