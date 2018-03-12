@@ -1,4 +1,3 @@
-
 const {no_zip} = require('./messages')
 const fs = require("fs")
 
@@ -32,10 +31,33 @@ function send_csv(file_name, data, resp){
 }
 
 // abstract formatting to format manager
-const {fix_formatting} = require('./database_manager')
+
+// manually copied from database manager for now
+function fix_format(data){
+    if(data[0].Presence != undefined){
+        // for each text row
+        for(let row=0; row<data.length; row++){
+            data[row].Presence = String(data[row].Presence[0])
+            data[row].Time_received = fix_timestamp(data[row].Time_received)
+            data[row].Time_sent = fix_timestamp(data[row].Time_sent)
+            
+            // let clean_dust = clean_data(data[row].pm10, data[row].pm2_5)
+            // data[row].pm10 = clean_dust.PM10
+            // data[row].pm2_5 = clean_dust.PM2_5
+        }
+    }
+   
+   return data
+}
+
+function fix_timestamp(data){
+    
+    return data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate() + " " + data.getHours() + ":" + data.getMinutes() + ":" + data.getSeconds();
+
+}
 
 function send_json(data, resp){
-    resp.send(fix_formatting(data))
+    resp.send(fix_format(data))
 }
 
 const {export_functs} = require('./lib')

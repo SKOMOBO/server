@@ -30,4 +30,8 @@ describe('the database stores data correctly', ()=>{
         db.get_type('arduino', '1', fake_response)
         expect(db.get_connection().query.mock.calls[2][0]).toBe("SELECT * from arduino where Box_ID = 1")
     })
+
+    test('The data format correcter is defined', ()=>{
+        expect(db.fix_format).toBeDefined()
+    })
 })

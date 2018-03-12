@@ -2,12 +2,9 @@ const {send_json, send_csv} = require('./file_manager')
 const {no_box, please_send_id} = require('./messages')
 
 /**
- * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
- * 
- * @param {any} data 
- * @returns 
+ * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans 
  */
-function fix_formatting(data){
+function fix_format(data){
 
     if(data[0].Presence != undefined){
         // for each text row
@@ -78,9 +75,9 @@ function get_type(name, id, resp, format){
     }
 
     let query = 'SELECT * from ' + name
-    
+
     if(id != "all"){ 
-        id =  String(id)
+        id = String(id)
         if(id.indexOf('_') > -1){
             query += ' where Box_ID in (' + id.replace('_', ',') + ')'
         }else{
@@ -94,7 +91,7 @@ function get_type(name, id, resp, format){
                 if(format === 'json'){
                     send_json(results, resp)
                 }else{
-                    send_csv(name + '.csv', fix_formatting(results), resp)
+                    send_csv(name + '.csv', fix_format(results), resp)
                 }
             }
         }
@@ -136,8 +133,6 @@ function get_connection(){
     return connection
 }
 
-exports.get_connection = get_connection
-exports.get_type = get_type
-exports.store_arduino = store_arduino
-exports.resolve_db = resolve_db
-exports.fix_formatting = fix_formatting
+const {export_functs} = require('./lib')
+
+module.exports = export_functs(get_connection, get_type, store_arduino, resolve_db, fix_format, fix_timestamp)

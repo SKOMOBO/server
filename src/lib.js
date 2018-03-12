@@ -127,6 +127,7 @@ function export_functs(){
             result[arg.name] = arg
         }
    })
+
    return result
 }
 
