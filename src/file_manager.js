@@ -4,8 +4,6 @@ const fs = require("fs")
 
 //! this desperately needs to be cleaned up to make dependency tree simpler
 
-const json2csv = require('json2csv')  
-
 function send_zip(resp, data){
     resp.send(no_zip)
 }
@@ -20,13 +18,16 @@ function send_file(file, resp){
     })
 }
 
-function send_csv(file, data, resp){
-    
-    let csv = json2csv({data: data})
-    
+// const Readable = require('stream').Readable
+
+const csv = require('csv-express')
+
+function send_csv(file_name, data, resp){
+    // Excel stupidly assumes that a CSV starting with ID as the first column is a SYLK file
+    data = JSON.parse(JSON.stringify(data).replace(/ID/g, 'Id'))
     // telling the browser to treat the text as a attachment
-    resp.set({'Content-Disposition': 'attachment; filename="' + file + '"'})
-    resp.send(csv);
+    resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
+    resp.csv(data, true)
 }
 
 // abstract formatting to format manager
