@@ -53,6 +53,19 @@ app.get("/get*", async (req, resp) =>{
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]+_.*/g, store_arduino)
 
+const {box_exists} = require('./database_manager')
+app.get('/exists', (req, resp)=>{
+    box_exists(req.params.id, (exists)=>{
+        if(exists){
+            resp.send("The database has a box with ID " + String(id))
+        }
+        else{
+            resp.sendStatus(404)
+        }
+    })
+
+})
+
 // the regex above fails on every second request for some reason?
 // monkey patching to make it work for now
 app.get('*', (req, resp)=>{

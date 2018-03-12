@@ -34,4 +34,8 @@ describe('the database stores data correctly', ()=>{
     test('The data format correcter is defined', ()=>{
         expect(db.fix_format).toBeDefined()
     })
+
+    test('Box exists function is defined', ()=>{
+        expect(db.box_exists).toBeDefined()
+    })
 })

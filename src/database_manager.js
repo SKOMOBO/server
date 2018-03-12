@@ -102,6 +102,16 @@ function get_type(name, id, resp, format){
 }
 
 async function store(response, database_name, values){
+
+    // restructure db to have seperate table for each box
+
+    // list of boxes in database gets stored in box_info, if a box is not in that list
+    // we insert it into said list and then create its table
+    // if it does exist we insert the data into its correct table
+    // each table should be like 1, 2, 3 etc to denote what ID it maps to
+
+    // the box info table is used to track the meta data about each box
+
     if(!has(values, null)){
         await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
         // tell the client everything is ok
@@ -133,6 +143,18 @@ function get_connection(){
     return connection
 }
 
+function box_exists(id, callback){
+    resolve_db()
+    if(id !== undefined){
+        if(id !== null){
+            let values = null
+            connection.query('select * from box_info', (err, results , fields)=>{
+                callback(results)
+            })
+        }
+    }
+}
+
 const {export_functs} = require('./lib')
 
-module.exports = export_functs(get_connection, get_type, store_arduino, resolve_db, fix_format, fix_timestamp)
+module.exports = export_functs(get_connection, get_type, store_arduino, resolve_db, fix_format, fix_timestamp, box_exists)
