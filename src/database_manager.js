@@ -88,12 +88,13 @@ function get_type(name, id, resp, format){
     }
 
     connection.query(query, (err, results , fields)=>{ 
-        if(results !== null && results.length !== 0){
-
-            if(format === 'json'){
-                send_json(results, resp)
-            }else{
-                send_csv(name + '.csv', fix_formatting(results), resp)
+        if(results !== null && results !== undefined){
+            if(results.length !== 0){
+                if(format === 'json'){
+                    send_json(results, resp)
+                }else{
+                    send_csv(name + '.csv', fix_formatting(results), resp)
+                }
             }
         }
         else{
