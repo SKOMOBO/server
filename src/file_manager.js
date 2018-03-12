@@ -20,8 +20,8 @@ function send_file(file, resp){
 
 // const Readable = require('stream').Readable
 
-// const csv = require('csv-express')
-const csv = require('./express-csv-stream')
+const csv = require('csv-express')
+// const csv = require('./express-csv-stream')
 
 function send_csv(file_name, data, resp){
     // Excel stupidly assumes that a CSV starting with ID as the first column is a SYLK file
