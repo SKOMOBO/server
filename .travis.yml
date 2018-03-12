@@ -9,7 +9,6 @@ install:
 cache:
   directories:
     - '$HOME/.npm'
-    # -'node_modules'
 os:
   - linux
   - osx
