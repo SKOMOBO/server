@@ -4,8 +4,6 @@ const fs = require("fs")
 
 //! this desperately needs to be cleaned up to make dependency tree simpler
 
-const json2csv = require('json2csv')  
-
 function send_zip(resp, data){
     resp.send(no_zip)
 }
