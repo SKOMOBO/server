@@ -7,7 +7,7 @@ yarn-error.log*
 
 Dist
 prod-password.json
-download_password.json
+download_password.cson
 
 *.csv
 
