@@ -7,9 +7,9 @@
  ###
 has = (object, val)->
     if object isnt val
-        for prop in object
-            if object[prop] is val
-                return true
+        for prop, propval of object 
+                if propval is val
+                    return true
     else
         return object is val
 

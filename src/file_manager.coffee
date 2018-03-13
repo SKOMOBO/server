@@ -28,7 +28,30 @@ send_csv = (file_name, data, resp) ->
     resp.csv(data, true, stream=true)
 
 # abstract formatting to format manager
-{fix_formatting} = require('./database_manager')
+###**
+ * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
+ * 
+ * @param {any} data 
+ * @returns 
+ ###
+fix_formatting = (data)->
+
+    if data[0].Presence isnt undefined
+        # for each text row
+
+        for row in [0 .. data.length-1]
+            data[row].Presence = String(data[row].Presence[0])
+            data[row].Time_received = fix_timestamp(data[row].Time_received)
+            data[row].Time_sent = fix_timestamp(data[row].Time_sent)
+            
+    return data
+
+# below two timestamp functions were retrieved from https:#stackoverflow.com/a/5133807/6142189
+
+fix_timestamp = (data) ->
+    
+    return data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate() + " " + data.getHours() + ":" + data.getMinutes() + ":" + data.getSeconds();
+
 
 send_json = (data, resp) ->
     resp.send(fix_formatting(data))
