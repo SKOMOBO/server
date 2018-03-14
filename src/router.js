@@ -55,12 +55,13 @@ app.get(/\/[0-9]+_.*/g, store_arduino)
 
 const {box_exists} = require('./database_manager')
 app.get('/exists', (req, resp)=>{
-    box_exists(req.params.id, (exists)=>{
+    let id = req.query.id
+    box_exists(id, (exists)=>{
         if(exists){
             resp.send("The database has a box with ID " + String(id))
         }
         else{
-            resp.sendStatus(404)
+            resp.send("No box with ID " + String(id))
         }
     })
 
@@ -73,7 +74,7 @@ app.get('*', (req, resp)=>{
         store_arduino(req, resp)
     }
     else{
-        resp.send(404)
+        resp.sendStatus(404)
     }
 })
 

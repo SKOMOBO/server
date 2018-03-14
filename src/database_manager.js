@@ -86,12 +86,14 @@ function get_type(name, id, resp, format){
     }
 
     connection.query(query, (err, results , fields)=>{ 
-        if(results !== null && results !== undefined){
-            if(results.length !== 0){
-                if(format === 'json'){
-                    send_json(results, resp)
-                }else{
-                    send_csv(name + '.csv', fix_format(results), resp)
+        if(results !== undefined){
+            if(results !== null){
+                if(results.length !== 0){
+                    if(format === 'json'){
+                        send_json(results, resp)
+                    }else{
+                        send_csv(name + '.csv', fix_format(results), resp)
+                    }
                 }
             }
         }
@@ -143,13 +145,29 @@ function get_connection(){
     return connection
 }
 
+function set_connection(value){
+    connection = value
+}
+
 function box_exists(id, callback){
     resolve_db()
+
     if(id !== undefined){
         if(id !== null){
-            let values = null
-            connection.query('select * from box_info', (err, results , fields)=>{
-                callback(results)
+            connection.query('select * from box_info where id = ' + String(id), (err, results , fields)=>{
+                if(err !== undefined){
+                    if(err !== null){
+                        console.error(err)
+                    }
+                }
+                console.log(results)
+                
+                if(results !== undefined){
+                    if(results !== null){
+                        callback(true)
+                    }
+                }
+                callback(false)
             })
         }
     }
@@ -157,4 +175,4 @@ function box_exists(id, callback){
 
 const {export_functs} = require('./lib')
 
-module.exports = export_functs(get_connection, get_type, store_arduino, resolve_db, fix_format, fix_timestamp, box_exists)
+module.exports = export_functs(set_connection, get_connection, get_type, store_arduino, resolve_db, fix_format, fix_timestamp, box_exists)
