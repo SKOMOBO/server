@@ -6,7 +6,7 @@ const {no_box, please_send_id} = require('./messages')
  */
 function fix_format(data){
 
-    if(data[0].Presence != undefined){
+    if(data[0].Presence !== undefined){
         // for each text row
         for(let row=0; row<data.length; row++){
             data[row].Presence = String(data[row].Presence[0])
@@ -60,40 +60,39 @@ function resolve_db(){
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
-function get_type(name, id, resp, format){
+function get_box(id, resp, format){
 
     // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
     resolve_db()
 
     // check if it is a valid number if it is we carry on without issues
-    if(isNaN(id) && id != "all" ){
+    if(isNaN(id) && id !== "all" ){
         id = String(id)
     }
-    else if(id == undefined){
+    else if(id == null){
         resp.send(please_send_id)
         return
     }
 
-    let query = 'SELECT * from ' + name
+    let query = 'SELECT * from box' + id
 
-    if(id != "all"){ 
-        id = String(id)
-        if(id.indexOf('_') > -1){
-            query += ' where Box_ID in (' + id.replace('_', ',') + ')'
-        }else{
-            query += ' where Box_ID = ' + id
-        }
-    }
+    // todo fix later
+    // if(id !== "all"){ 
+    //     id = String(id)
+    //     if(id.indexOf('_') > -1){
+    //         query += ' where Box_ID in (' + id.replace('_', ',') + ')'
+    //     }else{
+    //         query += ' where Box_ID = ' + id
+    //     }
+    // }
 
     connection.query(query, (err, results , fields)=>{ 
-        if(results !== undefined){
-            if(results !== null){
-                if(results.length !== 0){
-                    if(format === 'json'){
-                        send_json(results, resp)
-                    }else{
-                        send_csv(name + '.csv', fix_format(results), resp)
-                    }
+        if(results != null){
+            if(results.length !== 0){
+                if(format === 'json'){
+                    send_json(results, resp)
+                }else{
+                    send_csv('skomobo.csv', fix_format(results), resp)
                 }
             }
         }
@@ -110,21 +109,34 @@ async function store(response, database_name, values){
     // list of boxes in database gets stored in box_info, if a box is not in that list
     // we insert it into said list and then create its table
     // if it does exist we insert the data into its correct table
-    // each table should be like 1, 2, 3 etc to denote what ID it maps to
+    // each table should be like box1, box2, box3 etc to denote what ID it maps to
 
     // the box info table is used to track the meta data about each box
 
     if(!has(values, null)){
-        await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
-        // tell the client everything is ok
-        response.writeHead(200, {"Content-Type": "text/HTML"})
+
+        box_exists(values["Box_ID"], (exists)=>{
+            if(exists){
+                connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+                // tell the client everything is ok
+                response.writeHead(200, {"Content-Type": "text/HTML"})
+                response.end()
+            }
+            else{
+                connection.query('CREATE TABLE ' + database_name + ' LIKE box_data')
+                connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+    
+                let box_meta =  {"ID": values["Box_ID"], "processor": "arduino"}
+                connection.query('INSERT INTO box_info set ?' , box_meta)
+                response.writeHead(200, {"Content-Type": "text/HTML"})
+                response.end()
+            }    
+        })
     }
     else{
         response.writeHead(400, {"Content-Type": "text/HTML"})
+        response.end()
     }
-       
-    //send the response
-    response.end()
 }
 
 const {validate_data} = require('./validator')
@@ -135,7 +147,7 @@ function store_arduino(req, resp){
     
     validate_data(url, (data)=>{
         let values = extract(url)
-        store(resp, "arduino", values)
+        store(resp, "box" + values["Box_ID"], values)
     },()=>{
         resp.send("Invalid data")
     })
@@ -149,35 +161,92 @@ function set_connection(value){
     connection = value
 }
 
-function box_exists(id, callback){
+function get_info(id, cols, callback){
     resolve_db()
+    if(id != null){
 
-    if(id !== undefined){
-        if(id !== null){
-            connection.query("select * from box_info where id = '" + String(id) + "'", (err, results , fields)=>{
-                if(err !== undefined){
-                    if(err !== null){
-                        console.error(err)
-                    }
-                }
-                
-                if(results !== undefined){
-                    if(results !== null && results.length !== 0){
-                        callback(true)
-                    }
-                    else{
-                        callback(false)
-                    }
+        cols = cols.join(', ')
+        connection.query("select " + cols + " from box_info where id = '" + String(id) + "'", (err, results , fields)=>{
+
+            if(err != null){
+                console.error(err)
+            }
+        
+            if(results != null){
+                if(results.length !== 0){
+                    callback(true, results)
                 }
                 else{
                     callback(false)
                 }
-              
-            })
-        }
+            }
+            else{
+                callback(false)
+            }
+            
+        })
     }
+}
+
+function box_exists(id, callback){
+    get_info(id, ['id'], (has_result)=>{
+        callback(has_result)
+    })
+}
+
+function box_processor(id, callback){
+    get_info(id, ['processor'], (has_result, result)=>{
+        has_result ?callback(has_result, result[0]['processor']): callback(has_result)
+    })
+}
+
+function latest(id, format, resp){
+    // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
+    resolve_db()
+
+    // check if it is a valid number if it is we carry on without issues
+    if(isNaN(id) && id !== "all" ){
+        id = String(id)
+    }
+    else if(id == null){
+        resp.send(please_send_id)
+        return
+    }
+
+    let query = 'SELECT * from box' + id + ' order by Time_received DESC limit 1'
+
+
+    connection.query(query, (err, results , fields)=>{ 
+
+        if(err != null){
+            console.error(err)
+        }
+
+        if(results != null){
+            if(results.length !== 0){
+                if(format === 'json'){
+                    send_json(results, resp)
+                }else{
+                    // finish this
+                    let values = fix_format(results)[0]
+                    console.log(values)
+                    let msg = "box " + id + " received at</br>" + values["Time_received"]
+                    + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
+                    +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
+                    +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
+                    + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
+                    + "</br>Pm10: " + values["Dust10"]
+
+                    resp.send(msg)
+                }
+            }
+        }
+        else{
+            resp.send(no_box(id))
+        }
+    })
 }
 
 const {export_functs} = require('./lib')
 
-module.exports = export_functs(set_connection, get_connection, get_type, store_arduino, resolve_db, fix_format, fix_timestamp, box_exists)
+module.exports = export_functs(latest, box_processor,set_connection, get_connection, get_box, store_arduino, resolve_db, fix_format, fix_timestamp, box_exists)

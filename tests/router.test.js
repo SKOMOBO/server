@@ -43,6 +43,18 @@ describe('the routes work correctly', ()=>{
     test('box exists says no box exists', ()=>{
         return request.get('/exists?id=ha&pass=' + password).expect("No box with ID ha")
     })
+
+    test('box processor returns processor of box', ()=>{
+        return request.get('/processor?id=1&pass=' + password).expect("Box 1 has a arduino processor")
+    })
+
+    test('box processor returns no box', ()=>{
+        return request.get('/processor?id=ha&pass=' + password).expect("No box with ID ha")
+    })
+
+    test('latest returns 200', ()=>{
+        return request.get('/latest?id=1&pass=' + password).expect(200)
+    })
 })
 
 
