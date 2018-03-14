@@ -42,6 +42,6 @@ describe('the database stores data correctly', ()=>{
 
     test('Box exists function is passed correct ID', ()=>{
         db.box_exists(1, ()=>{})
-        expect(db.get_connection().query.mock.calls[3][0]).toBe("select * from box_info where id = 1")
+        expect(db.get_connection().query.mock.calls[3][0]).toBe("select * from box_info where id = '1'")
     })
 })

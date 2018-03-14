@@ -55,16 +55,22 @@ app.get(/\/[0-9]+_.*/g, store_arduino)
 
 const {box_exists} = require('./database_manager')
 app.get('/exists', (req, resp)=>{
-    let id = req.query.id
-    box_exists(id, (exists)=>{
-        if(exists){
-            resp.send("The database has a box with ID " + String(id))
-        }
-        else{
-            resp.send("No box with ID " + String(id))
-        }
-    })
 
+    let id = req.query.id
+
+    authenticate(correct_pass, req.query.pass, ()=>{
+        box_exists(id, (exists)=>{
+            if(exists){
+                resp.send("The database has a box with ID " + String(id))
+            }
+            else{
+                resp.send("No box with ID " + String(id))
+            }
+        })
+    },(message)=>{
+        resp.send(400, message)
+    })
+ 
 })
 
 // the regex above fails on every second request for some reason?

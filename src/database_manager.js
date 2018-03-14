@@ -154,20 +154,25 @@ function box_exists(id, callback){
 
     if(id !== undefined){
         if(id !== null){
-            connection.query('select * from box_info where id = ' + String(id), (err, results , fields)=>{
+            connection.query("select * from box_info where id = '" + String(id) + "'", (err, results , fields)=>{
                 if(err !== undefined){
                     if(err !== null){
                         console.error(err)
                     }
                 }
-                console.log(results)
                 
                 if(results !== undefined){
-                    if(results !== null){
+                    if(results !== null && results.length !== 0){
                         callback(true)
                     }
+                    else{
+                        callback(false)
+                    }
                 }
-                callback(false)
+                else{
+                    callback(false)
+                }
+              
             })
         }
     }

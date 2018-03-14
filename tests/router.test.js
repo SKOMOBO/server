@@ -37,11 +37,11 @@ describe('the routes work correctly', ()=>{
     })
 
     test('box exists works', ()=>{
-        return request.get('/exists?id=1').expect("The database has a box with ID 1")
+        return request.get('/exists?id=1&pass=' + password).expect("The database has a box with ID 1")
     })
 
     test('box exists says no box exists', ()=>{
-        return request.get('/exists?id=ha').expect("No box with ID ha")
+        return request.get('/exists?id=ha&pass=' + password).expect("No box with ID ha")
     })
 })
 
