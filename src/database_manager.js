@@ -117,6 +117,7 @@ async function store(response, database_name, values){
 
         box_exists(values["Box_ID"], (exists)=>{
             if(exists){
+                // insert into new table now
                 connection.query('INSERT INTO ' + database_name + ' set ?' , values)
                 // tell the client everything is ok
                 response.writeHead(200, {"Content-Type": "text/HTML"})
@@ -129,12 +130,18 @@ async function store(response, database_name, values){
     // select * from arduino where box_id = 2
     // something like this to migrate across old data first?
     // need a way to fix the primary key index and sort by time received maybe in migrate proc??
-                connection.query('')
+                // connection.query('')
 
-
+                // copy this query structure to migrate data and index correctly 
+                // create table box2 like box_data;
+// alter table box2 auto_increment = 1;
+// insert into box2(`Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,  `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2`)
+	// select `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,  `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2`
+	// from arduino where box_id = "2";
 
                 connection.query('INSERT INTO ' + database_name + ' set ?' , values)
-    
+                
+                // update box metadata
                 let box_meta =  {"ID": values["Box_ID"], "processor": "arduino"}
                 connection.query('INSERT INTO box_info set ?' , box_meta)
                 response.writeHead(200, {"Content-Type": "text/HTML"})
