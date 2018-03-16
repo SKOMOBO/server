@@ -124,6 +124,15 @@ async function store(response, database_name, values){
             }
             else{
                 connection.query('CREATE TABLE ' + database_name + ' LIKE box_data')
+
+                // insert into box2
+    // select * from arduino where box_id = 2
+    // something like this to migrate across old data first?
+    // need a way to fix the primary key index and sort by time received maybe in migrate proc??
+                connection.query('')
+
+
+
                 connection.query('INSERT INTO ' + database_name + ' set ?' , values)
     
                 let box_meta =  {"ID": values["Box_ID"], "processor": "arduino"}
@@ -161,6 +170,7 @@ function set_connection(value){
     connection = value
 }
 
+// make a get_data
 function get_info(id, cols, callback){
     resolve_db()
     if(id != null){
