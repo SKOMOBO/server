@@ -77,13 +77,13 @@ function update_progress(index, total_rows){
     
 }
 
-var my_url = 'localhost:81/'
+// var my_url = 'localhost:81/'
 
 // transmits data to server just need to put payload in body somehow then return result and turn into csv on client
 function clean_row(row, on_received){
 
     $.post(
-        my_url + "clean",
+        "clean",
         data = row,
         function(data){
             on_received(JSON.parse(data))

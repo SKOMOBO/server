@@ -11,14 +11,18 @@ const app = express()
 
 app.use(parser)
 
+
+// for testing remove later
+app.use(express.static('static'))
+
 // bugsnag integration only enable if we are in production
 // import * as bugsnag from "bugsnag"
-const bugsnag = require('bugsnag')
-if (app.settings.env !== "development"){
-    bugsnag.register(require("./global_keys.json").bugsnag_key)
-    app.use(bugsnag.requestHandler);
-    app.use(bugsnag.errorHandler);
-}
+// const bugsnag = require('bugsnag')
+// if (app.settings.env !== "development"){
+//     bugsnag.register(require("./global_keys.json").bugsnag_key)
+//     app.use(bugsnag.requestHandler);
+//     app.use(bugsnag.errorHandler);
+// }
 
 
 //var csv is the CSV file with headers
@@ -205,9 +209,13 @@ app.post("/clean", (req, resp)=>{
 
 // })
 
+app.get('/ping*', (req, resp)=>{
+    console.log('hello')
+    resp.send('hello')
+})
 
-
-app.listen(82, ()=>{
+app.listen(82,'0.0.0.0', ()=>{
     console.log("Dust cleaner started")
+    console.log("Server listening on: http://%s:%s", require("ip").address(), 82);
 })
 
