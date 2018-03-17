@@ -20,11 +20,62 @@ app.get('/ping', (req, resp)=>{
     resp.send('hello')
 })
 
+app.post("/clean", (req, resp)=>{
+    
+
+    let input = JSON.parse(req.body)
+
+    let prepped = prep_data(input.Dust10, input.Dust2_5)
+
+    request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped), json:true}, (error, response, body)=>{
+    
+        if(error === null){
+            if(data_valid(body)){
+               
+                // resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
+                // resp.send(json2csv(body));
+                input["Dust10"] = body["PM10"]
+                input["Dust2_5"] = body["PM2_5"]
+                resp.send(JSON.stringify(input))
+            }
+            else{
+                resp.send("File contains no salvagable values, please contact the developer Ryan, Mikael or Yu Wang")
+            }
+        }else{
+            resp.send("Server error, please contact the developer and try again later :)")
+            bugsnag.notify(Error(JSON.stringify(error)))
+        }
+    })
+
+})
+
 app.listen(82,'0.0.0.0', ()=>{
     console.log("Dust cleaner started")
     console.log("Server listening on: http://%s:%s", require("ip").address(), 82);
 })
 
+function data_valid(data){
+    let i = 0
+
+    while(data[i] === null){
+        i++
+    }
+    if(i == data.length ){
+        return false
+    }else{
+        return true
+    }
+}
+
+function prep_data(pm10, pm2_5){
+    pm10 = pm10 / 1000;
+    pm2_5 = pm2_5 / 1000;
+            
+    var result = {"PM10": pm10, "PM2_5": pm2_5, "PM10_diff": pm10 - prev_PM10, "PM2_5_diff": pm2_5 - prev_PM2_5};
+    prev_PM10 = pm10;
+    prev_PM2_5 = pm2_5;
+    return result;
+}
 
 //var csv is the CSV file with headers
 function csvJSON(csv){
