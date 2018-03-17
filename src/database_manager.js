@@ -57,6 +57,19 @@ function resolve_db(){
     
 }
 
+
+/**
+ * This function creates our tables and database if it doesn't already exist
+ * 
+ */
+function setup_db(){
+    //todo put code in here to do above
+    //run on startup, then setup docker container with mariadb to unit test against 
+    // / just add services:mariadb to travis file and make sure to include delete statements
+    // fix db_manager so that it checks results of functions and tests real db not mock stuff
+}
+
+
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
@@ -125,20 +138,23 @@ async function store(response, database_name, values){
             }
             else{
                 connection.query('CREATE TABLE ' + database_name + ' LIKE box_data')
-
-                // insert into box2
-    // select * from arduino where box_id = 2
-    // something like this to migrate across old data first?
-    // need a way to fix the primary key index and sort by time received maybe in migrate proc??
-                // connection.query('')
-
+                connection.query('ALTER TABLE ' + database_name + ' AUTO_INCREMENT = 1')
                 // copy this query structure to migrate data and index correctly 
-                // create table box2 like box_data;
-// alter table box2 auto_increment = 1;
+                
+
+                let old_data = connection.query('SELECT `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,' +
+                 ' `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2` from arduino' +
+                 "where Box_ID = '" + values["Box_ID"] + "'")
+
+                connection.query('Insert into ' + database_name + ' set ?', old_data)
+
+                
+                // from arduino where box_id = "2";')
 // insert into box2(`Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,  `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2`)
 	// select `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,  `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2`
 	// from arduino where box_id = "2";
-
+                
+                // insert new data
                 connection.query('INSERT INTO ' + database_name + ' set ?' , values)
                 
                 // update box metadata
