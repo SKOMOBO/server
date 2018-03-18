@@ -82,42 +82,14 @@ function update_progress(index, total_rows){
 // transmits data to server just need to put payload in body somehow then return result and turn into csv on client
 function clean_row(row, on_received){
 
-    $.post(
+    return $.post(
         "clean",
         data = row,
         function(data){
             on_received(JSON.parse(data))
         }
-    )
-    // configuring request data
-    
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("POST", my_url + "clean", true);
-
-    // xhr.ontimeout = function(ev){
-    //     console.error("Connection timed out")
-    // }
-
-    // xhr.onerror = function(error){
-    //     console.error(error)
-    // }
-
-    // xhr.onprogress = function(){
-    //     console.log("loading")
-    // }
-
-    // xhr.setRequestHeader("Content-type", "application/json");
-
-    // xhr.onreadystatechange = function () {
-    //     if (this.readyState === 4 && this.status == 200) {
-    //         on_received(JSON.parse(this.responseText))
-    //         // var json = JSON.parse(xhr.responseText);
-    //         // console.log(json.email + ", " + json.password);
-
-    //     }
-    // };
-
-    // xhr.send(JSON.stringify(row));
+    ).promise()
+   
 }
 
 function decode(csv){
@@ -127,31 +99,34 @@ function decode(csv){
 
     var total_rows = json.length
 
+    var requests = []
     for(i = 0; i < json.length; i++){
-
-        clean_row(json[i], (cleaned)=>{
+        requests.push(clean_row(json[i], (cleaned)=>{
+            downloading = true
             json[i].Dust10 = cleaned.Dust10
             json[i].Dust2_5 = cleaned.Dust2_5
             index = i
             update_progress(index, total_rows)
-        })
+        }))
 
     }
 
-    update_progress(index, total_rows)
+    $.when.apply($, requests).then(function(){
+        update_progress(index, total_rows)
 
-    json = {"keys": json[0].keys, "data": json}
+        json = {"keys": json[0].keys, "data": json}
 
-    // insert library reference in HTML
-    // variable for the final download
-    CSV = json2csv(json)
+        // insert library reference in HTML
+        // variable for the final download
+        CSV = json2csv(json)
 
-    // correct weird formatting
-    CSV = CSV.replace(/"""/g, '"')
+        // correct weird formatting
+        CSV = CSV.replace(/"""/g, '"')
 
-    // get the final name here and data
-    // might have to stream this somehow
-    save(data_file.name.slice(0, -4) + '_clean.csv', CSV)
+        // get the final name here and data
+        save(data_file.name.slice(0, -4) + '_clean.csv', CSV)
+    })
+
 }
 
 function save(filename, data) {

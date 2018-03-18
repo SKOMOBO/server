@@ -6,6 +6,8 @@ const compress = require("compression")
 const request = require('request')
 const upload = multer()
 const json2csv = require('json2csv');
+const parser = require("body-parser")
+app.use(parser)
 
 // for testing remove later
 app.use(express.static('static'))
@@ -21,6 +23,7 @@ app.get('/ping', (req, resp)=>{
 })
 
 app.post("/clean", (req, resp)=>{
+    console.log(req.body)
     let input = JSON.parse(req.body)
 
     let prepped = prep_data(input.Dust10, input.Dust2_5)

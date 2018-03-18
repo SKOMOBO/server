@@ -136,6 +136,11 @@ function get_connection(){
     return connection
 }
 
+function set_connection(val){
+    connection = val
+}
+
+exports.set_connection = set_connection
 exports.get_connection = get_connection
 exports.get_type = get_type
 exports.store_arduino = store_arduino

@@ -1,5 +1,7 @@
 const db = require('../src/database_manager')
 
+db.set_connection(jest.fn())
+
 describe('the database stores data correctly', ()=>{
     test('The connection is resolved', ()=>{
         expect(jest.isMockFunction(db.resolve_db().query)).toBe(true)
