@@ -21,8 +21,6 @@ app.get('/ping', (req, resp)=>{
 })
 
 app.post("/clean", (req, resp)=>{
-    
-
     let input = JSON.parse(req.body)
 
     let prepped = prep_data(input.Dust10, input.Dust2_5)
