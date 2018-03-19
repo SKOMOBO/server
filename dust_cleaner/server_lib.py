@@ -1,5 +1,7 @@
+from __future__ import print_function
 import joblib
 import json
+import sys
 
 load_model = lambda name : joblib.load("./dust_cleaner/pickles/" + name + ".pkl")
 
@@ -10,4 +12,4 @@ PM10Model = load_model("PM10Model")
 PM2_5Model = load_model("PM2_5Model")
 
 def decode_json(data):
-    return json.loads(data.json)["data"]
+    return json.loads(data.json)

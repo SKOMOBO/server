@@ -1,11 +1,17 @@
+from __future__ import print_function
 from pipe import * 
 import numpy as np
-from flask import Flask
 from server_lib import *
+import sys
+
+def check_value(pm, value):
+    if(pm == "10"):
+        return outlierPredictorPM10.predict(value)[0] != 1
+    elif(pm == "2.5"):
+        return outlierPredictorPM2_5.predict(value)[0] != 1
 
 def is_not_outlier(data):
-    isvalid = outlierPredictorPM10.predict(data["PM10"])[0] != 1 and outlierPredictorPM2_5.predict(data["PM2_5"])[0] != 1
-    return isvalid
+    return check_value("10", data["PM10"]) and check_value("2.5", data["PM2_5"])
 
 def correct_data(data):
     if(data != None):
@@ -20,11 +26,8 @@ def correct_data(data):
 # limiter cus I can chunk it on the client side
 dust_cleaner = Pipe(
     decode_json,
-    stream(
-        validate(is_not_outlier),
-        correct_data,
-    )
-    
+    validate(is_not_outlier),
+    correct_data
 )
 
 from flask import Flask, request, jsonify
@@ -36,7 +39,7 @@ def recieve_data():
     data_response = jsonify(dust_cleaner.open(request))
     return data_response
 
-app.run(port = 9999)
+app.run(port = 9999, debug = True)
 # make flask server here and feed requests into pipe
 
 # make sure it accepts post requests change nodejs server to send post requests

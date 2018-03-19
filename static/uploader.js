@@ -80,16 +80,28 @@ function update_progress(index, total_rows){
 // var my_url = 'localhost:81/'
 
 // transmits data to server just need to put payload in body somehow then return result and turn into csv on client
-function clean_row(row, on_received){
 
-    return $.post(
-        "clean",
-        data = row,
-        function(data){
-            on_received(JSON.parse(data))
+var last_error = ''
+
+function clean_row(row, on_received){
+    return $.ajax({
+        type: "post",
+        url: "clean",
+        data: JSON.stringify(row),
+        contentType: 'application/json',
+        success:function(data){
+            try{
+                on_received(JSON.parse(data))
+            }
+            catch(error){
+                if(data !== last_error){
+                    alert(data)
+                    last_error = data
+                }
+                throw data
+            }
         }
-    ).promise()
-   
+    })
 }
 
 function decode(csv){
@@ -103,6 +115,7 @@ function decode(csv){
     for(i = 0; i < json.length; i++){
         requests.push(clean_row(json[i], (cleaned)=>{
             downloading = true
+            console.log(cleaned)
             json[i].Dust10 = cleaned.Dust10
             json[i].Dust2_5 = cleaned.Dust2_5
             index = i

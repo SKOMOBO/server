@@ -5,9 +5,11 @@ const helmet = require("helmet")
 const compress = require("compression")
 const request = require('request')
 const upload = multer()
-const json2csv = require('json2csv');
+// const json2csv = require('json2csv');
 const parser = require("body-parser")
-app.use(parser)
+
+
+app.use(parser.json())
 
 // for testing remove later
 app.use(express.static('static'))
@@ -23,9 +25,7 @@ app.get('/ping', (req, resp)=>{
 })
 
 app.post("/clean", (req, resp)=>{
-    console.log(req.body)
-    let input = JSON.parse(req.body)
-
+    let input = req.body
     let prepped = prep_data(input.Dust10, input.Dust2_5)
 
     request.post({url:'http://localhost:9999/', body: JSON.stringify(prepped), json:true}, (error, response, body)=>{
@@ -44,7 +44,6 @@ app.post("/clean", (req, resp)=>{
             }
         }else{
             resp.send("Server error, please contact the developer and try again later :)")
-            bugsnag.notify(Error(JSON.stringify(error)))
         }
     })
 
@@ -58,6 +57,10 @@ app.listen(82,'0.0.0.0', ()=>{
 function data_valid(data){
     let i = 0
 
+    if(data === null){
+        return false
+    }
+
     while(data[i] === null){
         i++
     }
@@ -67,6 +70,9 @@ function data_valid(data){
         return true
     }
 }
+
+var prev_PM10 = 0.0
+prev_PM2_5 = 0.0
 
 function prep_data(pm10, pm2_5){
     pm10 = pm10 / 1000;
