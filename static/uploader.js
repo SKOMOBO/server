@@ -5,12 +5,42 @@ function file_attached(files){
     data_file = files[0]
 }
 
+errors = []
+
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
+
+function add_error(msg){
+    errors.push(msg)
+}
+
+function display_errors(msg){
+    errors = errors.filter(onlyUnique)
+
+    errors.forEach(function(error){
+        $('#myBar').hide() 
+        alert(error)
+        $('#error').text(error)
+        $('#error').show()
+    });
+
+    errors = []
+}
+
+function clear_error(){
+    $('#error').hide()
+}
+
 function upload(){
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-        alert('The File APIs are not fully supported in this browser. Please try the latest version of your browser, Chrome or Firefox');
+        add_error('The File APIs are not fully supported in this browser. Please try the latest version of your browser, Chrome or Firefox');
+        display_errors()
         return;
     }   
     else{
+        clear_error()
 
         var reader = new FileReader()
         // var f = document.getElementById("uploader").files[0]
@@ -25,15 +55,10 @@ function upload(){
             }
         }
         else{
-            alert("Please attach a file before submitting")
+            add_error("Please attach a file before submitting")
         }
-        // reader.onload = decode
-        
-        // reader.readAsText(f)
     }
 }
-
-
 
 function csvJSON(csv){
     var lines=csv.split("\n");
@@ -71,19 +96,15 @@ function csvJSON(csv){
 
 function update_progress(index, total_rows){
     var progress = String((index / total_rows) * 100) + "%"
-    var progress_bar = document.getElementById("myBar")
-    progress_bar.innerText = progress
-    progress_bar.style.width = progress
-    
+    $("#myBar").text(progress)
+    $("#myBar").width(progress)
 }
 
 // var my_url = 'localhost:81/'
 
 // transmits data to server just need to put payload in body somehow then return result and turn into csv on client
 
-var last_error = ''
-
-function clean_row(row, on_received){
+function clean_row(row, on_received, on_error){
     return $.ajax({
         type: "post",
         url: "clean",
@@ -91,14 +112,11 @@ function clean_row(row, on_received){
         contentType: 'application/json',
         success:function(data){
             try{
+                clear_error()
                 on_received(JSON.parse(data))
             }
             catch(error){
-                if(data !== last_error){
-                    alert(data)
-                    last_error = data
-                }
-                throw data
+                on_error(data)
             }
         }
     })
@@ -106,25 +124,27 @@ function clean_row(row, on_received){
 
 function decode(csv){
     json = csvJSON(csv)
-    document.getElementById("myProgress").style.display = 'block'
+    $("#myProgress").show()
     var index = 0
 
     var total_rows = json.length
 
     var requests = []
     for(i = 0; i < json.length; i++){
-        requests.push(clean_row(json[i], (cleaned)=>{
-            downloading = true
-            console.log(cleaned)
+        requests.push(clean_row(json[i], function(cleaned){
             json[i].Dust10 = cleaned.Dust10
             json[i].Dust2_5 = cleaned.Dust2_5
             index = i
             update_progress(index, total_rows)
+        }, function(msg){
+            add_error(msg)
         }))
 
     }
 
-    $.when.apply($, requests).then(function(){
+    display_errors()
+
+    $.when.apply($, requests).done(function(){
         update_progress(index, total_rows)
 
         json = {"keys": json[0].keys, "data": json}
@@ -152,7 +172,7 @@ function save(filename, data) {
         elem.href = window.URL.createObjectURL(blob);
         elem.download = filename;        
         document.body.appendChild(elem);
-        elem.click();        
+        elem.click();    
         document.body.removeChild(elem);
     }
 }
