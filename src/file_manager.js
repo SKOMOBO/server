@@ -32,10 +32,10 @@ function send_csv(file_name, data, resp){
 }
 
 // abstract formatting to format manager
-const {fix_formatting} = require('./database_manager')
+const {fix_format} = require('./database_manager')
 
 function send_json(data, resp){
-    resp.send(fix_formatting(data))
+    resp.send(fix_format(data))
 }
 
 const {export_functs} = require('./lib')

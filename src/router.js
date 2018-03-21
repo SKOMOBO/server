@@ -6,7 +6,7 @@ const {get_type, store_arduino} = require('./database_manager')
 var {app} = require('./config')
 const {send_zip} = require('./file_manager')
 
-const {please_send_type} = require("./messages")
+const {please_send_type, no_box} = require("./messages")
 
 var supported_types = ['arduino']
 
@@ -30,23 +30,67 @@ const correct_pass = require("../keys/download_password.json").password
 
 const {authenticate} = require('./validator')
 
-app.get("/get*", async (req, resp) =>{
-    function invalid(message){
-        resp.send(400, message)
-    }
 
-    authenticate(correct_pass, req.query.pass, ()=>{
-        if(req.query.type == 'all'){
-            send_zip(resp, {})
-        }
-        else if(supported_types.includes(req.query.type)){
-            get_type(req.query.type, req.query.id, resp, req.query.format)
+function safe_route(route, callback){
+
+    app.get(route, (req, resp)=>{
+        authenticate(correct_pass, req.query.pass, ()=>{
+            callback(req, resp)
+        }, (message)=>{
+            resp.send(400, message)
+        })
+    })
+ 
+}
+
+const {box_exists, box_processor, latest} = require('./database_manager')
+
+safe_route('/exists', (req, resp)=>{
+
+    let id = req.query.id
+
+    box_exists(id, (exists)=>{
+        if(exists){
+            resp.send("The database has a box with ID " + String(id))
         }
         else{
-            resp.send(please_send_type)
+            resp.send(no_box(id))
         }
-    }, invalid)
+    })
 })
+
+safe_route("/get*", async (req, resp) =>{
+
+    if(req.query.type == 'all'){
+        send_zip(resp, {})
+    }
+    else if(supported_types.includes(req.query.type)){
+        get_type(req.query.type, req.query.id, resp, req.query.format)
+    }
+    else{
+        resp.send(please_send_type)
+    }
+})
+
+
+safe_route('/processor', (req, resp)=>{
+
+    let id = req.query.id
+
+    box_processor(id, (exists, processor_type)=>{
+        if(exists){
+            resp.send("Box " + String(id) + ' has a ' + processor_type + ' processor')
+        }
+        else{
+            resp.send(no_box(id))
+        } 
+    })
+})
+
+safe_route('/latest', (req, resp)=>{
+    latest(req.query.id, req.query.format, resp)
+})
+
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]+_.*/g, store_arduino)
