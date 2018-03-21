@@ -1,11 +1,11 @@
 
-data_file = null
+var data_file = null
 
 function file_attached(files){
     data_file = files[0]
 }
 
-errors = []
+var errors = []
 
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
@@ -16,6 +16,7 @@ function add_error(msg){
     errors.push(msg)
 }
 
+var has_errored = false
 function display_errors(msg){
     errors = errors.filter(onlyUnique)
 
@@ -27,6 +28,7 @@ function display_errors(msg){
     });
 
     errors = []
+    has_errored = true
 }
 
 function clear_error(){
@@ -123,7 +125,7 @@ function clean_row(row, on_received, on_error){
 }
 
 function decode(csv){
-    json = csvJSON(csv)
+    var json = csvJSON(csv)
     $("#myProgress").show()
     var index = 0
 
@@ -142,37 +144,28 @@ function decode(csv){
 
     }
 
+    console.log(errors)
     display_errors()
 
-    $.when.apply($, requests).done(function(){
-        update_progress(index, total_rows)
-
-        json = {"keys": json[0].keys, "data": json}
-
-        // insert library reference in HTML
-        // variable for the final download
-        CSV = json2csv(json)
-
-        // correct weird formatting
-        CSV = CSV.replace(/"""/g, '"')
-
-        // get the final name here and data
-        save(data_file.name.slice(0, -4) + '_clean.csv', CSV)
-    })
-
-}
-
-function save(filename, data) {
-    var blob = new Blob([data], {type: 'text/csv'});
-    if(window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveBlob(blob, filename);
+    if(!has_errored){
+        $.when.apply($, requests).done(function(){
+            update_progress(index, total_rows)
+    
+            console.log(json)
+            json = {"keys": json[0].keys, "data": json}
+    
+            // insert library reference in HTML
+            // variable for the final download
+            CSV = json2csv(json)
+    
+            // correct weird formatting
+            CSV = CSV.replace(/"""/g, '"')
+    
+            // get the final name here and data
+            download(CSV, data_file.name.slice(0, -4) + '_clean.csv', 'text/csv')
+        })
     }
-    else{
-        var elem = window.document.createElement('a');
-        elem.href = window.URL.createObjectURL(blob);
-        elem.download = filename;        
-        document.body.appendChild(elem);
-        elem.click();    
-        document.body.removeChild(elem);
-    }
+
+    has_errored = false
+
 }
