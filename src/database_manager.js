@@ -7,7 +7,7 @@ const {no_box, please_send_id} = require('./messages')
  * @param {any} data 
  * @returns 
  */
-function fix_formatting(data){
+function fix_format(data){
 
     if(data[0].Presence != undefined){
         // for each text row
@@ -94,7 +94,7 @@ function get_type(name, id, resp, format){
                 if(format === 'json'){
                     send_json(results, resp)
                 }else{
-                    send_csv(name + '.csv', fix_formatting(results), resp)
+                    send_csv(name + '.csv', fix_format(results), resp)
                 }
             }
         }
@@ -118,6 +118,86 @@ async function store(response, database_name, values){
     response.end()
 }
 
+function box_exists(id, callback){
+    resolve_db()
+    connection.query("SELECT ID from arduino where Box_id = " + String(id), (err, results, fields)=>{
+        if(err != null){
+            console.error(err)
+        }
+    
+        if(results != null){
+            if(results.length !== 0){
+                callback(true)
+            }
+            else{
+                callback(false)
+            }
+        }
+        else{
+            callback(false)
+        }
+    })
+}
+
+function box_processor(id, callback){
+    // stubbed out for now
+
+    box_exists(id, (exists)=>{
+        exists ? callback(true, "arduino") : callback(false)
+    })
+}
+
+
+function latest(id, format, resp){
+    // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
+    resolve_db()
+
+    // check if it is a valid number if it is we carry on without issues
+    if(isNaN(id) && id !== "all" ){
+        id = String(id)
+    }
+    else if(id == null){
+        resp.send(please_send_id)
+        return
+    }
+
+    let query = 'SELECT * from arduino where Box_ID = ' + id +' order by Time_received DESC limit 1'
+
+
+    connection.query(query, (err, results , fields)=>{ 
+
+        if(err != null){
+            console.error(err)
+        }
+
+        if(results != null){
+            if(results.length !== 0){
+                if(format === 'json'){
+                    send_json(results, resp)
+                }else{
+                    // finish this
+                    let values = fix_format(results)[0]
+                    let msg = "box " + id + " received at</br>" + values["Time_received"]
+                    + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
+                    +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
+                    +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
+                    + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
+                    + "</br>Pm10: " + values["Dust10"]
+
+                    resp.send(msg)
+                }
+            }
+            else{
+                resp.send(no_box(id))
+            }
+        }
+        else{
+            resp.send(no_box(id))
+        }
+    })
+}
+
+
 const {validate_data} = require('./validator')
 function store_arduino(req, resp){
     resolve_db()
@@ -136,8 +216,11 @@ function get_connection(){
     return connection
 }
 
+exports.latest = latest
+exports.box_exists = box_exists
+exports.box_processor = box_processor
 exports.get_connection = get_connection
 exports.get_type = get_type
 exports.store_arduino = store_arduino
 exports.resolve_db = resolve_db
-exports.fix_formatting = fix_formatting
+exports.fix_format = fix_format
