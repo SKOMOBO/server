@@ -12,8 +12,6 @@ var supported_types = ['arduino']
 
 const lib = require('./lib')
 
-const proxy = require('http-proxy-middleware')
-
 const bugsnag = require("bugsnag")
 
 if (app.settings.env !== "development" && app.settings.env !== "test"){
