@@ -8,7 +8,14 @@
 
 // receives altered data and downloads the data as a csv file again on the client
 
-// optional: runs fast with clean code and minimal dependencies
+var errors = []
+function add_error(msg){
+    errors.push(msg)
+}
+
+function clear_errors(){
+    errors = []
+}
 
 function to_num(json, props){
     // Convert to floats and ints
@@ -19,6 +26,10 @@ function to_num(json, props){
         return obj
     })
     return json
+}
+
+function to_percent(i, total){
+    return String((i / total) * 100) + "%"
 }
 
 function csv_to_json(csv){
@@ -48,6 +59,7 @@ function csv_to_json(csv){
 if(module){
     module.exports = {
         csv_to_json: csv_to_json,
-        to_num: to_num
+        to_num: to_num,
+        to_percent: to_percent
     }
 }
