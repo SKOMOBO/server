@@ -1,4 +1,4 @@
-const {csv_to_json, to_num, to_percent} = require('../static/new_uploader')
+const {csv_to_json, to_num, to_percent, update_progress} = require('../static/new_uploader')
 
 test('it converts col values to floats and ints', ()=>{
     values = [{cat: "2", dog: "2.3", prof: "0"}]

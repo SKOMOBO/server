@@ -8,13 +8,8 @@
 
 // receives altered data and downloads the data as a csv file again on the client
 
-var errors = []
-function add_error(msg){
-    errors.push(msg)
-}
-
-function clear_errors(){
-    errors = []
+function update_progress(progress, bar){
+    return bar.width(progress)
 }
 
 function to_num(json, props){
