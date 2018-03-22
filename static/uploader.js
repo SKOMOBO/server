@@ -1,4 +1,3 @@
-
 var data_file = null
 
 function file_attached(files){
@@ -58,6 +57,7 @@ function upload(){
         }
         else{
             add_error("Please attach a file before submitting")
+            display_errors()
         }
     }
 }
@@ -97,7 +97,9 @@ function csvJSON(csv){
 }
 
 function update_progress(index, total_rows){
+    console.log(index, total_rows)
     var progress = String((index / total_rows) * 100) + "%"
+    console.log(progress)
     $("#myBar").text(progress)
     $("#myBar").width(progress)
 }
@@ -120,6 +122,14 @@ function clean_row(row, on_received, on_error){
             catch(error){
                 on_error(data)
             }
+        },
+        error: function(xmlhttprequest, textstatus, message) {
+            if(textstatus==="timeout") {
+                alert("No server connection");
+                has_errored = true
+            } else {
+                alert(textstatus);
+            }
         }
     })
 }
@@ -133,19 +143,17 @@ function decode(csv){
 
     var requests = []
     for(i = 0; i < json.length; i++){
+        update_progress(index, total_rows)
+
         requests.push(clean_row(json[i], function(cleaned){
             json[i].Dust10 = cleaned.Dust10
             json[i].Dust2_5 = cleaned.Dust2_5
             index = i
-            update_progress(index, total_rows)
         }, function(msg){
             add_error(msg)
         }))
 
     }
-
-    console.log(errors)
-    display_errors()
 
     if(!has_errored){
         $.when.apply($, requests).done(function(){
@@ -164,6 +172,9 @@ function decode(csv){
             // get the final name here and data
             download(CSV, data_file.name.slice(0, -4) + '_clean.csv', 'text/csv')
         })
+    }
+    else{
+        display_errors()    
     }
 
     has_errored = false
