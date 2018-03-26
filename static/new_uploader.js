@@ -75,7 +75,7 @@ function decode(text){
         })
     })
 
-    // wait in a non blocking fashion for the servr to process everything
+    // wait in a non blocking fashion for the server to process everything
     ticks = 0
     ticker = setInterval(function(){
         if(num_processed === 0){

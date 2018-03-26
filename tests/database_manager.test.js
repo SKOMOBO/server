@@ -1,6 +1,6 @@
 const db = require('../src/database_manager')
 
-db.set_connection(jest.fn())
+db.set_connection({query:jest.fn()})
 
 describe('the database stores data correctly', ()=>{
     test('The connection is resolved', ()=>{

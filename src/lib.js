@@ -120,15 +120,16 @@ function extract(data){
 
 // make it linux and windows friendly with the net start thing and put in net start thing "net start MySQL && 
 
-const _ = require('lodash')
 function export_functs(){
-   let result = {}
-   _.forEach(arguments, (arg)=>{
+    let inputs = Array.from(arguments)
+
+    let result = {}
+    inputs.forEach((arg)=>{
         if(arg.name !== undefined){
             result[arg.name] = arg
         }
-   })
-   return result
+    })
+    return result
 }
 
 
