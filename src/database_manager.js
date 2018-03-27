@@ -120,7 +120,7 @@ async function store(response, database_name, values){
 
 function box_exists(id, callback){
     resolve_db()
-    connection.query("SELECT ID from arduino where Box_id = " + String(id), (err, results, fields)=>{
+    connection.query("SELECT ID from arduino where Box_id = " + String(id) + " LIMIT 1", (err, results, fields)=>{
         if(err != null){
             console.error(err)
         }
