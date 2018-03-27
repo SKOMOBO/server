@@ -102,7 +102,7 @@ app.get('*', (req, resp)=>{
         store_arduino(req, resp)
     }
     else{
-        resp.send(404)
+        resp.sendStatus(404)
     }
 })
 
