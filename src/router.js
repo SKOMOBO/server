@@ -37,7 +37,7 @@ function safe_route(route, callback){
         authenticate(correct_pass, req.query.pass, ()=>{
             callback(req, resp)
         }, (message)=>{
-            resp.send(400, message)
+            resp.sen(message)
         })
     })
  
