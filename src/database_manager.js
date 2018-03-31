@@ -177,14 +177,15 @@ function latest(id, format, resp){
                 }else{
                     // finish this
                     let values = fix_format(results)[0]
-                    let msg = "box " + id + " received at</br>" + values["Time_received"]
-                    + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
-                    +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
-                    +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
-                    + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
-                    + "</br>Pm10: " + values["Dust10"]
+                    // let msg = "box " + id + " received at</br>" + values["Time_received"]
+                    // + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
+                    // +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
+                    // +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
+                    // + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
+                    // + "</br>Pm10: " + values["Dust10"]
 
-                    resp.send(msg)
+                    // resp.send(msg)
+                    resp.render('latest.pug', values)
                 }
             }
             else{

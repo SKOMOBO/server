@@ -1,0 +1,20 @@
+html
+    body
+
+        //- "box " + id + " received at</br>" + values["Time_received"]
+            // + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
+            // +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
+            // +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
+            // + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
+            // + "</br>Pm10: " + values["Dust10"]
+       p box #{Box_ID} recieved at #{Time_received}
+       h3 stats: 
+       p temperature: #{Temperature}
+       p humidity: #{Humidity}
+       p presence: #{Presence}
+        //-    should be two breaks or bold
+       h3 dust:
+       p PM1: #{Dust1}
+       p PM2.5: #{Dust2_5}
+       p PM10: #{Dust10}
+
