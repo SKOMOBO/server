@@ -7,8 +7,6 @@ test('The app is defined', ()=>{
 var request = require('supertest')(app)
 
 const {password} = require('../keys/download_password')
-// const {no_zip} = require('../src/messages')
-const {no_zip} = require('../src/messages')
 
 describe('the routes work correctly', ()=>{
     test('returns invalid route', ()=>{
@@ -16,11 +14,11 @@ describe('the routes work correctly', ()=>{
     })
 
     test('returns invalid password', ()=>{
-        return request.get('/get?type=arduino&id=2').expect(400)
+        return request.get('/get?type=arduino&id=2').expect('invalid password')
     })
 
     test('returns no zip', ()=>{
-        return request.get('/get?type=all&id=2&pass=' + password).expect(no_zip)
+        return request.get('/get?type=all&id=2&pass=' + password).expect("This will send a zip file with both raspberry pi and arduino data in the near future")
     })
 
     test('returns no dashboard', ()=>{

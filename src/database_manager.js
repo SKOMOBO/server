@@ -1,5 +1,4 @@
 const {send_json, send_csv} = require('./file_manager')
-const {no_box, please_send_id} = require('./messages')
 
 /**
  * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
@@ -72,11 +71,10 @@ function get_type(name, id, resp, format){
     if(isNaN(id) && id != "all" ){
         id = String(id)
     }
-    else if(id == undefined){
-        resp.send(please_send_id)
-        return
+    
+    if(id === 'undefined' || id === '' || id === ' ' || typeof id === 'undefined'){
+        return resp.render('please_send_id.pug')
     }
-
     let query = 'SELECT * from ' + name
     
     if(id != "all"){ 
@@ -99,7 +97,7 @@ function get_type(name, id, resp, format){
             }
         }
         else{
-            resp.send(no_box(id))
+            resp.render('no_box.pug', {id: id})
         }
     })
 }
@@ -157,7 +155,7 @@ function latest(id, format, resp){
         id = String(id)
     }
     else if(id == null){
-        resp.send(please_send_id)
+        resp.remder('please_send_id')
         return
     }
 
@@ -189,11 +187,11 @@ function latest(id, format, resp){
                 }
             }
             else{
-                resp.send(no_box(id))
+                resp.render('no_box.pug', {id: id})
             }
         }
         else{
-            resp.send(no_box(id))
+            resp.render('no_box.pug', {id: id})
         }
     })
 }
