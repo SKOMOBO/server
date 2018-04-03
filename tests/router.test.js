@@ -20,7 +20,9 @@ describe('the routes work correctly', ()=>{
     })
 
     test('returns no zip', ()=>{
-        return request.get('/get?type=all&id=2&pass=' + password).expect(no_zip)
+        return request.get('/get?type=all&id=2&pass=' + password).expect(
+            "<html><body>" + no_zip + "</body></html>"
+        )
     })
 
     test('returns no dashboard', ()=>{
