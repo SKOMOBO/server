@@ -16,7 +16,7 @@ describe('the routes work correctly', ()=>{
     })
 
     test('returns invalid password', ()=>{
-        return request.get('/get?type=arduino&id=2').expect(400)
+        return request.get('/get?type=arduino&id=2').expect('invalid password')
     })
 
     test('returns no zip', ()=>{
