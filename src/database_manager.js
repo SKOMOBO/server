@@ -1,5 +1,4 @@
 const {send_json, send_csv} = require('./file_manager')
-const {no_box, please_send_id} = require('./messages')
 
 /**
  * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
@@ -7,7 +6,8 @@ const {no_box, please_send_id} = require('./messages')
  * @param {any} data 
  * @returns 
  */
-function fix_formatting(data){
+function fix_format(data){
+
     if(data[0].Presence != undefined){
         // for each text row
         for(let row=0; row<data.length; row++){
@@ -71,11 +71,10 @@ function get_type(name, id, resp, format){
     if(isNaN(id) && id != "all" ){
         id = String(id)
     }
-    else if(id == undefined){
-        resp.send(please_send_id)
-        return
+    
+    if(id === 'undefined' || id === '' || id === ' ' || typeof id === 'undefined'){
+        return resp.render('please_send_id.pug')
     }
-
     let query = 'SELECT * from ' + name
     
     if(id != "all"){ 
@@ -88,22 +87,22 @@ function get_type(name, id, resp, format){
     }
 
     connection.query(query, (err, results , fields)=>{ 
-        if(results !== null && results.length !== 0){
-
-            if(format === 'json'){
-                send_json(results, resp)
-            }else{
-                send_csv(name + '.csv', fix_formatting(results), resp)
+        if(results !== null && results !== undefined){
+            if(results.length !== 0){
+                if(format === 'json'){
+                    send_json(results, resp)
+                }else{
+                    send_csv(name + '.csv', fix_format(results), resp)
+                }
             }
         }
         else{
-            resp.send(no_box(id))
+            resp.render('no_box.pug', {id: id})
         }
     })
 }
 
 async function store(response, database_name, values){
-
     if(!has(values, null)){
         await connection.query('INSERT INTO ' + database_name + ' set ?' , values)
         // tell the client everything is ok
@@ -117,13 +116,93 @@ async function store(response, database_name, values){
     response.end()
 }
 
-const {validate_data} = require('./validator')
-function store_arduino(req, resp){
+function box_exists(id, callback){
+    resolve_db()
+    connection.query("SELECT ID from arduino where Box_id = " + String(id) + " LIMIT 1", (err, results, fields)=>{
+        if(err != null){
+            console.error(err)
+        }
+    
+        if(results != null){
+            if(results.length !== 0){
+                callback(true)
+            }
+            else{
+                callback(false)
+            }
+        }
+        else{
+            callback(false)
+        }
+    })
+}
 
+function box_processor(id, callback){
+    // stubbed out for now
+
+    box_exists(id, (exists)=>{
+        exists ? callback(true, "arduino") : callback(false)
+    })
+}
+
+
+function latest(id, format, resp){
+    // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
     resolve_db()
 
-    let url = req.url
+    // check if it is a valid number if it is we carry on without issues
+    if(isNaN(id) && id !== "all" ){
+        id = String(id)
+    }
+    else if(id == null){
+        resp.remder('please_send_id')
+        return
+    }
 
+    let query = 'SELECT * from arduino where Box_ID = ' + id +' order by Time_received DESC limit 1'
+
+
+    connection.query(query, (err, results , fields)=>{ 
+
+        if(err != null){
+            console.error(err)
+        }
+
+        if(results != null){
+            if(results.length !== 0){
+                if(format === 'json'){
+                    send_json(results, resp)
+                }else{
+                    // finish this
+                    let values = fix_format(results)[0]
+                    // let msg = "box " + id + " received at</br>" + values["Time_received"]
+                    // + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
+                    // +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
+                    // +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
+                    // + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
+                    // + "</br>Pm10: " + values["Dust10"]
+
+                    // resp.send(msg)
+                    resp.render('latest.pug', values)
+                }
+            }
+            else{
+                resp.render('no_box.pug', {id: id})
+            }
+        }
+        else{
+            resp.render('no_box.pug', {id: id})
+        }
+    })
+}
+
+
+const {validate_data} = require('./validator')
+function store_arduino(req, resp){
+    resolve_db()
+
+    let url = req.url.slice(1)
+    
     validate_data(url, (data)=>{
         let values = extract(url)
         store(resp, "arduino", values)
@@ -141,8 +220,11 @@ function set_connection(val){
 }
 
 exports.set_connection = set_connection
+exports.latest = latest
+exports.box_exists = box_exists
+exports.box_processor = box_processor
 exports.get_connection = get_connection
 exports.get_type = get_type
 exports.store_arduino = store_arduino
 exports.resolve_db = resolve_db
-exports.fix_formatting = fix_formatting
+exports.fix_format = fix_format

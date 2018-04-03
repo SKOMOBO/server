@@ -13,4 +13,6 @@ app.use(compress())
 // Fix headers to make things more secure
 app.use(helmet())
 
+app.set('view engine', 'pug')
+
 exports.app = app

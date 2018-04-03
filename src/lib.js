@@ -88,11 +88,10 @@ function extract(data){
 
     // make sure there is actually data available  
     if( data !== '' && data !== ' ' && data != undefined){
-          // breaks up each value by a dash and removes / in the front
-        let tokens = data.split('_').slice(1)
+        // breaks up each value by a dash and removes /0 in the front
+        let tokens = data.split('_')
         
         // layout how the data is going to be mapped
-    
         let col_names = ['Box_ID','Time_sent','Dust1', 'Dust2_5', 'Dust10', 'Temperature', 'Humidity', 'CO2', 'Presence']
     
         let values = {}

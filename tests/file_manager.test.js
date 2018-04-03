@@ -13,7 +13,7 @@ describe('The file manager sends files', ()=>{
         disposition = data
     }
 
-    let fake_response = {'send': send, 'set': set}
+    let fake_response = {'send': send, 'set': set, 'csv':send}
     test('It sends a JSON file', ()=>{
 
         let now = new Date(Date.now())
@@ -28,6 +28,8 @@ describe('The file manager sends files', ()=>{
         fm.send_csv('test.csv', data, fake_response)
         
         expect(disposition).toMatchObject({"Content-Disposition": "attachment; filename=\"test.csv\""})
-        expect(result).toBe('"cat","hello"\r\n"dog","world"')
+        
+        // passes just a object to the response csv function now
+        expect(result).toMatchObject(data)
     })
 })
