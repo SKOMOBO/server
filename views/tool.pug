@@ -1,0 +1,31 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        title Dust cleaning tool
+        link(rel="stylesheet" type="text/css" href="dust.css")
+        script(src="https://vuejs.org/js/vue.js")
+        script(src="json2csv.js")
+        script(src="new_uploader.js")
+        script(src="uploader_lib.js")
+        script(src='http://js.zapjs.com/js/download.js')
+
+    body
+        h1 SKOMOBO dust cleaner tool
+        p(class = "intro")
+        |    This is a tool for fixing the dust data in your SKOMOBO CSV files.
+    
+        p(style="color:darkred") DISCLAIMER: This tool does not currently clean the PM1 measurements.
+         
+        input(id="uploader" type="file" name="file" accept=".csv" onchange="file_attached(this.files)")
+        input(type="submit" id="submit" value = "submit" onclick="process_file()")
+
+        br
+        
+        div(id="myProgress")
+            b(class="progress_heading") Cleaning Progress Bar
+            div(id="bar_background")
+                div(id="myBar") 0%
+                div(id="error")
