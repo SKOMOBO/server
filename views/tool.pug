@@ -27,5 +27,6 @@ html(lang="en")
         div(id="myProgress")
             b(class="progress_heading") Cleaning Progress Bar
             div(id="bar_background")
-                div(id="myBar") 0%
+                div(id="upload_bar", :style="{ width:{{upload_progess}} }") {{upload_progess}}%
+                div(id="download_bar", :style="{ width:{{download_progress}} }") {{download_progress}}%
                 div(id="error")
