@@ -34,12 +34,20 @@ describe('the routes work correctly', ()=>{
         return request.get('/23_2014-12-30-12-59-59_12_16_1000_30.00_90.00_400_1').expect(200)
     })
 
+    const pug = require('pug')
+
+    function get_view(file, data){
+        return pug.renderFile('views/' + file + '.pug', data)
+    }
+
     test('box exists works', ()=>{
-        return request.get('/exists?id=1&pass=' + password).expect("The database has a box with ID 1")
+        return request.get('/exists?id=1&pass=' + password).expect(
+            get_view('no_box', {id:1}))
     })
 
     test('box exists says no box exists', ()=>{
-        return request.get('/exists?id=ha&pass=' + password).expect("No box with ID ha")
+        return request.get('/exists?id=ha&pass=' + password).expect(
+            get_view('no_box', {id:'ha'}))
     })
 
     test('box processor returns processor of box', ()=>{
