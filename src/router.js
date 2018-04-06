@@ -94,18 +94,6 @@ safe_route('/latest', (req, resp)=>{
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]+_.*/g, store_arduino)
 
-    let id = req.query.id
-
-    box_processor(id, (exists, processor_type)=>{
-        if(exists){
-            resp.send("Box " + String(id) + ' has a ' + processor_type + ' processor')
-        }
-        else{
-            resp.send(no_box(id))
-        } 
-    })
-})
-
 // the regex above fails on every second request for some reason?
 // monkey patching to make it work for now
 app.get('*', (req, resp)=>{
