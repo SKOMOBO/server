@@ -19,7 +19,7 @@ describe('the routes work correctly', ()=>{
 
     test('returns no zip', ()=>{
         return request.get('/get?type=all&id=2&pass=' + password).expect(
-            "<html><body>" + no_zip + "</body></html>"
+            "<html><body> This will send a zip file with both raspberry pi and arduino data in the near future </body></html>"
         )
     })
 

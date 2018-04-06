@@ -71,6 +71,10 @@ safe_route("/get*", async (req, resp) =>{
     }
 })
 
+app.get('/dust_cleaner', (req, resp)=>{
+    resp.render('tool.pug')
+})
+
 
 safe_route('/processor', (req, resp)=>{
 
