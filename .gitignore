@@ -10,6 +10,7 @@ prod-password.json
 download_password.json
 
 *.csv
+*.pyc
 
 # Runtime data
 pids
