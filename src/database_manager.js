@@ -209,7 +209,7 @@ function latest(id, format, resp){
         id = String(id)
     }
     else if(id == null){
-        resp.remder('please_send_id')
+        resp.render('please_send_id')
         return
     }
 
@@ -328,36 +328,32 @@ function latest(id, format, resp){
 
     let query = 'SELECT * from box' + id + ' order by Time_received DESC limit 1'
 
+    if(id != null){
+        connection.query(query, (err, results , fields)=>{ 
 
-    connection.query(query, (err, results , fields)=>{ 
+            if(err != null){
+                console.error(err)
+            }
 
-        if(err != null){
-            console.error(err)
-        }
-
-        if(results != null){
-            if(results.length !== 0){
-                if(format === 'json'){
-                    send_json(results, resp)
-                }else{
-                    // finish this
-                    let values = fix_format(results)[0]
-                    console.log(values)
-                    let msg = "box " + id + " received at</br>" + values["Time_received"]
-                    + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
-                    +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
-                    +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
-                    + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
-                    + "</br>Pm10: " + values["Dust10"]
-
-                    resp.send(msg)
+            if(results != null){
+                if(results.length !== 0){
+                    if(format === 'json'){
+                        send_json(results, resp)
+                    }else{
+                        // finish this
+                        let values = fix_format(results)[0]
+                        resp.render('latest.pug', values)
+                    }
                 }
             }
-        }
-        else{
-            resp.send(no_box(id))
-        }
-    })
+            else{
+                resp.render('no_box.pug', {id: id})
+            }
+        })
+    }
+    else{
+        resp.render('please_send_id.pug', {id: id})
+    }
 }
 
 const {export_functs} = require('./lib')

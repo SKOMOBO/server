@@ -50,7 +50,7 @@ safe_route('/exists', (req, resp)=>{
 
     box_exists(id, (exists)=>{
         if(exists){
-            resp.send("The database has a box with ID " + String(id))
+            resp.render('box_exists', {id:id})
         }
         else{
             resp.render('no_box.pug', {id: id})

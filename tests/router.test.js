@@ -17,8 +17,14 @@ describe('the routes work correctly', ()=>{
         return request.get('/get?type=arduino&id=2').expect('invalid password')
     })
 
+    const pug = require('pug')
+
+    function get_view(file, data){
+        return pug.renderFile('views/' + file + '.pug', data)
+    }
+
     test('returns no zip', ()=>{
-        return request.get('/get?type=all&id=2&pass=' + password).expect("This will send a zip file with both raspberry pi and arduino data in the near future")
+        return request.get('/get?type=all&id=2&pass=' + password).expect(get_view('no_zip'))
     })
 
     test('returns no dashboard', ()=>{
@@ -34,15 +40,9 @@ describe('the routes work correctly', ()=>{
         return request.get('/23_2014-12-30-12-59-59_12_16_1000_30.00_90.00_400_1').expect(200)
     })
 
-    const pug = require('pug')
-
-    function get_view(file, data){
-        return pug.renderFile('views/' + file + '.pug', data)
-    }
-
     test('box exists works', ()=>{
         return request.get('/exists?id=1&pass=' + password).expect(
-            get_view('no_box', {id:1}))
+            get_view('box_exists', {id:1}))
     })
 
     test('box exists says no box exists', ()=>{
@@ -55,7 +55,7 @@ describe('the routes work correctly', ()=>{
     })
 
     test('box processor returns no box', ()=>{
-        return request.get('/processor?id=ha&pass=' + password).expect("No box with ID ha")
+        return request.get('/processor?id=ha&pass=' + password).expect(get_view('no_box', {id:'ha'}))
     })
 
     test('latest returns 200', ()=>{
