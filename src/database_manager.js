@@ -1,7 +1,8 @@
 const {send_json, send_csv} = require('./file_manager')
 
 /**
- * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans 
+ * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
+ * Corrects Funny database formatted date time strings to normal strings
  */
 function fix_format(data){
 
@@ -11,18 +12,11 @@ function fix_format(data){
             data[row].Presence = String(data[row].Presence[0])
             data[row].Time_received = fix_timestamp(data[row].Time_received)
             data[row].Time_sent = fix_timestamp(data[row].Time_sent)
-            
-            // let clean_dust = clean_data(data[row].pm10, data[row].pm2_5)
-            // data[row].pm10 = clean_dust.PM10
-            // data[row].pm2_5 = clean_dust.PM2_5
         }
     }
    
    return data
 }
-
-// var dust_cleaner = require("../dust_cleaner/dustCleanerClient.js")
-
 
 // below two timestampfunctions were retrieved from https://stackoverflow.com/a/5133807/6142189
 
@@ -116,15 +110,6 @@ function get_box(id, resp, format){
 
 async function store(response, database_name, values){
 
-    // restructure db to have seperate table for each box
-
-    // list of boxes in database gets stored in box_info, if a box is not in that list
-    // we insert it into said list and then create its table
-    // if it does exist we insert the data into its correct table
-    // each table should be like box1, box2, box3 etc to denote what ID it maps to
-
-    // the box info table is used to track the meta data about each box
-
     if(!has(values, null)){
 
         box_exists(values["Box_ID"], (exists)=>{
@@ -140,19 +125,12 @@ async function store(response, database_name, values){
                 connection.query('ALTER TABLE ' + database_name + ' AUTO_INCREMENT = 1')
                 // copy this query structure to migrate data and index correctly 
                 
-
                 let old_data = connection.query('SELECT `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,' +
                  ' `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2` from arduino' +
                  "where Box_ID = '" + values["Box_ID"] + "'")
 
                 connection.query('Insert into ' + database_name + ' set ?', old_data)
 
-                
-                // from arduino where box_id = "2";')
-// insert into box2(`Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,  `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2`)
-	// select `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,  `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2`
-	// from arduino where box_id = "2";
-                
                 // insert new data
                 connection.query('INSERT INTO ' + database_name + ' set ?' , values)
                 
@@ -170,27 +148,6 @@ async function store(response, database_name, values){
     }
 }
 
-function box_exists(id, callback){
-    resolve_db()
-    connection.query("SELECT ID from arduino where Box_id = " + String(id) + " LIMIT 1", (err, results, fields)=>{
-        if(err != null){
-            console.error(err)
-        }
-    
-        if(results != null){
-            if(results.length !== 0){
-                callback(true)
-            }
-            else{
-                callback(false)
-            }
-        }
-        else{
-            callback(false)
-        }
-    })
-}
-
 function box_processor(id, callback){
     // stubbed out for now
 
@@ -198,58 +155,6 @@ function box_processor(id, callback){
         exists ? callback(true, "arduino") : callback(false)
     })
 }
-
-
-function latest(id, format, resp){
-    // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
-    resolve_db()
-
-    // check if it is a valid number if it is we carry on without issues
-    if(isNaN(id) && id !== "all" ){
-        id = String(id)
-    }
-    else if(id == null){
-        resp.render('please_send_id')
-        return
-    }
-
-    let query = 'SELECT * from arduino where Box_ID = ' + id +' order by Time_received DESC limit 1'
-
-
-    connection.query(query, (err, results , fields)=>{ 
-
-        if(err != null){
-            console.error(err)
-        }
-
-        if(results != null){
-            if(results.length !== 0){
-                if(format === 'json'){
-                    send_json(results, resp)
-                }else{
-                    // finish this
-                    let values = fix_format(results)[0]
-                    // let msg = "box " + id + " received at</br>" + values["Time_received"]
-                    // + "</br></br><b>stats</b>:</br>temperature: " + values['Temperature']
-                    // +"</br>humidity: " + values["Humidity"] + "</br>CO2: " + values['CO2']
-                    // +"</br>presence: " + values["Presence"] + "</br></br>Dust: "
-                    // + "</br>Pm1: " + values["Dust1"] + "</br>Pm2.5: " + values["Dust2_5"]
-                    // + "</br>Pm10: " + values["Dust10"]
-
-                    // resp.send(msg)
-                    resp.render('latest.pug', values)
-                }
-            }
-            else{
-                resp.render('no_box.pug', {id: id})
-            }
-        }
-        else{
-            resp.render('no_box.pug', {id: id})
-        }
-    })
-}
-
 
 const {validate_data} = require('./validator')
 function store_arduino(req, resp){
