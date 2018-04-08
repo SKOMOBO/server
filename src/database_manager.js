@@ -178,7 +178,6 @@ function set_connection(value){
     connection = value
 }
 
-// make a get_data
 function get_info(id, cols, callback){
     resolve_db()
     if(id != null){
@@ -218,6 +217,44 @@ function box_processor(id, callback){
     })
 }
 
+function get_data(id, cols, modifier, callback){
+    // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
+    resolve_db()
+
+    if(cols.length > 1){
+        cols = cols.join(', ')
+    }
+    else if (cols.length === 1){
+        cols = cols[0]
+    }
+
+    let query = 'SELECT ' + cols + ' from box' + id + ' ' + modifier
+ 
+    if(id != null){
+        connection.query(query, (err, results , fields)=>{ 
+
+            if(err != null){
+                console.error(err)
+            }
+
+            if(results != null){
+                if(results.length !== 0){
+                    // finish this
+                    let values = fix_format(results)[0]
+                    callback(true, values)
+                
+                }
+                else{
+                    callback(false)
+                }
+            }
+            else{
+                callback(false)
+            }
+        })
+    }
+}
+
 function latest(id, format, resp){
     // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
     resolve_db()
@@ -226,8 +263,8 @@ function latest(id, format, resp){
     if(isNaN(id) && id !== "all" ){
         id = String(id)
     }
-    else if(id == null){
-        resp.send(please_send_id)
+    else if(id == null || id === 'undefined'){
+        resp.render('please_send_id.pug')
         return
     }
 
@@ -255,9 +292,6 @@ function latest(id, format, resp){
                 resp.render('no_box.pug', {id: id})
             }
         })
-    }
-    else{
-        resp.render('please_send_id.pug', {id: id})
     }
 }
 
