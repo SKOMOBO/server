@@ -1,17 +1,17 @@
-html
-    body
-        h3 box #{Box_ID} received at #{Time_received}
+include includes/header
+header
+    h3 box #{Box_ID} received at #{Time_received}
 
-        h3 stats: 
+    h3 stats: 
 
-        p temperature: #{Temperature}
-            br 
-            | humidity: #{Humidity}
-            | presence: #{Presence}
-    
-        h3 dust:
-        p PM1: #{Dust1} 
-            br 
-            | PM2.5: #{Dust2_5}
-            | PM10: #{Dust10}
+    p temperature: #{Temperature}
+        br 
+        | humidity: #{Humidity}
+        | presence: #{Presence}
+
+    h3 dust:
+    p PM1: #{Dust1} 
+        br 
+        | PM2.5: #{Dust2_5}
+        | PM10: #{Dust10}
 

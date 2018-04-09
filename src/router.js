@@ -90,6 +90,9 @@ safe_route('/latest', (req, resp)=>{
     latest(req.query.id, req.query.format, resp)
 })
 
+app.get('/ping', (req, resp)=>{
+    resp.render('ping.pug')
+})
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]+_.*/g, store_arduino)
