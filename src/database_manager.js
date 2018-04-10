@@ -121,24 +121,28 @@ async function store(response, database_name, values){
                 response.end()
             }
             else{
+
                 connection.query('CREATE TABLE ' + database_name + ' LIKE box_data')
                 connection.query('ALTER TABLE ' + database_name + ' AUTO_INCREMENT = 1')
                 // copy this query structure to migrate data and index correctly 
                 
-                let old_data = connection.query('SELECT `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,' +
+                connection.query('SELECT `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,' +
                  ' `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2` from arduino' +
-                 "where Box_ID = '" + values["Box_ID"] + "'")
+                 "where Box_ID = '" + values["Box_ID"] + "'", (err, results , fields)=>{
+                    if(typeof results !== 'undefined'){
+                        connection.query('Insert into ' + database_name + ' set ?', results)
+                    }
+                  
+                    // insert new data
+                    connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+                    
+                    // update box metadata
+                    let box_meta =  {"ID": values["Box_ID"], "processor": "arduino"}
+                    response.writeHead(200, {"Content-Type": "text/HTML"})
+                    response.end()
+                 })
 
-                connection.query('Insert into ' + database_name + ' set ?', old_data)
-
-                // insert new data
-                connection.query('INSERT INTO ' + database_name + ' set ?' , values)
-                
-                // update box metadata
-                let box_meta =  {"ID": values["Box_ID"], "processor": "arduino"}
-                connection.query('INSERT INTO box_info set ?' , box_meta)
-                response.writeHead(200, {"Content-Type": "text/HTML"})
-                response.end()
+               
             }    
         })
     }
