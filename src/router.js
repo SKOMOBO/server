@@ -64,7 +64,7 @@ safe_route("/get*", async (req, resp) =>{
         send_zip(resp, {})
     }
     else if(supported_types.includes(req.query.type)){
-        get_type(req.query.type, req.query.id, resp, req.query.format)
+        get_box(req.query.id, resp, req.query.format)
     }
     else{
         resp.render('please_send_type.pug')
