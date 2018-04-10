@@ -128,7 +128,6 @@ async function store(response, database_name, values){
                         let query = 'Insert into ' + database_name + ' (' + cols + ') ' + 'SELECT ' + cols + ' from arduino' +
                         " where Box_ID = '" + values["Box_ID"] + "'"
                         
-                        console.log(query)
                         connection.query(query, (err, results , fields)=>{
                             // finished migrating old data
                         
