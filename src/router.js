@@ -2,11 +2,9 @@
 
 // import {store_arduino} from "../server"
 
-const {get_type, store_arduino} = require('./database_manager')
+const {get_box, store_arduino} = require('./database_manager')
 var {app} = require('./config')
 const {send_zip} = require('./file_manager')
-
-const {please_send_type, no_box} = require("./messages")
 
 var supported_types = ['arduino']
 
@@ -52,10 +50,10 @@ safe_route('/exists', (req, resp)=>{
 
     box_exists(id, (exists)=>{
         if(exists){
-            resp.send("The database has a box with ID " + String(id))
+            resp.render('box_exists', {id:id})
         }
         else{
-            resp.send(no_box(id))
+            resp.render('no_box.pug', {id: id})
         }
     })
 })
@@ -69,7 +67,7 @@ safe_route("/get*", async (req, resp) =>{
         get_type(req.query.type, req.query.id, resp, req.query.format)
     }
     else{
-        resp.send(please_send_type)
+        resp.render('please_send_type.pug')
     }
 })
 
@@ -83,7 +81,7 @@ safe_route('/processor', (req, resp)=>{
             resp.send("Box " + String(id) + ' has a ' + processor_type + ' processor')
         }
         else{
-            resp.send(no_box(id))
+            resp.render('no_box.pug', {id: id})
         } 
     })
 })
@@ -92,6 +90,9 @@ safe_route('/latest', (req, resp)=>{
     latest(req.query.id, req.query.format, resp)
 })
 
+app.get('/ping', (req, resp)=>{
+    resp.render('ping.pug')
+})
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions
 app.get(/\/[0-9]+_.*/g, store_arduino)

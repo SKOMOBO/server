@@ -7,8 +7,6 @@ test('The app is defined', ()=>{
 var request = require('supertest')(app)
 
 const {password} = require('../keys/download_password')
-// const {no_zip} = require('../src/messages')
-const {no_zip} = require('../src/messages')
 
 describe('the routes work correctly', ()=>{
     test('returns invalid route', ()=>{
@@ -16,11 +14,17 @@ describe('the routes work correctly', ()=>{
     })
 
     test('returns invalid password', ()=>{
-        return request.get('/get?type=arduino&id=2').expect(400)
+        return request.get('/get?type=arduino&id=2').expect('invalid password')
     })
 
+    const pug = require('pug')
+
+    function get_view(file, data){
+        return pug.renderFile('views/' + file + '.pug', data)
+    }
+
     test('returns no zip', ()=>{
-        return request.get('/get?type=all&id=2&pass=' + password).expect(no_zip)
+        return request.get('/get?type=all&id=2&pass=' + password).expect(get_view('no_zip'))
     })
 
     test('returns no dashboard', ()=>{
@@ -33,7 +37,29 @@ describe('the routes work correctly', ()=>{
 
     test('multiple store requests works', ()=>{
         request.get('/23_2014-12-30-12-59-59_12_16_1000_30.00_90.00_400_1').expect(200)
-        return request.get('/123_1').expect(200)
+        return request.get('/23_2014-12-30-12-59-59_12_16_1000_30.00_90.00_400_1').expect(200)
+    })
+
+    test('box exists works', ()=>{
+        return request.get('/exists?id=1&pass=' + password).expect(
+            get_view('box_exists', {id:1}))
+    })
+
+    test('box exists says no box exists', ()=>{
+        return request.get('/exists?id=ha&pass=' + password).expect(
+            get_view('no_box', {id:'ha'}))
+    })
+
+    test('box processor returns processor of box', ()=>{
+        return request.get('/processor?id=1&pass=' + password).expect("Box 1 has a arduino processor")
+    })
+
+    test('box processor returns no box', ()=>{
+        return request.get('/processor?id=ha&pass=' + password).expect(get_view('no_box', {id:'ha'}))
+    })
+
+    test('latest returns 200', ()=>{
+        return request.get('/latest?id=1&pass=' + password).expect(200)
     })
 })
 

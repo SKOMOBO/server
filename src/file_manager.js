@@ -1,5 +1,3 @@
-
-const {no_zip} = require('./messages')
 const fs = require("fs")
 
 function fix_timestamp(data){
@@ -35,7 +33,7 @@ function fix_format(data){
 //! this desperately needs to be cleaned up to make dependency tree simpler
 
 function send_zip(resp, data){
-    resp.send(no_zip)
+    resp.render('no_zip.pug')
 }
 
 function send_file(file, resp){

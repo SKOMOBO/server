@@ -46,14 +46,9 @@ function connect_db(details){
 
     let connection = null
     try{
-        if(details.host === 'test'){
-            connection = {'query':jest.fn()}
-        }
-        else{
-            connection = mysql.createConnection(details)
-        }
-    
-    }catch(e){
+        connection = mysql.createConnection(details)
+    }
+    catch(e){
         console.error(e)
         console.log("Database not started")
         // change this so that it executes cmd cmmand to start DB
@@ -127,6 +122,7 @@ function export_functs(){
             result[arg.name] = arg
         }
    })
+
    return result
 }
 
