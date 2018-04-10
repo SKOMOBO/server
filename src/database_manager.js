@@ -125,12 +125,17 @@ async function store(response, database_name, values){
                 connection.query('CREATE TABLE ' + database_name + ' LIKE box_data')
                 connection.query('ALTER TABLE ' + database_name + ' AUTO_INCREMENT = 1')
                 // copy this query structure to migrate data and index correctly 
+
+                let query = 'SELECT `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,' +
+                ' `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2` from arduino' +
+                " where Box_ID = '" + values["Box_ID"] + "'"
                 
-                connection.query('SELECT `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,' +
-                 ' `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2` from arduino' +
-                 "where Box_ID = '" + values["Box_ID"] + "'", (err, results , fields)=>{
+                console.log(query)
+                connection.query(query, (err, results , fields)=>{
                     if(typeof results !== 'undefined'){
-                        connection.query('Insert into ' + database_name + ' set ?', results)
+                        results.map((result)=>{
+                            connection.query('Insert into ' + database_name + ' set ?', result)
+                        })
                     }
                   
                     // insert new data
