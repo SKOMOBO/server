@@ -111,7 +111,6 @@ function get_box(id, resp, format){
 async function store(response, database_name, values){
 
     if(!has(values, null)){
-
         box_exists(values["Box_ID"], (exists)=>{
             if(exists){
                 // insert into new table now
@@ -121,34 +120,34 @@ async function store(response, database_name, values){
                 response.end()
             }
             else{
+                connection.query('CREATE TABLE ' + database_name + ' LIKE box_data',  (err, results, fields)=>{
+                    connection.query('ALTER TABLE ' + database_name + ' AUTO_INCREMENT = 1', (err, results, fields)=>{
+                        // finished setting up new table
+                        let cols = "`Time_received`, `Box_ID`, `Time_sent`, `Dust1`, `Dust2_5`, `Dust10`,  `Presence`, `Temperature`, `Humidity`, `CO2`"
 
-                connection.query('CREATE TABLE ' + database_name + ' LIKE box_data')
-                connection.query('ALTER TABLE ' + database_name + ' AUTO_INCREMENT = 1')
-                // copy this query structure to migrate data and index correctly 
-
-                let query = 'SELECT `Time_received`, `Box_ID`, `Time_sent`,  `Dust1`,' +
-                ' `Dust2_5`,  `Dust10`,  `Presence`,  `Temperature`,  `Humidity`,  `CO2` from arduino' +
-                " where Box_ID = '" + values["Box_ID"] + "'"
-                
-                console.log(query)
-                connection.query(query, (err, results , fields)=>{
-                    if(typeof results !== 'undefined'){
-                        results.map((result)=>{
-                            connection.query('Insert into ' + database_name + ' set ?', result)
+                        let query = 'Insert into ' + database_name + ' (' + cols + ') ' + 'SELECT ' + cols + ' from arduino' +
+                        " where Box_ID = '" + values["Box_ID"] + "'"
+                        
+                        console.log(query)
+                        connection.query(query, (err, results , fields)=>{
+                            // finished migrating old data
+                        
+                            // insert new data
+                            connection.query('INSERT INTO ' + database_name + ' set ?' , values)
+                            
+                            // update box metadata
+                            let box_meta =  {"ID": values["Box_ID"], "processor": "arduino"}
+    
+                            // insert new data
+                            connection.query('INSERT INTO box_info set ?' , box_meta)
+    
+                            response.writeHead(200, {"Content-Type": "text/HTML"})
+                            response.end()
                         })
-                    }
-                  
-                    // insert new data
-                    connection.query('INSERT INTO ' + database_name + ' set ?' , values)
-                    
-                    // update box metadata
-                    let box_meta =  {"ID": values["Box_ID"], "processor": "arduino"}
-                    response.writeHead(200, {"Content-Type": "text/HTML"})
-                    response.end()
-                 })
-
-               
-            }    
+                    })     
+                
+                })
+            }   
         })
     }
     else{
