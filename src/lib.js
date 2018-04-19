@@ -94,9 +94,10 @@ function extract(data){
         if(tokens.includes('')){
             return null
         }
-        tokens.map((value, index)=>{
-            values[col_names[index]] = value
-        })
+
+        for(i=0;i<tokens.length;i++){
+            values[col_names[i]] = tokens[i]
+        }
     
         let times = values['Time_sent'].split("-")
         let date = times.slice(0, 3).join("-")
