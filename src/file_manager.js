@@ -53,7 +53,11 @@ const csv = require('csv-express')
 
 function send_csv(file_name, data, resp){
     // Excel stupidly assumes that a CSV starting with ID as the first column is a SYLK file
-    data = JSON.parse(JSON.stringify(data).replace(/ID/g, 'Id'))
+
+    data = data.map((item)=>{
+        return JSON.parse(JSON.stringify(item).replace(/ID/g, 'Id'))
+    })
+
     // telling the browser to treat the text as a attachment
     resp.set({'Content-Disposition': 'attachment; filename="' + file_name + '"'})
     resp.csv(data, true, stream=true)
