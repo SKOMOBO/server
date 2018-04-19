@@ -3,19 +3,21 @@ const {send_json, send_csv} = require('./file_manager')
 const {config_db, extract, has} = require('./lib')
     
 const {validate_data} = require('./validator')
-/**
+
+var self = {
+    connection:null,
+    /**
  * Converts the presence nodejs buffer to a single bit 1 or 0 to represent booleans
  * Corrects Funny database formatted date time strings to normal strings
  */
-var self = {
     fix_format(data){
 
         if(data[0].Presence !== undefined){
             // for each text row
             for(let row=0; row<data.length; row++){
                 data[row].Presence = String(data[row].Presence[0])
-                data[row].Time_received = fix_timestamp(data[row].Time_received)
-                data[row].Time_sent = fix_timestamp(data[row].Time_sent)
+                data[row].Time_received = self.fix_timestamp(data[row].Time_received)
+                data[row].Time_sent = self.fix_timestamp(data[row].Time_sent)
             }
         }
        
@@ -30,7 +32,6 @@ var self = {
         return `${t.getFullYear()}-${(t.getMonth() + 1)}-${t.getDate()} ${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`
     
     },
-    connection = null,
 
     resolve_db(){
     
@@ -70,7 +71,7 @@ var self = {
      get_box(id, resp, format){
     
         // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
-        resolve_db()
+        self.resolve_db()
     
         // check if it is a valid number if it is we carry on without issues
         if(isNaN(id) && id !== "all" ){
@@ -99,7 +100,7 @@ var self = {
                     if(format === 'json'){
                         send_json(results, resp)
                     }else{
-                        send_csv('skomobo.csv', fix_format(results), resp)
+                        send_csv('skomobo.csv', self.fix_format(results), resp)
                     }
                 }
             }
@@ -112,7 +113,7 @@ var self = {
     store(response, database_name, values){
     
         if(!has(values, null)){
-            box_exists(values["Box_ID"], (exists)=>{
+            self.box_exists(values["Box_ID"], (exists)=>{
                 if(exists){
                     // insert into new table now
                     self.connection.query(`INSERT INTO ${database_name} set ?` , values)
@@ -158,18 +159,18 @@ var self = {
      box_processor(id, callback){
         // stubbed out for now
     
-        box_exists(id, (exists)=>{
+        self.box_exists(id, (exists)=>{
             exists ? callback(true, "arduino") : callback(false)
         })
     },
      store_arduino(req, resp){
-        resolve_db()
+        self.resolve_db()
     
         let url = req.url.slice(1)
         
         validate_data(url, (data)=>{
             let values = extract(url)
-            store(resp, "box" + values["Box_ID"], values)
+            self.store(resp, "box" + values["Box_ID"], values)
         },()=>{
             resp.send("Invalid data")
         })
@@ -179,12 +180,12 @@ var self = {
         return self.connection
     },
     
-     set_connection(value){
+    set_connection(value){
         self.connection = value
     },
     
-     get_info(id, cols, callback){
-        resolve_db()
+    get_info(id, cols, callback){
+        self.resolve_db()
         if(id != null){
     
             cols = cols.join(', ')
@@ -210,21 +211,21 @@ var self = {
         }
     },
     
-     box_exists(id, callback){
-        get_info(id, ['id'], (has_result)=>{
+    box_exists(id, callback){
+        self.get_info(id, ['id'], (has_result)=>{
             callback(has_result)
         })
     },
     
-     box_processor(id, callback){
-        get_info(id, ['processor'], (has_result, result)=>{
+    box_processor(id, callback){
+        self.get_info(id, ['processor'], (has_result, result)=>{
             has_result ?callback(has_result, result[0]['processor']): callback(has_result)
         })
     },
     
-     get_data(id, cols, modifier, callback){
+    get_data(id, cols, modifier, callback){
         // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
-        resolve_db()
+        self.resolve_db()
     
         if(cols.length > 1){
             cols = cols.join(', ')
@@ -245,7 +246,7 @@ var self = {
                 if(results != null){
                     if(results.length !== 0){
                         // finish this
-                        let values = fix_format(results)[0]
+                        let values = self.fix_format(results)[0]
                         callback(true, values)
                     
                     }
@@ -260,9 +261,9 @@ var self = {
         }
     },
     
-     latest(id, format, resp){
+    latest(id, format, resp){
         // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
-        resolve_db()
+        self.resolve_db()
     
         // check if it is a valid number if it is we carry on without issues
         if(isNaN(id) && id !== "all" ){
@@ -288,7 +289,7 @@ var self = {
                             send_json(results, resp)
                         }else{
                             // finish this
-                            let values = fix_format(results)[0]
+                            let values = self.fix_format(results)[0]
                             resp.render('latest.pug', values)
                         }
                     }

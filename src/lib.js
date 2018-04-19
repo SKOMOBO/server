@@ -31,18 +31,17 @@ var self = {
     config_db(){
         if(config.util.getEnv('NODE_ENV') === 'production'){
         
-            let login_details = config_production()
+            let login_details = self.config_production()
             //set production password and user to production username and password stored locally on computer
-            return connect_db(login_details)
+            return self.connect_db(login_details)
     
         }else{
             // connection = mysql.createConnection(config.get('Dbconfig'))
-           return connect_db(config.get('Dbconfig'))
+           return self.connect_db(config.get('Dbconfig'))
         }
     
     },
     connect_db(details){
-    
         let connection = null
         try{
             connection = mysql.createConnection(details)
