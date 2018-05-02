@@ -1,6 +1,13 @@
 const net = require('net')
 
-export var app = net.createServer((socket)=>{
+const request = require('request')
+
+const massey = 'http://seat-skomobo.massey.ac.nz'
+// massey url
+// send json post request to massey server
+// send back received packet to client / whatever HTTP response says ok
+
+var app = net.createServer((socket)=>{
     // console.log("Connected")
 
     socket.on("data", (data)=>{
@@ -8,14 +15,26 @@ export var app = net.createServer((socket)=>{
         // console.log("got data")
         let received = data.toString("UTF8")
 
-        // console.log(received)
-
-        to_massey(received)
+        if(received.slice(0,4) == "POST"){
+            let window = JSON.parse(received.slice(received.indexOf('{')))
+            send_window(window)
+            socket.write('200 OK')
+        }
+        else{
+            console.log(received)
+            // to_massey(received)
+            // is arduino data
+        }
     })
 })
 
-// import * as http from "http"
-import * as request from "request"
+function send_window(data){
+    // request.post(massey + '/window_moved', data, ()=>{
+    let fake = "https://loclhost:80"
+    request.post(fake + '/window_moved', data, ()=>{
+        console.log("Forwarded data: ", data)
+    })
+}
 
 /**
  * This function passes the data to massey for storage
@@ -39,7 +58,7 @@ function to_massey(data){
         route = '/raspi_' + data.slice(2)
     }
 
-    request('http://seat-skomobo.massey.ac.nz' + route, function (error, response, body) {
+    request(massey + route, function (error, response, body) {
         // console.log('error:', error); // Print the error if one occurred
         // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         // console.log('body:', body); // Print the HTML for the Google homepage.
