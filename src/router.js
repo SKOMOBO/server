@@ -63,12 +63,15 @@ safe_route("/get*", async (req, resp) =>{
     if(req.query.type == 'all'){
         send_zip(resp, {})
     }
-    else if(supported_types.includes(req.query.type)){
-        get_box(req.query.id, resp, req.query.format)
-    }
     else{
-        resp.render('please_send_type.pug')
+        get_box(req.query.id, resp, req.query.format, req.query.from, req.query.to)
     }
+    // else if(supported_types.includes(req.query.type)){
+       
+    // }
+    // else{
+    //     resp.render('please_send_type.pug')
+    // }
 })
 
 

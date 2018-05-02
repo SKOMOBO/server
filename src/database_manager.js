@@ -66,7 +66,7 @@ function setup_db(){
 // to stream use AND ROWNUM <= 3 AND ROWNUM > ....
 // so that we only get x number of rows will have to calculate chunks
 
-function get_box(id, resp, format){
+function get_box(id, resp, format, from, to){
 
     // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
     resolve_db()
@@ -81,6 +81,30 @@ function get_box(id, resp, format){
     }
 
     let query = 'SELECT * from box' + id
+    let from_defined = false
+
+    if(typeof from !== 'undefined'){
+        if(from != null && from != '' ){
+            from_defined = true
+        }
+    }
+
+    let to_defined = false
+    if(typeof to !== 'undefined'){
+        if(to != null && to != '' ){
+            to_defined = true
+        }
+    }
+
+    if(from_defined && to_defined){
+        query += ` where time_received > '${from}' and time_received < '${to}'`
+    }
+    else if(from_defined && !to_defined){
+        query += ` where time_received > '${from}'`
+    }
+    else if(!from_defined && to_defined){
+        query += ` where time_received < '${to}'`
+    }
 
     // todo fix later
     // if(id !== "all"){ 
