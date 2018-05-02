@@ -86,6 +86,27 @@ safe_route('/processor', (req, resp)=>{
     })
 })
 
+const express_graphql = require('express-graphql')
+const {buildSchema} = require('graphql')
+
+// GraphQL schema
+var schema = buildSchema(`
+    type Query {
+        message: String
+    }
+`);
+
+// Root resolver
+var rootValue = {
+    message: () => 'Hello World!'
+};
+
+app.use('/dbi', express_graphql({
+    schema,
+    rootValue,
+    graphiql: true
+}))
+
 safe_route('/latest', (req, resp)=>{
     latest(req.query.id, req.query.format, resp)
 })
