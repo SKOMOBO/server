@@ -87,7 +87,7 @@ safe_route('/processor', (req, resp)=>{
 })
 
 app.get('/window_moved', (req, resp)=>{
-    console.log("got: ", req.body)
+    console.log("got: ", req)
 })
 
 safe_route('/latest', (req, resp)=>{

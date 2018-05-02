@@ -30,9 +30,10 @@ var app = net.createServer((socket)=>{
 
 function send_window(data){
     // request.post(massey + '/window_moved', data, ()=>{
-    let fake = "https://loclhost:80"
-    request.post(fake + '/window_moved', data, ()=>{
+    let fake = "https://localhost:80"
+    request.post(fake + '/window_moved', {json:data}, (response)=>{
         console.log("Forwarded data: ", data)
+        console.log(response)
     })
 }
 
