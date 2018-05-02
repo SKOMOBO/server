@@ -18,7 +18,15 @@ var app = net.createServer((socket)=>{
         if(received.slice(0,4) == "POST"){
             let window = JSON.parse(received.slice(received.indexOf('{')))
             send_window(window)
-            socket.write('200 OK')
+
+            let cannedResponse = new Buffer(
+                "HTTP1.1 200 OK\r\n" +
+                "Content-Length: 12\r\n" +
+                "Connection: Keep-Alive\r\n" +
+                "\r\n" +
+                "Data received\n"
+              );
+            socket.write(cannedResponse)
         }
         else{
             console.log(received)
@@ -28,7 +36,7 @@ var app = net.createServer((socket)=>{
     })
 })
 
-function send_window(data){
+function send_window(data, ca){
     // request.post(massey + '/window_moved', data, ()=>{
     let fake = "http://localhost:80"
     request.post(fake + '/window_moved', {json:data}, (err)=>{
