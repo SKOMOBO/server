@@ -115,7 +115,6 @@ function get_box(id, resp, format, from, to){
     //         query += ' where Box_ID = ' + id
     //     }
     // }
-    console.log(query)
 
     connection.query(query, (err, results , fields)=>{ 
         if(results != null){
