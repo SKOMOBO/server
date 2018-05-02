@@ -86,8 +86,12 @@ safe_route('/processor', (req, resp)=>{
     })
 })
 
+const influx = require('./influx_manager')
+
 app.post('/window_moved', (req, resp)=>{
     console.log("got: ", req.body)
+    influx.store_window(req.body)
+    resp.send("Data received")
 })
 
 safe_route('/latest', (req, resp)=>{
