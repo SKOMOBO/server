@@ -58,6 +58,13 @@ safe_route('/exists', (req, resp)=>{
     })
 })
 
+safe_route('/get_window', (req, resp)=>{
+
+    influx.get_window(req.query.id, (data)=>{
+        resp.send(data)
+    }, req.query.symbol, req.query.val)
+})
+
 safe_route("/get*", async (req, resp) =>{
 
     if(req.query.type == 'all'){
@@ -93,6 +100,8 @@ app.post('/window_moved', (req, resp)=>{
     influx.store_window(req.body)
     resp.send("Data received")
 })
+
+
 
 safe_route('/latest', (req, resp)=>{
     latest(req.query.id, req.query.format, resp)

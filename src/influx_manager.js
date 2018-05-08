@@ -48,6 +48,23 @@ var self = {
         }).catch((err)=>{
             console.error(err.message)
         })
+    },
+    get_window(id, callback, symbol = null, val = null){
+        let db = resolve_db()
+        let query = ""
+        if(symbol !== null && val !== null){
+            query = `select * from window_movement where id = '${id}' and time ${symbol} now() - ${val}`
+        }
+        else{
+            query = `select * from window_movement where id = '${id}'`
+        }
+
+        db.query(query).then((data)=>{
+            callback(data)
+        }).catch((err)=>{
+            console.error(err)
+            callback(false)
+        })
     }
 }
 
