@@ -1,8 +1,11 @@
 const helmet = require("helmet")
 const compress = require("compression")
 
+const parser = require('body-parser')
 const express = require("express")
 var app = express()
+
+app.use(parser.json())
 
 // Enable GZIP compression for improved performance
 app.use(compress())

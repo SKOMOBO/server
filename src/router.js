@@ -58,6 +58,13 @@ safe_route('/exists', (req, resp)=>{
     })
 })
 
+safe_route('/get_window', (req, resp)=>{
+
+    influx.get_window(req.query.id, (data)=>{
+        resp.send(data)
+    }, req.query.symbol, req.query.val)
+})
+
 safe_route("/get*", async (req, resp) =>{
 
     if(req.query.type == 'all'){
@@ -88,6 +95,16 @@ safe_route('/processor', (req, resp)=>{
         } 
     })
 })
+
+const influx = require('./influx_manager')
+
+app.post('/window_moved', (req, resp)=>{
+    console.log("got: ", req.body)
+    influx.store_window(req.body)
+    resp.send("Data received")
+})
+
+
 
 safe_route('/latest', (req, resp)=>{
     latest(req.query.id, req.query.format, resp)
