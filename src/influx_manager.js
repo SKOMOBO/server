@@ -17,7 +17,16 @@ function resolve_db(){
                         memory: Influx.FieldType.INTEGER,
                         heading:Influx.FieldType.INTEGER,
                         localIP:Influx.FieldType.STRING,
-                        id:Influx.FieldType.STRING
+                        id:Influx.FieldType.STRING,
+                        ax:Influx.FieldType.FLOAT, 
+                        ay:Influx.FieldType.FLOAT,
+                        az:Influx.FieldType.FLOAT, 
+                        gx:Influx.FieldType.FLOAT, 
+                        gy:Influx.FieldType.FLOAT, 
+                        gz:Influx.FieldType.FLOAT, 
+                        mx:Influx.FieldType.FLOAT, 
+                        my:Influx.FieldType.FLOAT, 
+                        mz:Influx.FieldType.FLOAT
                     },
                     tags: [
                         'id'
@@ -34,9 +43,7 @@ var self = {
         let db = resolve_db()
     
         let {id,...point} = object
-    
-        console.log(id, point)
-
+   
         point = {
             measurement: 'window_movement',
             tags: {id},
