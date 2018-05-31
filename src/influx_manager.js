@@ -70,7 +70,7 @@ var self = {
             callback(data)
         }).catch((err)=>{
             console.error(err)
-            callback(false)
+            callback(err)
         })
     }
 }
