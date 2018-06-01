@@ -26,11 +26,9 @@ let config = {
     "database": "skomobo"
 }
 
-const {app} = require("./config")
-
 function config_db(){
 
-    if(app.settings.env === 'production'){
+    if(process.env.NODE_ENV === 'production'){
     
         let login_details = config_production()
         login_details["host"] = config["host"]
