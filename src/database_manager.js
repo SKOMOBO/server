@@ -117,6 +117,10 @@ function get_box(id, resp, format, from, to){
     // }
 
     connection.query(query, (err, results , fields)=>{ 
+        if(err !== null){
+            console.error(err)
+        }
+        
         if(results != null){
             if(results.length !== 0){
                 if(format === 'json'){

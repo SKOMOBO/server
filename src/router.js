@@ -12,6 +12,7 @@ const lib = require('./lib')
 
 const bugsnag = require("bugsnag")
 
+
 if (app.settings.env !== "development" && app.settings.env !== "test"){
     bugsnag.register(require("../keys/global_keys.json").bugsnag_key)
     app.use(bugsnag.requestHandler);

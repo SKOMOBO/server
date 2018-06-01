@@ -21,19 +21,29 @@ function has(object, val){
 
 }
 
-const config = require("config")
-// import * as config from "config"
+let config = {
+    "host":"localhost",
+    "database": "skomobo"
+}
 
 function config_db(){
-    if(config.util.getEnv('NODE_ENV') === 'production'){
+
+    if(process.env.NODE_ENV === 'production'){
     
         let login_details = config_production()
+        login_details["host"] = config["host"]
+        login_details["database"] = config["database"]
+
         //set production password and user to production username and password stored locally on computer
         return connect_db(login_details)
 
     }else{
-        // connection = mysql.createConnection(config.get('Dbconfig'))
-       return connect_db(config.get('Dbconfig'))
+        config["user"] = "root"
+        config["password"] = "dev1234"
+
+        return connect_db(config)
+
+    //    todo remove config dependency and replace with manually settting up details here
     }
 
 }
@@ -63,18 +73,8 @@ function connect_db(details){
  * @returns 
  */
 function config_production(){
-    let config = require('config')
 
-    //get all the publicly available config values
-    let the_config = config.get('Dbconfig')
     let login_details = require('../keys/prod-password.json')
-
-    for(let prop in the_config){
-
-        if(prop !== 'password' && prop !== 'user'){
-            login_details[prop] = the_config[prop]
-        }
-    }
 
     return login_details
 }
