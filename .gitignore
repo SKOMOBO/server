@@ -14,6 +14,8 @@ download_password.json
 
 *.tmp
 
+src/keys.json
+
 # Runtime data
 pids
 *.pid
