@@ -12,6 +12,8 @@ download_password.json
 *.csv
 *.pyc
 
+*.tmp
+
 # Runtime data
 pids
 *.pid

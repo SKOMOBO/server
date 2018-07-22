@@ -19,12 +19,6 @@ if (app.settings.env !== "development" && app.settings.env !== "test"){
     app.use(bugsnag.errorHandler);
 }
 
-app.get("/dash*", (req, resp) =>{
-    resp.send("A awesome dashboard is coming here soon stay tuned.")
-
-    // make a request using http to the website node process and then just send the response via a proxy
-})
-
 const correct_pass = require("../keys/download_password.json").password
 
 const {authenticate} = require('./validator')
@@ -109,10 +103,6 @@ app.post('/window_moved', (req, resp)=>{
 
 safe_route('/latest', (req, resp)=>{
     latest(req.query.id, req.query.format, resp)
-})
-
-app.get('/ping', (req, resp)=>{
-    resp.render('ping.pug')
 })
 
 // interpret a random group of numbers seperated by underscores as arduino transmissions

@@ -31,7 +31,24 @@ function resolve_db(){
                     tags: [
                         'id'
                     ]
-                }
+                },
+                {
+                    measurement: 'main_unit',
+                    fields: {
+                        id:Influx.FieldType.STRING,
+                        temperature: Influx.FieldType.FLOAT,
+                        humidity: Influx.FieldType.FLOAT,
+                        dust1:Influx.FieldType.INTEGER,
+                        dust25:Influx.FieldType.INTEGER, 
+                        dust10:Influx.FieldType.INTEGER,
+                        co2:Influx.FieldType.INTEGER, 
+                        presence:Influx.FieldType.BOOLEAN, 
+                        time_sent:Influx.FieldType.STRING
+                    },
+                    tags: [
+                        'id'
+                    ]
+                },
             ]
         })
     }
