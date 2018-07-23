@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// SKOMOBO is a struct that defines all the columns that are currently in the mariadb database
 type SKOMOBO struct {
 	ID           int       // primary key in the Mariadb database
 	BoxID        string    // the actual ID we send in a the data from the boxes
