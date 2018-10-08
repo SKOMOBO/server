@@ -66,4 +66,8 @@ typings/
 
 global_keys.json
 
-keys
+# vim 
+.*.s??
+
+# habitat
+keysresults/
