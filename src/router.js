@@ -43,7 +43,7 @@ function safe_route(route, callback){
  
 }
 
-const {box_exists, box_processor, latest} = require('./database_manager')
+const {box_exists, box_processor, latest, stats} = require('./database_manager')
 
 safe_route('/exists', (req, resp)=>{
 
@@ -105,7 +105,9 @@ app.post('/window_moved', (req, resp)=>{
     resp.send("Data received")
 })
 
-
+safe_route('/stats', (req, resp)=>{
+    stats(req.query.id, req.query.format, resp)
+})
 
 safe_route('/latest', (req, resp)=>{
     latest(req.query.id, req.query.format, resp)
