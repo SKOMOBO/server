@@ -330,6 +330,46 @@ function latest(id, format, resp){
     }
 }
 
+function stats(id, format, resp){
+    // check to make sure that they give a ID value, that it is a valid number and not the value all or a _ seperated list
+    resolve_db()
+
+    // check if it is a valid number if it is we carry on without issues
+    if(isNaN(id) && id !== "all" ){
+        id = String(id)
+    }
+    else if(id == null || id === 'undefined'){
+        resp.render('please_send_id.pug')
+        return
+    }
+
+    let query = 'SELECT * from box' + id + ' order by Time_received DESC limit 1'
+
+    if(id != null){
+        connection.query(query, (err, results , fields)=>{ 
+
+            if(err != null){
+                console.error(err)
+            }
+
+            if(results != null){
+                if(results.length !== 0){
+                    if(format === 'json'){
+                        send_json(results, resp)
+                    }else{
+                        // finish this
+                        let values = fix_format(results)[0]
+                        resp.render('stats.pug', values)
+                    }
+                }
+            }
+            else{
+                resp.render('no_box.pug', {id: id})
+            }
+        })
+    }
+}
+
 const {export_functs} = require('./lib')
 
-module.exports = export_functs(latest, box_processor,set_connection, get_connection, get_box, store_arduino, resolve_db, fix_format, fix_timestamp, box_exists)
+module.exports = export_functs(stats, latest, box_processor,set_connection, get_connection, get_box, store_arduino, resolve_db, fix_format, fix_timestamp, box_exists)
