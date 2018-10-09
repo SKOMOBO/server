@@ -37,5 +37,9 @@ func windowMoved(w grog.Writer, r grog.Request) {
 
 }
 
+func stats(w grog.Writer, r grog.Reqeust) {
+
+}
+
 // get data on index route stores as CSV for the Arduino. Could change for proxy
 // it sends its data as a underscore seperated packet in the URL not as a query paramater
