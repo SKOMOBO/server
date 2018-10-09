@@ -6,6 +6,18 @@ services:
     - "8080:8080"
     volumes:
     - ./krakend:/etc/krakend
+  
+  dashboard:
+    image: grafana
+
+  api:
+    image: skomobo_server
+    build: .
+
+  influxdb:
+    image: 
+
+# production use restart always to start on startup
 
   # nginx:
   #   image: nginx:1.15.15-alpine
