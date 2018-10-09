@@ -8,16 +8,17 @@ services:
     - ./krakend:/etc/krakend
   
   dashboard:
-    image: grafana
+    # image: grafana probably replace with chronograph
 
   api:
     image: skomobo_server
     build: .
 
-  influxdb:
+  db:
     image: 
 
 # production use restart always to start on startup
+
 
   # nginx:
   #   image: nginx:1.15.15-alpine
