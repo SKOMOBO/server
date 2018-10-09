@@ -1,0 +1,22 @@
+version: '2'
+services:
+ skombo_server:
+    image: skomobo_server
+    # depends_on:
+    #   - "postgres"
+    environment:
+    #   TAX_DB_IP: "postgres"
+    #   TAX_DB_PORT: "5432"
+    #   TAX_DB_USER: "taxonomy_user"
+    #   TAX_DB_PWD: "thistaxonomyisthebestthingever"
+    #   TAX_DB: "marketdata"
+      APP_ENV: dev
+    #   DB_IP: mongo
+    build: 
+      context: .
+      dockerfile: dev.dockerfile
+
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/go/src/github.com/Ulfasaar/skomobo_server/app
