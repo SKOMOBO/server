@@ -1,45 +1,50 @@
 package main
 
-import "github.com/grog"
-
-func ping(w grog.Writer, r grog.Request) {
-	w.Send("I am still alive!")
+func ping() {
+	return "I am still alive"
 }
 
-func dash(w grog.Writer, r grog.Request) {
-	w.Send("A awesome dashboard is coming here soon stay tuned.")
-}
+// import "github.com/Ulfasaar/grog"
 
-func get(w grog.Writer, r grog.Request) {
-	// sends data back as CSV by default, can specify JSON as well in format query
-}
+// func ping(w grog.Writer, r grog.Request) {
+// 	w.Send("I am still alive!")
+// }
 
-func exists(w grog.Writer, r grog.Request) {
+// // offload this style of stuff to nginx instead
+// // func dash(w grog.Writer, r grog.Request) {
+// // 	w.Send("A awesome dashboard is coming here soon stay tuned.")
+// // }
 
-}
+// func get(w grog.Writer, r grog.Request) {
+// 	// sends data back as CSV by default, can specify JSON as well in format query
+// }
 
-func latest(w grog.Writer, r grog.Request) {
+// func exists(w grog.Writer, r grog.Request) {
 
-}
+// }
 
-func processor(w grog.Writer, r grog.Request) {
+// func latest(w grog.Writer, r grog.Request) {
 
-}
+// }
 
-func getWindow(w grog.Writer, r grog.Request) {
+// func stats(w grog.Writer, r grog.Reqeust) {
 
-}
+// }
 
-// all the above except for the first two at the top are password protected
+// func processor(w grog.Writer, r grog.Request) {
 
-// POST request
-func windowMoved(w grog.Writer, r grog.Request) {
+// }
 
-}
+// func getWindow(w grog.Writer, r grog.Request) {
 
-func stats(w grog.Writer, r grog.Reqeust) {
+// }
 
-}
+// // all the above except for the first two at the top are password protected
 
-// get data on index route stores as CSV for the Arduino. Could change for proxy
-// it sends its data as a underscore seperated packet in the URL not as a query paramater
+// // POST request
+// func windowMoved(w grog.Writer, r grog.Request) {
+
+// }
+
+// // get data on index route stores as CSV for the Arduino. Could change for proxy
+// // it sends its data as a underscore seperated packet in the URL not as a query paramater

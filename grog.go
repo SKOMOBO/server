@@ -1,5 +1,7 @@
 package grog
 
+// author Ryan Weyers
+
 import (
 	"bytes"
 	"encoding/csv"
