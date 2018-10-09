@@ -14,13 +14,13 @@ func main() {
 
 	r := httprouter.New()
 
-	// g := grog.New(r)
+	g := NewGrogRouter(r)
 
 	// pprof for performance debugging
 	r.HandlerFunc(http.MethodGet, "/debug/pprof/", pprof.Index)
 	r.Handler(http.MethodGet, "/debug/pprof/:item", http.DefaultServeMux)
 
-	// g.GET("/ping", ping)
+	g.GET("/ping", ping)
 
 	log.Println("Listening....")
 

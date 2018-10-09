@@ -1,14 +1,8 @@
 package main
 
-func ping() {
-	return "I am still alive"
+func ping(w Writer, r Request) {
+	w.Send("I am still alive!")
 }
-
-// import "github.com/Ulfasaar/grog"
-
-// func ping(w grog.Writer, r grog.Request) {
-// 	w.Send("I am still alive!")
-// }
 
 // // offload this style of stuff to nginx instead
 // // func dash(w grog.Writer, r grog.Request) {

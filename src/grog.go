@@ -1,4 +1,4 @@
-package grog
+package main
 
 // author Ryan Weyers
 
@@ -77,7 +77,7 @@ func (w Writer) Send(msg string) {
 }
 
 // New create a new grog router
-func New(r *httprouter.Router) *Router {
+func NewGrogRouter(r *httprouter.Router) *Router {
 	return &Router{r: r}
 }
 

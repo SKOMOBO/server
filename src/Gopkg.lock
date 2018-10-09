@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/Fatih/structs"
+  packages = ["."]
+  revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
+  version = "v1.0"
+
+[[projects]]
   name = "github.com/julienschmidt/httprouter"
   packages = ["."]
   revision = "8c199fb6259ffc1af525cc3ad52ee60ba8359669"
@@ -10,6 +16,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4368a84c877fb4752452ba91aaadffeab050a12dac9f66e08b2196102e7903f5"
+  inputs-digest = "82538e637ebda82802835a770f1741914bcb51bdac6e83d9c1e47f35c924bfac"
   solver-name = "gps-cdcl"
   solver-version = 1
