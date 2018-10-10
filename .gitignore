@@ -73,3 +73,5 @@ typings/
 .env
 
 global_keys.json
+
+data
