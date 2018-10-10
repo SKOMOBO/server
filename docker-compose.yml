@@ -7,17 +7,39 @@ services:
     volumes:
     - ./krakend:/etc/krakend
   
-  dashboard:
-    # image: grafana probably replace with chronograph
-
+  # my actual code for the server
   api:
     image: skomobo_server
     build: .
 
-  db:
-    image: 
+  # debugging
+  # tracer:
+  #   image: jaegar + golang library?
+
+  # tick stack
+  # db:
+  #   image: 
+
+  # dashboard:
+  #   # image: grafana probably replace with chronograph
+
+  # ingestor:
+
+  # mangagment ie uis for doing stuff, portainer and compose ui or consul, vault and nomad???
+
+  # container_manager:
+  #   image: portainer
+
+  # compose_manager:
+  #   image: compose-ui
+
+  # secret_manager:
+  #   image: hashicorp vault
 
 # production use restart always to start on startup
+
+
+
 
 
   # nginx:
