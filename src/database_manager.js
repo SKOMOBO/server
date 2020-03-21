@@ -183,13 +183,13 @@ async function store(response, database_name, values){
     }
 }
 
-function box_processor(id, callback){
-    // stubbed out for now
-
-    box_exists(id, (exists)=>{
-        exists ? callback(true, "arduino") : callback(false)
-    })
-}
+// function box_processor(id, callback){
+//     // stubbed out for now
+//
+//     box_exists(id, (exists)=>{
+//         exists ? callback(true, "arduino") : callback(false)
+//     })
+// }
 
 const {validate_data} = require('./validator')
 function store_arduino(req, resp){

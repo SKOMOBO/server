@@ -3,7 +3,7 @@ const compress = require("compression")
 
 const parser = require('body-parser')
 const express = require("express")
-var app = express()
+const app = express();
 
 app.use(parser.json())
 
